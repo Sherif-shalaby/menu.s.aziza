@@ -177,6 +177,9 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left cl5 @endif">
                                     <h3 class="font-semibold text-lg cl0 mtext-101">{{ $item->name }}</h3>
                                 </div>
+                                <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left @endif">
+                                            <h3 class="font-semibold text-lg text-dark">{{$item->attributes->size?$item->attributes->size->name:'' }}</h3>
+                                </div>
                                 <div class="md:w-1/3 xs:w-5/12">
                                     <div class="flex flex-row qty_row justify-center w-full">
                                         <button type="button"
@@ -214,7 +217,8 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                                 <label for="radio"
                                                     class="block ml-2 text-sm font-medium cl5 dark:text-gray-300 px-2">
                                                     @if ($variation->name == 'Default')
-                                                        {{ $item->name }}
+                                                        {{-- {{ $item->name }} --}}
+                                                        @lang('lang.default')
                                                     @else
                                                         {{ $variation->size->name ?? '' }}
                                                     @endif
@@ -223,7 +227,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                         </div>
                                         <div
                                             class="flex-1 text-base @if ($locale_direction == 'rtl') text-left cl5 @else text-right @endif font-semibold">
-                                            {{ @num_format($variation->default_sell_price - $item->attributes->discount) }}<span
+                                            {{ @num_format($variation->default_sell_price - $item->attributes->size->pivot->discount) }}<span
                                                 class="font-bold">
                                                 {{ session('currency')['code'] }}</span>
                                         </div>

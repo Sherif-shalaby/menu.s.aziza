@@ -97,7 +97,7 @@
         })
         $(document).on('change', '.quantity', function() {
             $('.add_to_cart_btn').attr('href',
-                '{{ action('CartController@addToCart', $product->id) }}?quantity=' +
+                '{{ action('CartController@addToCart', $product->id,) }}?quantity=' +
                 $(this).val());
         })
 

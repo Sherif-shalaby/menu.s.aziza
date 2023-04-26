@@ -163,17 +163,48 @@
                 
 
                     </div>
-                    <div class="flex bg0" style="flex-wrap: nowrap;justify-content: space-between;align-items: center;">
-                        <div class=" ">
+                    <div class="productCard flex bg0 p-2 " style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
+                        @foreach($product->sizes as $size)
+                            <input type="hidden" value="{{$size->id}}" name="size"/>
+                            @break
+                        @endforeach
+                        @foreach($product->sizes as $s)
+                        <div class="">
+                            
                             <a href="#"
                                 class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
                                 style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
-                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0">{{ Str::limit($product->name, 15) }}</p>
-                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0">
-                                    {{ session('currency')['code'] }} {{ @num_format($product->sell_price - $product->discount_value) }}
+                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>
+                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
+                                    {{ session('currency')['code'] }} 
+                                    <span class="sell-price">
+                                    {{ @num_format($s->pivot->sell_price - $s->pivot->discount_value) }}
+                                    </span>
                                 </p>
                             </a>
+                            <div>
+                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
+                                    <span>
+                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>                           
+                                    </span>    
+                                    <span class="size-menu">
+                                        {{$s->name}}</span>
+                                
+                                </button>
+                                
+                                <!-- Dropdown menu -->
+                                <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">
+                                        @foreach($product->sizes as $size)
+                                            <li>
+                                                <a data-size_id="{{$size->id}}" data-size_name="{{$size->name}}" data-price="{{ @num_format($size->pivot->sell_price - $s->pivot->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->name}}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+                        
    
 
 
@@ -188,12 +219,20 @@
                                     class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
                             </div>
                             <div class="flex">
-                                <a href="{{ action('CartController@addToCart', $product->id) }}"
-                                    class="add_to_cart_btn bg11 text-white font-semibold rounded-lg px-4 py-2">  
+                                
+                                @foreach($product->sizes as $size)
+                                <a data-product_id="{{ $product->id }}" 
+                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
                                     <i class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"></i></a>
-                            </div>
+                                {{-- <a href="{{ action('CartController@addToCart',[ $product->id,$size->id]) }}"
+                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
+                                    <i class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"></i></a> --}}
+                                @break
+                                @endforeach
+                                </div>
                         </div>
-
+                        @break
+                        @endforeach
                     </div>
 
 
@@ -242,6 +281,8 @@
 @endsection
 
 @section('javascript')
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
 @if (!empty($homepage_category_carousel))
@@ -305,6 +346,41 @@ $(document).on('click', '.minus', function() {
         document.querySelector(".prev-nav").onclick = function() {
             slider.goTo("prev");
         };
+    });
+
+
+    $(document).on('click', '.cart_button', function(){
+        var sizeId=$(this).closest('.productCard').find('input[name=size]').val();
+        var product_id=$(this).data('product_id');
+        $.ajax({
+            type: "GET",
+            url: '/cart/add-to-cart/' + $(this).data('product_id')+'/'+sizeId,
+            // data: "data",
+            dataType: "json",
+            success: function (response) {
+                if (response.status.success) {
+                    swal("", response.status.msg, "success");
+                }else{
+                    swal("@lang('lang.error')!", response.status.msg, "error");
+                }
+                $('.cart_items').load(document.URL +  ' .cart_items');
+                $('.total').load(document.URL +  ' .total');
+            }
+        });
+
+
+        // window.location.href = base_path + '/cart/add-to-cart/' + $(this).data('product_id')+'/'+sizeId;
+    })
+    $(document).on('click', '.changeSize', function(e){
+        e.preventDefault();
+        var price=$(this).data('price');
+        var size_id=$(this).data('size_id');
+        $(this).parent().parent().parent().parent().siblings().find('.sell-price').text(price);
+        var size=$(this).data('size_name');
+        var s=$(this).parent().parent().parent().siblings().find('.size-menu').text(size);
+        $(this).closest('.productCard').children('input[name=size]').val(size_id);
+        // __write_number(size,)
+        // var size_id=$(this).data('size_id');
     });
 </script>
 @endsection
