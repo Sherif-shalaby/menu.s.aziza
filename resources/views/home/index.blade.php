@@ -171,7 +171,7 @@
                         @foreach($product->sizes as $s)
                         <div class="">
                             
-                            <a href="#"
+                            <a href="{{ action('ProductController@show', $product->id) }}"
                                 class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
                                 style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
                                 <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>

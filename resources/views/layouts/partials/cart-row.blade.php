@@ -8,7 +8,7 @@ if (!empty($user_id)) {
     $cart_count = $cart_collection->count();
 }
 @endphp
-<div class="flex  ">
+<div class="flex">
     <div class="flex-1">
     </div>
     <div class="flex-1 text-center mt-2 cart_items">
@@ -22,5 +22,4 @@ if (!empty($user_id)) {
             </button>
         </a>
     </div>
-
 </div>
