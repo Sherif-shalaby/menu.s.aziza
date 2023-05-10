@@ -14,13 +14,16 @@ class SystemSeeder extends Seeder
      */
     public function run()
     {
-        System::updateOrCreate(
-            ['key' => 'language'],
-            ['value' => 35]
-        );
-        System::updateOrCreate(
-            ['key' => 'currency'],
-            ['value' => 'ar']
-        );
+        $pos = System::getProperty('pos');
+        if(!isset($pos)){
+            System::updateOrCreate(
+                ['key' => 'language'],
+                ['value' => 35]
+            );
+            System::updateOrCreate(
+                ['key' => 'currency'],
+                ['value' => 'ar']
+            );
+        } 
     }
 }
