@@ -96,5 +96,17 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('replace_space', function ($string) {
             return "str_replace(' ', '_', $string)";
         });
+        $path = base_path('.env');
+        $test = file_get_contents($path);
+        $new_app_url=System::getProperty('pos');
+        $new_url='APP_URL='.$new_app_url;
+        if(!empty($new_app_url)){
+            file_put_contents($path , str_replace('APP_URL=https://aziza.sherifshalaby.tech/',$new_url , $test));
+        }
+        // else{
+        //     file_put_contents($path , str_replace( 'APP_URL=https://s.elhabib.sherifshalaby.tech','APP_URL=http://localhost:8000', $test));
+        // }
+
+
     }
 }
