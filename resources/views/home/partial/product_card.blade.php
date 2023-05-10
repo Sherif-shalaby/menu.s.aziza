@@ -12,6 +12,7 @@
             </div>
         </div>
     </div>
+    hbuhjb
     <div class="flex">
         <a href="{{ action('ProductController@show', $product->id) }}"
             class=" w-full text-white text-xs text-center bg-black opacity-70 rounded-xl py-4 mt-2">

@@ -261,5 +261,6 @@ return [
     'social_media' => 'Social Media',
     'view_cart' => 'View Cart',
     'all_product' => 'All Products',
-    
+    'default'=>'Default',
+    'products_count'=>'Products Count',
 ];

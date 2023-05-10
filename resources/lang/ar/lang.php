@@ -251,4 +251,6 @@ return [
     'social_media' => 'وسائل التواصل الاجتماعي',
     'view_cart' => 'عربة التسوق',
     'all_product' => 'كل المنتجات',
+    'default'=>'مقاس عادى',
+    'products_count'=>'عدد المنتجات',
 ];

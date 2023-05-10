@@ -10,8 +10,8 @@
 
 <style>
     .modal-content{
-        overflow: scroll;
-        height: 90vh;
+        /* overflow: scroll; */
+        /* height: 90vh; */
     }
 </style>
 
@@ -221,7 +221,7 @@
         theme-mode="outline" icon="fas fa-file">
 
         <div class="row">
-            <div class="col-md-4">
+           <div class="col-md-4">
                 {!! Form::label('product_class_id', __('lang.category') . ' *', []) !!}
 
                 <div class="input-group my-group">
@@ -239,9 +239,9 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <x-adminlte-input name="name" label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
-                        enable-old-support>
-                        <x-slot name="appendSlot">
+                    <x-adminlte-input name="name" required label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
+                        enable-old-support style="width: 80%">
+                        <x-slot name="prependSlot">
                             <div class="input-group-text text-primary translation_btn"  data-type="product">
                                 <i class="fas fa-globe"></i>
                             </div>
@@ -292,44 +292,59 @@
                     ])
                 </div>
             </div>
+   
+            <div class="col-md-12 ">
+                <table class="table" id="size_table">
+                    <thead>
+                        <tr>
+                            <th style = 'width: 15%'>@lang('lang.size')</th>
+                            <th style = 'width: 10%'>@lang('lang.cost')</th>
+                            <th style = 'width: 10%'>@lang('lang.sell_price')</th>
+                            <th style = 'width: 10%'>@lang('lang.discount_type')</th>
+                            <th style = 'width: 10%'>@lang('lang.discount')</th>
+                            <th>@lang('lang.discount_start_date')</th>
+                            <th>@lang('lang.discount_end_date')</th>
+                            <th>@lang('lang.status')</th>
+                            <th><button type="button" class="btn btn-success btn-xs add_size_row mt-2"><i
+                                        class="fa fa-plus"></i></button></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td style = 'width: 15%'>
+                            <div class="input-group my-group ">
+                                {!! Form::select('sizes[0][size_id]', $sizes,null, ['class' => 'form-control select2','style' => 'width: 60%','data-live-search' => 'true', 'placeholder' => __('lang.size')]) !!}
+                                <span class="input-group-btn">
+                                    @can('settings.size.create')
+                                        <button class="btn-modal btn btn-default bg-white btn-flat"
+                                            data-href="{{ action('Admin\SizeController@create') }}"
+                                            data-container=".view_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
+                                    @endcan
+                                </span>
+                            </div>
+                        </td>
+                        <td style = 'width: 10%'>
+                            {!! Form::text('sizes[0][purchase_price]', null, ['class' => 'form-control', 'placeholder' => session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost')]) !!}
+                        </td>
+                        <td style = 'width: 10%'>
+                            {!! Form::text('sizes[0][sell_price]', null, ['class' => 'form-control', 'placeholder' => __('lang.sell_price'), 'required']) !!}
+                        </td>
+                        <td style = 'width: 10%'>
+                            {!! Form::select('sizes[0][discount_type]', ['fixed' => __('lang.fixed'), 'percentage' => __('lang.percentage')], 'fixed', ['class' => 'form-control', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
+                        </td>
+                        <td style = 'width: 10%'>
+                            {!! Form::text('sizes[0][discount]', null, ['class' => 'form-control', 'placeholder' => __('lang.discount')]) !!}
+                        </td>
+                        <td>
+                            {!! Form::text('sizes[0][discount_start_date]', null, ['class' => 'form-control datepicker', 'placeholder' => __('lang.discount_start_date')]) !!}
+                        </td>
+                        <td>
+                            {!! Form::text('sizes[0][discount_end_date]', null, ['class' => 'form-control datepicker', 'placeholder' => __('lang.discount_end_date')]) !!}
+                        </td>
+                        <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="fa fa-times"></i></button>
 
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('purchase_price', __('lang.cost') . ' *', []) !!}
-                    {!! Form::text('purchase_price', null, ['class' => 'form-control', 'placeholder' => session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost'), 'required']) !!}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('sell_price', __('lang.sell_price') . ' *', []) !!}
-                    {!! Form::text('sell_price', null, ['class' => 'form-control', 'placeholder' => __('lang.sell_price'), 'required']) !!}
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('discount_type', __('lang.discount_type'), []) !!}
-                    {!! Form::select('discount_type', ['fixed' => __('lang.fixed'), 'percentage' => __('lang.percentage')], 'fixed', ['class' => 'form-control', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select')]) !!}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('discount', __('lang.discount'), []) !!}
-                    {!! Form::text('discount', null, ['class' => 'form-control', 'placeholder' => __('lang.discount')]) !!}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('discount_start_date', __('lang.discount_start_date'), []) !!}
-                    {!! Form::text('discount_start_date', null, ['class' => 'form-control datepicker', 'placeholder' => __('lang.discount_start_date')]) !!}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('discount_end_date', __('lang.discount_end_date'), []) !!}
-                    {!! Form::text('discount_end_date', null, ['class' => 'form-control datepicker', 'placeholder' => __('lang.discount_end_date')]) !!}
-                </div>
+                    </tbody>
+                </table>
+                <input type="hidden" name="row_size_id" id="row_size_id" value="1">
             </div>
             <div class="col-md-4">
                 <div class="form-group">
@@ -337,6 +352,17 @@
                     {!! Form::checkbox('active', 1, true, ['class']) !!}
                 </div>
             </div>
+            {{-- <div class="col-md-12">
+                <div class="form-group">
+                    {!! Form::label('product_details', __('lang.description'), []) !!} <button type="button" class="translation_textarea_btn btn btn-sm text-primary"> <i class="fas fa-globe"></i></button>
+                    @php
+                        $config = config('adminlte.editor');
+                    @endphp
+                    <x-adminlte-text-editor name="product_details" :config="$config" />
+
+                </div>
+            </div> --}}
+            
 
             <div class="col-md-12" style="margin-top: 10px">
                 <div class="custom-control custom-checkbox">
@@ -410,12 +436,12 @@
 
 
 <script>
-  const fileInput = document.querySelector('#file-input');
-    const previewContainer = document.querySelector('.preview-container');
-    const croppieModal = document.querySelector('#croppie-modal');
-    const croppieContainer = document.querySelector('#croppie-container');
-    const croppieCancelBtn = document.querySelector('#croppie-cancel-btn');
-    const croppieSubmitBtn = document.querySelector('#croppie-submit-btn');
+  var fileInput = document.querySelector('#file-input');
+    var previewContainer = document.querySelector('.preview-container');
+    var croppieModal = document.querySelector('#croppie-modal');
+    var croppieContainer = document.querySelector('#croppie-container');
+    var croppieCancelBtn = document.querySelector('#croppie-cancel-btn');
+    var croppieSubmitBtn = document.querySelector('#croppie-submit-btn');
 
 
     fileInput.addEventListener('change', () => {

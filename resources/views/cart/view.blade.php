@@ -177,6 +177,9 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left cl5 @endif">
                                     <h3 class="font-semibold text-lg cl0 mtext-101">{{ $item->name }}</h3>
                                 </div>
+                                <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left @endif">
+                                            <h3 class="font-semibold text-lg text-white">{{$item->attributes->size?$item->attributes->size->name:'' }}</h3>
+                                </div>
                                 <div class="md:w-1/3 xs:w-5/12">
                                     <div class="flex flex-row qty_row justify-center w-full">
                                         <button type="button"
@@ -203,7 +206,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 @if (!empty($variation->size))
                                     <div
                                         class="flex @if ($locale_direction == 'rtl') flex-row-reverse @else flex-row @endif ">
-                                        <div class="flex-1">
+                                        {{-- <div class="flex-1">
                                             <div
                                                 class="flex @if ($locale_direction == 'rtl') flex-row-reverse @else flex-row @endif items-center mb-4">
                                                 <input type="radio" data-id="{{ $item->id }}"
@@ -220,10 +223,10 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                                     @endif
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div
                                             class="flex-1 text-base @if ($locale_direction == 'rtl') text-left cl5 @else text-right @endif font-semibold">
-                                            {{ @num_format($variation->default_sell_price - $item->attributes->discount) }}<span
+                                            {{ @num_format($variation->default_sell_price - $item->attributes->size->pivot->discount) }}<span
                                                 class="font-bold">
                                                 {{ session('currency')['code'] }}</span>
                                         </div>

@@ -34,8 +34,8 @@
 
 
             </div>
-            <div class="flex-1 xs:w-full lg:w-1/2">
-                <div class="flex flex-col bg-white opacity-70 px-16 py-8">
+            <div class="flex-1 xs:w-full lg:w-1/2 text-dark">
+                <div class="flex flex-col bg12   px-16 py-8">
                     <div class="flex-1">
                         <h1 class="text-2xl font-bold">{{ $product->name }}</h1>
                         <p class="py-2 text-gray-600">{!! $product->product_details !!}</p>
@@ -97,7 +97,7 @@
         })
         $(document).on('change', '.quantity', function() {
             $('.add_to_cart_btn').attr('href',
-                '{{ action('CartController@addToCart', $product->id) }}?quantity=' +
+                '{{ action('CartController@addToCart', $product->id,) }}?quantity=' +
                 $(this).val());
         })
 

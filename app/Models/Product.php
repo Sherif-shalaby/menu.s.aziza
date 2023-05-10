@@ -99,4 +99,8 @@ class Product extends Model implements HasMedia
 
         return $discount_value;
     }
+    public function sizes()
+    {
+        return $this->belongsToMany('App\Models\Size', 'product_size')->withPivot('purchase_price','sell_price','discount_type','discount','discount_start_date','discount_end_date');
+    }
 }

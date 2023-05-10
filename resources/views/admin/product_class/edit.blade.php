@@ -306,7 +306,9 @@
                 </div>
             </div>
 
-
+            <div class="col-10 offset-1">
+                <div class="preview-container"></div>
+            </div>
         
 
             <div id="cropped_images"></div>

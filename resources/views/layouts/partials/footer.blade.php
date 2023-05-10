@@ -27,14 +27,14 @@ $dining_tables = DiningTable::pluck('name', 'id');
             </div>
             <div class="w-2/4 text-right">
                 <div class="flex-col mt-2 ">
-                    <img src="{{ asset('uploads/' . session('logo')) }}" alt="logo" class="  w-16 h-16">
+                    <img src="{{ asset('uploads/' . session('logo')) }}" alt="logo" >
                 
                 </div>
             </div>
             <div class="w-1/4 text-center md:block xs:hidden">
                
             </div>
-            <div class="w-1/4 text-left">
+            <div class="w-1/4 text-left total">
                 <span class="w-full h-10 mt-4 rounded-lg cl2 mtext-102">@lang('lang.total')  </span> <br>
                 <span class=" w-full h-10 mt-4 rounded-lg cl2 mtext-102">{{ @num_format($total) }}
                     {{ session('currency')['code'] }}</span>
