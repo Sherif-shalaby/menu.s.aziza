@@ -14,6 +14,10 @@ class SystemSeeder extends Seeder
      */
     public function run()
     {
+
+
+
+        
         $pos = System::getProperty('pos');
         if(!isset($pos)){
             System::updateOrCreate(
