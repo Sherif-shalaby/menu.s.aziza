@@ -44,6 +44,21 @@ $dining_tables = DiningTable::pluck('name', 'id');
     </div>
     <div class="flex w-full p-b-10">
         <div class="flex-1 mt-8" style="font-size: small;">
+            <p class="cl2 text-center">
+                <a class="cl11" href="{{ action('AboutUsController@index') }}">
+                    {{ App\Models\System::getProperty('about_us_footer') }}
+                </a> <br><br>
+            </p>
+            <p class="text-dark text-center">
+                <a href="{{ action('AboutUsController@index') }}"
+                    class="bg11 text-white md:text-base xs:text-sm font-bold px-4 py-2 border-2 border-white rounded-lg">@lang('lang.show_more')
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <div class="flex w-full p-b-10">
+        <div class="flex-1 mt-8" style="font-size: small;">
             <p class="cl2 text-center">@lang('lang.footer_copyright')</p>
             <p class="text-dark text-center">Tel : 00201003836917 - 00905386531059 - 0097433231457</p>
         </div>

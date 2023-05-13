@@ -164,11 +164,13 @@
 
                     </div>
                     <div class="productCard flex bg0 p-2 " style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
-                        @foreach($product->sizes as $size)
-                            <input type="hidden" value="{{$size->id}}" name="size"/>
+                        @foreach($product->variations as $size)
+                            <input type="hidden" value="{{$size->size_id}}" name="size"/>
+                            <input type="hidden" value="{{$size->id}}" name="variation"/>
                             @break
                         @endforeach
-                        @foreach($product->sizes as $s)
+                        {{-- @if(count($product->sizes)>0) --}}
+                        @foreach($product->variations as $s)
                         <div class="">
                             
                             <a href="{{ action('ProductController@show', $product->id) }}"
@@ -178,26 +180,30 @@
                                 <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
                                     {{ session('currency')['code'] }} 
                                     <span class="sell-price">
-                                    {{ @num_format($s->pivot->sell_price - $s->pivot->discount_value) }}
+                                    {{ @num_format($s->default_sell_price - $product->discount_value) }}
                                     </span>
                                 </p>
                             </a>
                             <div>
-                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
+                                @if($s->size_id!==null)
+                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
                                     <span>
                                         <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>                           
-                                    </span>    
+                                    </span> 
+                                    &nbsp;
+                                    <span>@lang('lang.size')</span> 
+                                    &nbsp;   
                                     <span class="size-menu">
-                                        {{$s->name}}</span>
+                                        {{$s->size->name}}</span>
                                 
                                 </button>
-                                
+                                @endif
                                 <!-- Dropdown menu -->
                                 <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">
-                                        @foreach($product->sizes as $size)
+                                        @foreach($product->variations as $size)
                                             <li>
-                                                <a data-size_id="{{$size->id}}" data-size_name="{{$size->name}}" data-price="{{ @num_format($size->pivot->sell_price - $s->pivot->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->name}}</a>
+                                                <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -220,13 +226,10 @@
                             </div>
                             <div class="flex">
                                 
-                                @foreach($product->sizes as $size)
-                                <a data-product_id="{{ $product->id }}" 
+                                @foreach($product->variations as $var)
+                                <a data-variation_id="{{ $var->id }}" 
                                     class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
                                     <i class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"></i></a>
-                                {{-- <a href="{{ action('CartController@addToCart',[ $product->id,$size->id]) }}"
-                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
-                                    <i class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"></i></a> --}}
                                 @break
                                 @endforeach
                                 </div>
@@ -351,10 +354,11 @@ $(document).on('click', '.minus', function() {
 
     $(document).on('click', '.cart_button', function(){
         var sizeId=$(this).closest('.productCard').find('input[name=size]').val();
-        var product_id=$(this).data('product_id');
+        var variationId=$(this).closest('.productCard').find('input[name=variation]').val();
+        // var variation_id=$(this).data('variation_id');
         $.ajax({
             type: "GET",
-            url: '/cart/add-to-cart/' + $(this).data('product_id')+'/'+sizeId,
+            url: '/cart/add-to-cart/' + variationId,
             // data: "data",
             dataType: "json",
             success: function (response) {
@@ -375,10 +379,12 @@ $(document).on('click', '.minus', function() {
         e.preventDefault();
         var price=$(this).data('price');
         var size_id=$(this).data('size_id');
+        var variation_id=$(this).data('variation_id');
         $(this).parent().parent().parent().parent().siblings().find('.sell-price').text(price);
         var size=$(this).data('size_name');
         var s=$(this).parent().parent().parent().siblings().find('.size-menu').text(size);
         $(this).closest('.productCard').children('input[name=size]').val(size_id);
+        $(this).closest('.productCard').children('input[name=variation]').val(variation_id);
         // __write_number(size,)
         // var size_id=$(this).data('size_id');
     });

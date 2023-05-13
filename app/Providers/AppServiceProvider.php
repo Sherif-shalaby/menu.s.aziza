@@ -99,8 +99,8 @@ class AppServiceProvider extends ServiceProvider
         $path = base_path('.env');
         $test = file_get_contents($path);
         $new_app_url=System::getProperty('pos');
-        $new_url='APP_URL='.$new_app_url;
         if(!empty($new_app_url)){
+            $new_url='APP_URL='.$new_app_url;
             file_put_contents($path , str_replace('APP_URL=https://aziza.sherifshalaby.tech/',$new_url , $test));
         }
         // else{
