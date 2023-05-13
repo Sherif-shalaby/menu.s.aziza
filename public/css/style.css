@@ -63,7 +63,7 @@ input:checked + .toggle-bg {
 }
 [type="checkbox"],
 [type="radio"] {
-    color: #927c40;
+    color: #d3bf88;
 }
 .error{
     color: #be0202;

@@ -253,4 +253,6 @@ return [
     'all_product' => 'كل المنتجات',
     'default'=>'مقاس عادى',
     'products_count'=>'عدد المنتجات',
+    'dinnig_in_restaurant'=>'داخل المطعم',
+    'table_no'=>'طاولة رقم',
 ];

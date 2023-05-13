@@ -73,87 +73,53 @@ class ProductController extends Controller
                         return '<img src="' . asset('/uploads/' . session('logo')) . '" height="50px" width="50px">';
                     }
                 })
-                // ->editColumn('discount_start_date', '@if(!empty($discount_start_date)){{@format_date($discount_start_date)}}@endif')
-                // ->editColumn('discount_end_date', '@if(!empty($discount_end_date)){{@format_date($discount_end_date)}}@endif')
-                // ->editColumn('discount', '{{@num_format($discount)}}')
+                ->editColumn('discount_start_date', '@if(!empty($discount_start_date)){{@format_date($discount_start_date)}}@endif')
+                ->editColumn('discount_end_date', '@if(!empty($discount_end_date)){{@format_date($discount_end_date)}}@endif')
+                ->editColumn('discount', '{{@num_format($discount)}}')
                 ->editColumn('category', function ($row) {
                     $category = ProductClass::find($row->product_class_id);
                     return $category->name ?? '';
                 })
                 ->editColumn('size',  function ($row) {
                     $size_name='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
+                    $product_sizes = Variation::where('product_id',$row->id)->get();
                     if(!empty($product_sizes)){
                     foreach($product_sizes as $size){
-                        $size_name.=Size::find($size->size_id)->name.'<br>';
+                        $size=Size::find($size->size_id);
+                        if(isset($size->name)){
+                            $size_name.=$size->name.'<br>';
+                        }else{
+                            $size_name.=''.'<br>';
+                        }
                     }
                 }
                     return $size_name;
                 })
                 ->editColumn('sell_price',  function ($row) {
                     $sell='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
+                    $product_sizes = Variation::where('product_id',$row->id)->get();
                     if(!empty($product_sizes)){
                     foreach($product_sizes as $size){
-                        $sell.=$size->sell_price.'<br>';
+                        $sell.=$size->default_sell_price.'<br>';
                     }
                 }
                     return $sell;
                 })
                 ->editColumn('purchase_price', function ($row) {
                     $purchase='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
+                    $product_sizes = Variation::where('product_id',$row->id)->get();
                     if(!empty($product_sizes)){
                     foreach($product_sizes as $size){
-                        $purchase.=$size->sell_price.'<br>';
+                        $purchase.=$size->default_purchase_price.'<br>';
                     }
                 }
                     return $purchase;
                 })
-                ->editColumn('discount', function ($row) {
-                    $discount='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
-                    if(!empty($product_sizes)){
-                        foreach($product_sizes as $size){
-                            $discount.=$size->discount.'<br>';
-                        }
-                    }
-                    return $discount;
-                })
-                ->editColumn('discount_start_date', function ($row) {
-                    $discount_start_date='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
-                    if(!empty($product_sizes)){
-                        foreach($product_sizes as $size){
-                            $discount_start_date.=$size->discount_start_date.'<br>';
-                        }
-                    }
-                    return $discount_start_date;
-                })
-                ->editColumn('discount_end_date', function ($row) {
-                    $discount_end_date='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
-                    if(!empty($product_sizes)){
-                        foreach($product_sizes as $size){
-                            $discount_end_date.=$size->discount_end_date.'<br>';
-                        }
-                    }
-                    return $discount_end_date;
-                })
-                // ->editColumn('sell_price', '@if(!empty($sell_price)){{@num_format($sell_price)}}@endif')
-                // ->editColumn('purchase_price', '@if(!empty($purchase_price)){{@num_format($purchase_price)}}@endif')
                 ->editColumn('active', function ($row) {
-                    $active='';
-                    $product_sizes = ProductSize::where('product_id',$row->id)->get();
-                    if(!empty($product_sizes)){
-                        foreach($product_sizes as $size){
-                            if ($size->active == 1) {
-                                $active.='<span class="badge badge-success">' . __('lang.active') . '</span>'.'<br>';
-                            } else {
-                                $active.='<span class="badge badge-danger">' . __('lang.deactivated') . '</span>'.'<br>';
-                            }
-                        }
-                        return $active;
+                    if ($row->active == 1) {
+                        return '<span class="badge badge-success">' . __('lang.active') . '</span>';
+                    } else {
+                        return '<span class="badge badge-danger">' . __('lang.deactivated') . '</span>';
                     }
                 })
                 ->editColumn('product_details', '{!! $product_details !!}')
@@ -206,10 +172,7 @@ class ProductController extends Controller
                     'size',
                     'sell_price',
                     'purchase_price',
-                    'discount',
                     'product_details',
-                    'discount_start_date',
-                    'discount_end_date',
                     'active',
                     'action',
                 ])
@@ -251,12 +214,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        
+        // return $request->variations;
             $data = $request->except('_token', 'image');
             $data['sku'] = $this->productUtil->generateProductSku($data['name']);
-            // $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
-            // $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
-            // $data['active'] = !empty($data['active']) ? 1 : 0;
+            $data['purchase_price'] = $data['purchase_price'];
+            $data['sell_price'] = $data['sell_price'];
+            $data['discount'] = $data['discount'];
+            $data['discount_type'] = $data['discount_type'];
+            $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
+            $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
+            
             $data['created_by'] = auth()->user()->id;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
@@ -264,7 +231,6 @@ class ProductController extends Controller
             $product = Product::create($data);
 
             $this->productUtil->createOrUpdateVariations($product, $request->variations);
-            $this->productUtil->createOrUpdateProductSizes($product, $request->sizes);
 
   
             if ($request->has('image')) {
@@ -345,6 +311,12 @@ class ProductController extends Controller
         try {
             $data = $request->except('_token', '_method', 'image');
             $data['created_by'] = auth()->user()->id;
+            $data['purchase_price'] = $data['purchase_price'];
+            $data['sell_price'] = $data['sell_price'];
+            $data['discount'] = $data['discount'];
+            $data['discount_type'] = $data['discount_type'];
+            $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
+            $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $product = Product::where('id', $id)->first();
@@ -352,7 +324,6 @@ class ProductController extends Controller
             DB::beginTransaction();
             $product->update($data);
             $this->productUtil->createOrUpdateVariations($product, $request->variations);
-            $this->productUtil->createOrUpdateProductSizes($product, $request->sizes);
 
            /* if ($request->has('uploaded_image_name')) {
                 if (!empty($request->input('uploaded_image_name'))) {

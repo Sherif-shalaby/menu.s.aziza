@@ -172,13 +172,13 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
             <div class="flex-1 xl:px-16 lg:px-2 md:px-4 xs:px-4 xs:mt-8 xs:border-t-2">
                 @foreach ($cart_content as $item)
                     @if ($item->attributes->extra != 1)
-                        <div class="flex-col justify-center py-4">
+                        <h3 class="flex-col justify-center py-4">
                             <div class="flex @if ($locale_direction == 'rtl') flex-row-reverse @else flex-row @endif ">
                                 <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left cl5 @endif">
                                     <h3 class="font-semibold text-lg cl0 mtext-101">{{ $item->name }}</h3>
                                 </div>
                                 <div class="w-1/2 @if ($locale_direction == 'rtl') text-right @else text-left @endif">
-                                            <h3 class="font-semibold text-lg text-white">{{$item->attributes->size?$item->attributes->size->name:'' }}</h3>
+                                            <h3 class="font-semibold text-lg text-white">{{$item->attributes->size?$item->attributes->size:'' }}</h3>
                                 </div>
                                 <div class="md:w-1/3 xs:w-5/12">
                                     <div class="flex flex-row qty_row justify-center w-full">
@@ -201,9 +201,10 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                             <p class="text-xs cl0 mtext-101 font-semibold">{!! $item->associatedModel->product_details !!}</p>
                             <h3
                                 class="font-semibold text-base cl0 mtext-101 py-2 @if ($item->associatedModel->variations->first()->name == 'Default') hidden @endif">
-                                @lang('lang.select_size')</h3>
+                                
+                        </h3>
                             @foreach ($item->associatedModel->variations as $variation)
-                                @if (!empty($variation->size))
+                                @if ( $variation->id==$item->attributes->variation_id)
                                     <div
                                         class="flex @if ($locale_direction == 'rtl') flex-row-reverse @else flex-row @endif ">
                                         {{-- <div class="flex-1">
@@ -226,12 +227,14 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                         </div> --}}
                                         <div
                                             class="flex-1 text-base @if ($locale_direction == 'rtl') text-left cl5 @else text-right @endif font-semibold">
-                                            {{ @num_format($variation->default_sell_price - $item->attributes->size->pivot->discount) }}<span
+                                            {{ @num_format($variation->default_sell_price - $item->associatedModel->discount) }}
+                                            <span
                                                 class="font-bold">
                                                 {{ session('currency')['code'] }}</span>
                                         </div>
                                     </div>
                                 @endif
+                             
                             @endforeach
                         </div>
                     @endif

@@ -18,7 +18,7 @@ class ProductController extends Controller
     {
         $category = ProductClass::find($category_id);
         $products = Product::where('product_class_id', $category_id)->where('active', 1)->get();
-
+        
         return view('product.index')->with(compact(
             'category',
             'products'

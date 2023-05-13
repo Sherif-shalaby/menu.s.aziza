@@ -39,7 +39,7 @@ class HomeController extends Controller
                 $offers_count++;
             }
         }
-
+        // return $products;
         return view('home.index')->with(compact(
             'categories',
             'products',
