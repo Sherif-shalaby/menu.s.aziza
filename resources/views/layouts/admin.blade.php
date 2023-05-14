@@ -3,6 +3,15 @@
     <link rel="stylesheet" href="{{ asset('js/datatable/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+    <style>
+    .select2-selection__rendered {
+    line-height: 40px !important;
+    }
+    
+    .select2-selection {
+    height: 39px !important;
+    }
+    </style>
 @endsection
 @section('content_top_nav_right')
     @if (!empty(env('POS_SYSTEM_URL')))
