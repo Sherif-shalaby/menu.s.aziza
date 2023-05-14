@@ -100,20 +100,20 @@ class AppServiceProvider extends ServiceProvider
         });
 
 
-        
         $path = base_path('.env');
         $test = file_get_contents($path);
-        if (Schema::hasTable('systems'))
-        {
-            $new_app_url=System::getProperty('pos');
-            $current_url=config('app.url');
-            if(!empty($new_app_url)){
-                $new_url='APP_URL='.$new_app_url;
-                $old_url='APP_URL='.$current_url;
-                file_put_contents($path , str_replace($old_url,$new_url , $test));
+        if(session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket')
+        {   
+            if (Schema::hasTable('systems'))
+            {
+                $new_app_url=System::getProperty('pos');
+                $current_url=config('app.url');
+                if(!empty($new_app_url)){
+                    $new_url='APP_URL='.$new_app_url;
+                    $old_url='APP_URL='.$current_url;
+                    file_put_contents($path , str_replace($old_url,$new_url , $test));
+                }
             }
         }
-
-
     }
 }
