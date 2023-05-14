@@ -108,10 +108,12 @@ class AppServiceProvider extends ServiceProvider
             {
                 $new_app_url=System::getProperty('pos');
                 $current_url=config('app.url');
-                if(!empty($new_app_url)){
+                if(!empty($new_app_url) ){
                     $new_url='APP_URL='.$new_app_url;
                     $old_url='APP_URL='.$current_url;
+                    if($new_url !==$old_url){
                     file_put_contents($path , str_replace($old_url,$new_url , $test));
+                    }
                 }
             }
         }
