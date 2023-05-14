@@ -182,6 +182,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 </div>
                                 <div class="md:w-1/3 xs:w-5/12">
                                     <div class="flex flex-row qty_row justify-center w-full">
+                                       
                                         <button type="button"
                                             class="minus border-2 rounded-full text-lg text-center border-dark cl0 mtext-101 h-8 w-8">-</button>
                                         <input type="text" data-id="{{ $item->id }}" value="{{ $item->quantity }}"
@@ -227,7 +228,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                         </div> --}}
                                         <div
                                             class="flex-1 text-base @if ($locale_direction == 'rtl') text-left cl5 @else text-right @endif font-semibold">
-                                            {{ @num_format($variation->default_sell_price - $item->associatedModel->discount) }}
+                                            {{ @num_format($variation->default_sell_price - $item->attributes->discount) }}
                                             <span
                                                 class="font-bold">
                                                 {{ session('currency')['code'] }}</span>
@@ -236,7 +237,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 @endif
                              
                             @endforeach
-                        </div>
+                      
                     @endif
                 @endforeach
 

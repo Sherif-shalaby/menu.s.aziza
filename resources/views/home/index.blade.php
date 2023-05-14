@@ -219,8 +219,8 @@
                             <div class="flex flex-row  mt-2">
                                 <button
                                     class="minus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">-</button>
-                                <input type="quantity" value="1"
-                                    class="quantity text-center focus:outline-none text-dark bg-transparent w-16">
+                                <input type="quantity" value="1" name="quantity"
+                                    class="quantityp quantity text-center focus:outline-none text-dark bg-transparent w-16">
                                 <button
                                     class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
                             </div>
@@ -355,10 +355,11 @@ $(document).on('click', '.minus', function() {
     $(document).on('click', '.cart_button', function(){
         var sizeId=$(this).closest('.productCard').find('input[name=size]').val();
         var variationId=$(this).closest('.productCard').find('input[name=variation]').val();
-        // var variation_id=$(this).data('variation_id');
+        var quantity=$(this).closest('.productCard').find('input[name=quantity]').val();
+        alert(quantity)
         $.ajax({
             type: "GET",
-            url: '/cart/add-to-cart/' + variationId,
+            url: '/cart/add-to-cart/' + variationId+"?quantity="+quantity,
             // data: "data",
             dataType: "json",
             success: function (response) {
