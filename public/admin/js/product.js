@@ -108,7 +108,6 @@ $(document).on("click", ".add_row", function () {
             $(".select2").select2();
 
             // $("#row_id").val(row_id + 1);
-            // alert(parseInt($("#row_id").val()))
         },
     });
 });

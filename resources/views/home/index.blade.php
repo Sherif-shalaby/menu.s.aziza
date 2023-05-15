@@ -356,7 +356,6 @@ $(document).on('click', '.minus', function() {
         var sizeId=$(this).closest('.productCard').find('input[name=size]').val();
         var variationId=$(this).closest('.productCard').find('input[name=variation]').val();
         var quantity=$(this).closest('.productCard').find('input[name=quantity]').val();
-        alert(quantity)
         $.ajax({
             type: "GET",
             url: '/cart/add-to-cart/' + variationId+"?quantity="+quantity,
