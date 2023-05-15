@@ -255,4 +255,5 @@ return [
     'products_count'=>'عدد المنتجات',
     'dinnig_in_restaurant'=>'داخل المطعم',
     'table_no'=>'طاولة رقم',
+    'enter_restaurant_store'=>'ادخل اسم المطعم'
 ];
