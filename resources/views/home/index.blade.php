@@ -156,7 +156,6 @@
         <div class="w-full mx-auto p-4 ">
             <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6" >
                 @foreach ($products as $product)
-                {{$product->getFirstMediaUrl('product')}}
                 <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}}">
                     <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
                         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
