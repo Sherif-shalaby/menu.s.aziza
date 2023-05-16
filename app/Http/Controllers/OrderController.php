@@ -92,8 +92,9 @@ class OrderController extends Controller
                     'price' => $content->price,
                     'sub_total' => $content->price * $content->quantity,
                 ];
+                // . " " .__('lang.size')." ".$content->attributes->size??'#'.
                 $product = Product::find($content->associatedModel->id);
-                $text .= urlencode($product->name) . '+%3A+' . $order_details['quantity'] . "+%2A+" . $order_details['price'] . '+=+' . $order_details['sub_total'] . " " . session('currency')['code'] . " +%0D%0A+";
+                $text .= urlencode($product->name) .'+  +'.$content->attributes->size.'+%3A+' . $order_details['quantity'] . "+%2A+" . $order_details['price'] . '+=+' . $order_details['sub_total'] . " " . session('currency')['code'] . " +%0D%0A+";
                 OrderDetails::create($order_details);
             }
             $order->discount_amount = $order->order_details->sum('discount') ?? 0;
