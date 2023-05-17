@@ -52,7 +52,8 @@ class ProductController extends Controller
         }
         if (request()->ajax()) {
 
-            $products = Product::leftjoin('product_classes', 'products.product_class_id', 'product_classes.id');
+            $products = Product::leftjoin('product_classes', 'products.product_class_id', 'product_classes.id')
+            ->orderBy('products.sort')->orderBy('products.created_at','desc');
 
             if (!empty(request()->product_class_id)) {
                 $products->where('products.product_class_id', request()->product_class_id);
@@ -227,6 +228,8 @@ class ProductController extends Controller
             $data['created_by'] = auth()->user()->id;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
+            $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
+            $data['sort'] = !empty($data['sort']) ? $data['sort'] : 1;
             DB::beginTransaction();
             $product = Product::create($data);
 
@@ -319,6 +322,8 @@ class ProductController extends Controller
             $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
+            $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
+            $data['sort'] = !empty($data['sort']) ? $data['sort'] :1;
             $product = Product::where('id', $id)->first();
 
             DB::beginTransaction();
@@ -332,11 +337,15 @@ class ProductController extends Controller
             } */
             if ($request->has('image')) {
                 if (!empty($request->input('image'))) {
+                    if(preg_match('/^data:image/', $request->input('image')))
+                    {
+                    $product->clearMediaCollection('product');
                     $extention = explode(";",explode("/",$request->image)[1])[0];
                     $image = rand(1,1500)."_image.".$extention;
                     $filePath = public_path($image);
                     $fp = file_put_contents($filePath,base64_decode(explode(",",$request->image)[1]));
                     $product->addMedia($filePath)->toMediaCollection('product');
+                    }
                 }
             }
 

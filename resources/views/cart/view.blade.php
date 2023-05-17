@@ -161,10 +161,16 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                 <div class="flex flex-row justify-center mt-4">
                     <select id="store_id" name="store_id" required 
                         class="w-1/2 mx-2 bg12 border border-gray-300 cl5 text-sm rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
+                        @if(count($stores)==1)
+                        @foreach ($stores as $id => $store)
+                            <option value="{{ $id }}">{{ $store }}</option>
+                        @endforeach
+                        @else
                         <option selected value="">@lang('lang.enter_restaurant_store')</option>
                         @foreach ($stores as $id => $store)
                             <option value="{{ $id }}">{{ $store }}</option>
                         @endforeach
+                        @endif
                     </select>
 
                 </div>
