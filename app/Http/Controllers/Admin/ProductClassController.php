@@ -51,7 +51,7 @@ class ProductClassController extends Controller
         if (request()->ajax()) {
 
             $product_classes = ProductClass::leftJoin("products","products.product_class_id","=","product_classes.id")
-            ->groupBy('product_classes.id');
+            ->groupBy('product_classes.id')->orderBy('product_classes.sort')->orderBy('product_classes.created_at','desc');
 
 
             $product_classes = $product_classes->selectRaw(
@@ -283,13 +283,15 @@ class ProductClassController extends Controller
                             $media->delete();
                         }
                     }
-
+                    if(preg_match('/^data:image/', $request->cropImages[0]))
+                    {
+                    $class->clearMediaCollection('class');
                     $extention = explode(";",explode("/",$img)[1])[0];
                     $image = rand(1,1500)."_image.".$extention;
                     $filePath = public_path($image);
                     $fp = file_put_contents($filePath,base64_decode(explode(",",$img)[1]));
                     $class->addMedia($filePath)->toMediaCollection('product_class');
-                
+                    }
                 }
             } 
 

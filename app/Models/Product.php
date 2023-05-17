@@ -27,6 +27,7 @@ class Product extends Model implements HasMedia
     protected $casts = [
         'multiple_sizes' => 'array',
         'translations' => 'array',
+        'details_translations'=>'array'
 
     ];
 
@@ -40,6 +41,17 @@ class Product extends Model implements HasMedia
             }
         }
         return $name;
+    }
+    public function getProductDetailsAttribute($product_details)
+    {
+        $translations = !empty($this->details_translations['product_details']) ? $this->details_translations['product_details'] : [];
+        if (!empty($translations)) {
+            $lang = LaravelLocalization::getCurrentLocale();
+            if (!empty($translations[$lang])) {
+                return $translations[$lang];
+            }
+        }
+        return $product_details;
     }
 
     public function category()

@@ -220,7 +220,7 @@
 
         <div class="modal-body">
             <div class="form-group">
-                <x-adminlte-input name="name" label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
+                <x-adminlte-input name="name" required label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
                     enable-old-support>
                     <x-slot name="appendSlot">
                         <div class="input-group-text text-primary translation_btn"  data-type="product_class">
