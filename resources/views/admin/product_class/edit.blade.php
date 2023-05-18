@@ -284,6 +284,20 @@
                                                id="img{{  $product_class->id }}"   alt="">
                               
                                         <div class="action_div"></div>
+                                        <button type="button"
+                                        class="delete-btn"><i
+                                        style="font-size: 20px;"
+                                        id="deleteBtn{{ $product_class->id }}"
+                                        class="fas fa-trash"></i>
+                                        </button>
+                                        <button type="button"
+                                                data-toggle="modal"
+                                                id="cropBtn{{ $product_class->id }}"
+                                                data-target="#exampleModal"
+                                                class="crop-btn"><i
+                                                style="font-size: 20px;"
+                                                class="fas fa-crop"></i>
+                                        </button>
                                        {{-- <button type="button"
                                                 class="delete-btn"><i
                                                 style="font-size: 20px;"
@@ -359,7 +373,32 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-
+<script>
+    @if($product_class)
+    
+    document.getElementById("deleteBtn{{ $product_class->id }}").addEventListener('click', () => {
+        swal({
+            title: '{{ __("lang.Are you sure?") }}',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            console.log(result)
+            if (result) {
+                swal(
+                    'Deleted!',
+                    '{{ __("lang.Your Image has been deleted.") }}',
+                    'success'
+                )
+                $("#preview{{ $product_class->id }}").remove();
+            }
+        });
+    });
+    
+    @endif
+    </script>
 
 <script>
     $("#edit-data-btn").on("click",function(e){
