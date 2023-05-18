@@ -294,7 +294,9 @@ class ProductClassController extends Controller
                     }
                 }
             } 
-
+            if(!isset($request->cropImages[0]) || strlen($request->cropImages[0])==0){
+                $class->clearMediaCollection('product_class');
+            }
 
 
 
