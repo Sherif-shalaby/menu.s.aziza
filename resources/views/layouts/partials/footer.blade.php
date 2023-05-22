@@ -27,7 +27,7 @@ $dining_tables = DiningTable::pluck('name', 'id');
             </div>
             <div class="w-2/4 text-right">
                 <div class="flex-col mt-2 ">
-                    <img src="{{ asset('uploads/' . session('logo')) }}" alt="logo" >
+                    <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="logo" >
                 
                 </div>
             </div>

@@ -25,12 +25,14 @@
 </head>
 
 <body class="font-poppins">
-
     @if (empty(request()->segment(2)) || request()->segment(2) == 'home')
         @include('layouts.partials.main-header')
     @endif
     <main class="relative bg-cover bg-no-repeat bg-center"
-        style="background-attachment: fixed;background-image: url('@if(!empty(session('page_background_image'))){{ asset('uploads/' . session('page_background_image')) }}@else{{ asset('images/default-page-bg.png') }}@endif')">
+        style="background-attachment: fixed;background-image: 
+        url('@if(!empty(session('page_background_image')))
+        {{ images_asset(asset('uploads/' . session('page_background_image'))) }}
+        @else{{ asset('images/default-page-bg.png') }}@endif')">
         @yield('content')
         
         <div class="flex-1 text-right">

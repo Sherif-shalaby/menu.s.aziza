@@ -1,7 +1,7 @@
 <div class="w-full mb-4">
     <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card"
         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
-        background-image: url('{{ !empty($product->getFirstMediaUrl('product'))? $product->getFirstMediaUrl('product'): asset('uploads/' . session('logo')) }}')">
+        background-image: url('{{images_asset($product->getFirstMediaUrl('product'))}}')">
 
         <div class="flex  w-full text-center">
             <div class="absolute bottom-0 mx-auto w-full">
