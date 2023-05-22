@@ -10,7 +10,7 @@
 
                 <!-- Logo desktop -->	
                 <a href="{{ action('HomeController@index') }}"  class="logo ">
-                    <img src="{{ asset('uploads/' . session('logo')) }}" alt="IMG-LOGO">
+                    <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO">
                     <p class="p-lr-20 cl2 mtext-102">{{ App\Models\System::getProperty('site_title') }}</p>
                 </a>
 
