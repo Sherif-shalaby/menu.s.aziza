@@ -25,14 +25,12 @@
 </head>
 
 <body class="font-poppins">
-
     @if (empty(request()->segment(2)) || request()->segment(2) == 'home')
         @include('layouts.partials.main-header')
     @endif
-    <main class="relative bg-cover bg-no-repeat bg-center"
-        style="background-attachment: fixed;background-image: url('@if(!empty(session('page_background_image'))){{ asset('uploads/' . session('page_background_image')) }}@else{{ asset('images/default-page-bg.png') }}@endif')">
+    <main class="relative  bg-no-repeat bg-center"
+        style="background-size:100% 100%;background-attachment: fixed;background-image: url('@if(!empty(session('page_background_image'))){{ images_asset(asset('uploads/' . session('page_background_image'))) }}@else{{ asset('images/default-page-bg.png') }}@endif')">
         @yield('content')
-        
         <div class="flex-1 text-right">
             <button class="bg11 text-white font-semibold py-2 px-3 rounded-full mt-10" id="goToTop" onclick="topFunction()"><i
                     class="fa fa-arrow-up"></i></button>

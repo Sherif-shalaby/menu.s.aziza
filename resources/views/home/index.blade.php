@@ -139,7 +139,7 @@
                         <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-7 m-tb-5 logo main-cat-style"  onclick="filterSelection({{$category->id}})" >
                             <div class="p-tb-3 logo">
                                 <img class="main-cat-img" 
-                                src="{{ !empty($category->getFirstMediaUrl('product_class')) ? $category->getFirstMediaUrl('product_class') : asset('uploads/' . session('logo')) }}" alt="">
+                                src="{{images_asset($category->getFirstMediaUrl('product_class')) }}" alt="">
                                 <span>  {{ $category->name }}</span>
                             </div>
                         </button>
@@ -159,7 +159,7 @@
                 <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}}">
                     <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
                         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
-                        background-image: url('{{ !empty($product->getFirstMediaUrl('product'))? $product->getFirstMediaUrl('product'): asset('uploads/' . session('logo')) }}')">
+                        background-image: url('{{images_asset($product->getFirstMediaUrl('product')) }}')">
                 
 
                     </div>
