@@ -2,16 +2,33 @@
 @php
 $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
 @endphp
-@section('content')
-    @include('layouts.partials.cart-header')
-    
+@section('css')
+
     <style>
         .c-f-s{
-           color: #222;
+            color: #222;
             font-size: medium;
             font-weight: 600;
         }
+        @media (max-width: 360px) {
+
+            button#send_the_order {
+                width: 100% !important;
+            }
+
+            button#send_the_order  .absolute {
+                position: relative !important;
+                right: 0 !important;
+            }
+        }
+        /**/
     </style>
+
+@endsection
+@section('content')
+    @include('layouts.partials.cart-header')
+
+
     <div class="container mx-auto mt-14">
         <div class="flex mt-40 bg11">
 
@@ -20,8 +37,8 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
 
     <div class="container mx-auto py-4">
         {!! Form::open(['url' => action('OrderController@store'), 'method' => 'pos', 'id' => 'cart_form']) !!}
-        <div class="flex lg:flex-row xs:flex-col py-4 bg11 opacity-80 "  >
-            <div class="flex-1 xl:px-16 lg:px-2 md:px-4 xs:px-4 flow-root">
+        <div class="flex lg:flex-row xs:flex-col py-4 bg11 opacity-80 row "  >
+            <div class="col-md-6 xl:px-16 lg:px-2 md:px-4 xs:px-4 flow-root">
                 <div class="form-group">
                     <label
                         class="font-semibold text-base cl0 mtext-101  @if ($locale_direction == 'rtl') float-right @else float-left @endif"
@@ -75,29 +92,31 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                             for="order_later">@lang('lang.order_later')</label>
                     </div>
                 </div>
-                <div class="flex flex-row justify-center order_later_div hidden ">
-                    <img class="md:h-8 md:w-12 xs:h-4 xs:w-8 px-2 md:mt-1 xs:mt-4"
-                        src="{{ asset('images/calender-icon.png') }}" alt="">
-                    <select id="month" name="month"
-                        class="font-select w-32 mx-2 bg12 border border-gray-300 cl5 md:text-base xs:text-xs rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full md:p-2.5 xs:p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
-                        @foreach ($month_array as $key => $month)
-                            <option @if ($key == date('m')) selected @endif value="{{ $key }}">
-                                {{ $month }}</option>
-                        @endforeach
-                    </select>
-                    <select id="day" name="day"
-                        class="font-select w-32 mx-2 bg12 border border-gray-300 cl5 md:text-base xs:text-xs rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full md:p-2.5 xs:p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
-                        @foreach (range(1, 31, 1) as $i)
-                            <option @if ($i == date('d')) selected @endif value="{{ $i }}">
-                                {{ $i }}</option>
-                        @endforeach
-                    </select>
-                    <img class="md:h-8 md:w-12 xs:h-4 xs:w-8 px-2 md:mt-1 xs:mt-4"
-                        src="{{ asset('images/time-icon.png') }}" alt="">
-
-                    <input type="time" name="time" id="base-input" value="{{ date('H:i') }}"
+                <div class="flex flex-row justify-center order_later_div hidden  row">
+                    <div class="flex flex-row col-md-8"  style="margin-top: 10px;">
+                        <img class="md:h-8 md:w-12 xs:h-4 xs:w-8 px-2 md:mt-1 xs:mt-4"
+                             src="{{ asset('images/calender-icon.png') }}" alt="">
+                        <select id="month" name="month"
+                                class="font-select w-32 mx-2 bg12 border border-gray-300 cl5 md:text-base xs:text-xs rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full md:p-2.5 xs:p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
+                            @foreach ($month_array as $key => $month)
+                                <option @if ($key == date('m')) selected @endif value="{{ $key }}">
+                                    {{ $month }}</option>
+                            @endforeach
+                        </select>
+                        <select id="day" name="day"
+                                class="font-select w-32 mx-2 bg12 border border-gray-300 cl5 md:text-base xs:text-xs rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full md:p-2.5 xs:p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
+                            @foreach (range(1, 31, 1) as $i)
+                                <option @if ($i == date('d')) selected @endif value="{{ $i }}">
+                                    {{ $i }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-6" style="display: inline-flex;margin-top: 10px;">
+                        <img class="md:h-8 md:w-12 xs:h-4 xs:w-8 px-2 md:mt-1 xs:mt-4"
+                            src="{{ asset('images/time-icon.png') }}" alt="">
+                        <input type="time" name="time" id="base-input" value="{{ date('H:i') }}"
                         class="font-select w-32 bg12 border border-gray-300 cl5 md:text-base xs:text-xs rounded-lg focus:ring-blue-500 focus:bg12 border-blue-500 block w-full py-2.5 px-0 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:bg12 border-blue-500">
-
+                    </div>
                 </div>
                 <div class="flex flex-row py-2  justify-center">
                     <div class="flex-1">
@@ -178,7 +197,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                 @endif
 
             </div>
-            <div class="flex-1 xl:px-16 lg:px-2 md:px-4 xs:px-4 xs:mt-8 xs:border-t-2">
+            <div class="col-md-6 xl:px-16 lg:px-2 md:px-4 xs:px-4 xs:mt-8 xs:border-t-2">
                 @foreach ($cart_content as $item)
                     @if ($item->attributes->extra != 1)
                         <h3 class="flex-col justify-center py-4">
@@ -191,7 +210,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                 </div>
                                 <div class="md:w-1/3 xs:w-5/12">
                                     <div class="flex flex-row qty_row justify-center w-full">
-                                       
+
                                         <button type="button"
                                             class="minus border-2 rounded-full text-lg text-center border-dark cl0 mtext-101 h-8 w-8">-</button>
                                         <input type="text" data-id="{{ $item->id }}" value="{{ $item->quantity }}"
@@ -211,7 +230,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                             <p class="text-xs cl0 mtext-101 font-semibold">{!! $item->associatedModel->product_details !!}</p>
                             <h3
                                 class="font-semibold text-base cl0 mtext-101 py-2 @if ($item->associatedModel->variations->first()->name == 'Default') hidden @endif">
-                                
+
                         </h3>
                             @foreach ($item->associatedModel->variations as $variation)
                                 @if ( $variation->id==$item->attributes->variation_id)
@@ -244,9 +263,9 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                                         </div>
                                     </div>
                                 @endif
-                             
+
                             @endforeach
-                      
+
                     @endif
                 @endforeach
 
