@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => env('ASSET_URL', null),
+    'asset_url' => env('ENABLE_POS_SYNC')?env('POS_SYSTEM_URL'):env('ASSET_URL', null),
 
     /*
     |--------------------------------------------------------------------------
