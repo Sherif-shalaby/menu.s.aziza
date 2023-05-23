@@ -20,19 +20,22 @@ $dining_tables = DiningTable::pluck('name', 'id');
 <div class="footer w-full     " style="border-top: 1px #85838386 solid">
     <div class=" mx-auto">
         <div class="flex flex-row" style="justify-content: space-between;">
-            <div class="w-1/4 text-center md:block">
+
+            <div class="w-1/4 text-center md:block" style="width: 27% !important;">
                 @include('layouts.partials.cart-row')
             </div>
             <div class="w-1/4 text-center md:block xs:hidden">
             </div>
-            <div class="w-2/4 text-right">
+            <div class="w-1/4 text-right"  style="width: 20% !important;">
                 <div class="flex-col mt-2 ">
+
                     <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="logo" >
                 
+
                 </div>
             </div>
             <div class="w-1/4 text-center md:block xs:hidden">
-               
+
             </div>
             <div class="w-1/4 text-left total">
                 <span class="w-full h-10 mt-4 rounded-lg cl2 mtext-102">@lang('lang.total')  </span> <br>
