@@ -2,7 +2,6 @@
 use Illuminate\Support\Str;
 function images_asset($path= null)
 {
-    // echo Str::replaceFirst('http://localhost:8000/', env('POS_SYSTEM_URL'), $path);
     if ($path==null){
         return $subject=images_asset(asset('uploads/' . session('logo')));
     }
