@@ -45,16 +45,16 @@
     <script>
         console.log("{{session('order_completed')}}", 'order_completed');
         @if (!empty(session('order_completed')))
-            swal.fire("Done", "Your order has been sent successfully", "success");
+            swal("Done", "Your order has been sent successfully", "success");
             @php
                 session()->forget('order_completed');
             @endphp
         @endif
         @if (!empty(session('status')))
             @if (session('status.success') == 1)
-                swal.fire("", "{{ session('status.msg') }}", "success");
+                swal("", "{{ session('status.msg') }}", "success");
             @elseif(session('status.success') == '0')
-                swal.fire("@lang('lang.error')!", "{{ session('status.msg') }}", "error");
+                swal("@lang('lang.error')!", "{{ session('status.msg') }}", "error");
             @endif
         @endif
     </script>

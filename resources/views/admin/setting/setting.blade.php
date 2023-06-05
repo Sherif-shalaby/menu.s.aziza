@@ -985,7 +985,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                         deleteBtn.classList.add('delete-btn');
                         deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
                         deleteBtn.addEventListener('click', () => {
-                            Swal.fire({
+                            Swal({
                                 title: '{{ __("site.Are you sure?") }}',
                                 text: "{{ __("site.You won't be able to delete!") }}",
                                 icon: 'warning',
@@ -995,7 +995,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                                 confirmButtonText: 'Yes, delete it!'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    Swal.fire(
+                                    Swal(
                                         'Deleted!',
                                         '{{ __("site.Your Image has been deleted.") }}',
                                         'success'
@@ -1022,7 +1022,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                     });
                     reader.readAsDataURL(file);
                 }else{
-                    Swal.fire({
+                    Swal({
                         icon: 'error',
                         title: '{{ __("site.Oops...") }}',
                         text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
