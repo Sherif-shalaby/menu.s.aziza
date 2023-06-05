@@ -19,7 +19,12 @@ class HomeController extends Controller
     {
         $homepage_category_carousel = System::getProperty('homepage_category_carousel');
         $categories = ProductClass::orderBy('product_classes.sort')->orderBy('product_classes.created_at','desc')->where('status', 1)->where('name', '!=', 'Extras')->get();
-        $products = Product::orderBy('products.sort')->orderBy('products.created_at','desc')->where('active', 1)->get();
+        $products = Product::orderBy('products.sort')->orderBy('products.created_at','desc')->where('active', 1)->where(function($query){
+            if(env('ENABLE_POS_SYNC')){
+                $query->where('is_raw_material', 0);
+            }
+        })
+        ->get();
         $offers_array = [];
 
         $offers = Offer::where(function ($q) {
