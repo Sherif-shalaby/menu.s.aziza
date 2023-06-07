@@ -111,28 +111,29 @@ class OrderController extends Controller
             DB::commit();
             // $orders_count=
             // event(new NewOrderEvent($order));
-
-            $options = array(
-                'cluster' =>  env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true
-            );
-    
-    
-            $pusher = new Pusher(
-                env('PUSHER_APP_KEY'),
-                env('PUSHER_APP_SECRET'),
-                env('PUSHER_APP_ID'),
-                $options
-            );
-    
-            $table=DiningTable::find($order->table_no);
-            $data = [
-                'order_id'=>$order->id,
-                'table_no'=>$order->table_no,
-                'room_no'=>$table->dining_room_id,
-                'orders_count'=>$order->order_details()->count()
-            ];
-            $pusher->trigger('order-channel', 'new-order', $data);
+            if(env('ENABLE_POS_SYNC')){
+                $options = array(
+                    'cluster' =>  env('PUSHER_APP_CLUSTER'),
+                    'useTLS' => true
+                );
+        
+        
+                $pusher = new Pusher(
+                    env('PUSHER_APP_KEY'),
+                    env('PUSHER_APP_SECRET'),
+                    env('PUSHER_APP_ID'),
+                    $options
+                );
+        
+                $table=DiningTable::find($order->table_no);
+                $data = [
+                    'order_id'=>$order->id,
+                    'table_no'=>$order->table_no,
+                    'room_no'=>$table->dining_room_id,
+                    'orders_count'=>$order->order_details()->count()
+                ];
+                $pusher->trigger('order-channel', 'new-order', $data);
+            }
             //send email for order
 
             $email = System::getProperty('system_email'); //system email

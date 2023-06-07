@@ -163,27 +163,37 @@
                 
 
                     </div>
+                    @php
+                        $variation_products='';
+                        if($product->variations->where('name','!=','Default')->count()>0){
+                            $variation_products=$product->variations->where('name','!=','Default');
+                        }else{
+                            $variation_products=$product->variations->where('name','Default');
+                        }
+                    @endphp
                     <div class="productCard flex bg0 p-2 " style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
-                        @foreach($product->variations as $size)
+                        @foreach($variation_products as $size)
                             <input type="hidden" value="{{$size->size_id}}" name="size"/>
                             <input type="hidden" value="{{$size->id}}" name="variation"/>
                             @break
                         @endforeach
                         {{-- @if(count($product->sizes)>0) --}}
-                        @foreach($product->variations as $s)
+                    
+                        @foreach($variation_products as $s)
                         <div class="">
-                            
-                            <a href="{{ action('ProductController@show', $product->id) }}"
-                                class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
-                                style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
-                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>
-                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
-                                    {{ session('currency')['code'] }} 
-                                    <span class="sell-price">
-                                    {{ @num_format($s->default_sell_price - $product->discount_value) }}
-                                    </span>
-                                </p>
-                            </a>
+                            <div class="">
+                                <a href="{{ action('ProductController@show', $product->id) }}"
+                                    class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
+                                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
+                                    <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>
+                                    <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
+                                        {{ session('currency')['code'] }} 
+                                        <span class="sell-price">
+                                        {{ @num_format($s->default_sell_price - $product->discount_value) }}
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
                             <div>
                                 @if($s->size_id!==null)
                                 <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
@@ -201,7 +211,7 @@
                                 <!-- Dropdown menu -->
                                 <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">
-                                        @foreach($product->variations as $size)
+                                        @foreach($variation_products as $size)
                                             <li>
                                                 <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>
                                             </li>
@@ -220,16 +230,16 @@
                                 <button
                                     class="minus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">-</button>
                                 <input type="quantity" value="1" name="quantity"
-                                    class="quantityp quantity text-center focus:outline-none text-dark bg-transparent w-16">
+                                    class="quantityp quantity text-center focus:outline-none text-dark bg-transparent " style="width: 3.4rem;">
                                 <button
                                     class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
                             </div>
                             <div class="flex">
                                 
-                                @foreach($product->variations as $var)
+                                @foreach($variation_products as $var)
                                 <a data-variation_id="{{ $var->id }}" 
                                     class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
-                                    <i class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"></i></a>
+                                    <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
                                 @break
                                 @endforeach
                                 </div>
@@ -371,10 +381,10 @@ $(document).on('click', '.minus', function() {
                 $('.total').load(document.URL +  ' .total');
             }
         });
-
-
-        // window.location.href = base_path + '/cart/add-to-cart/' + $(this).data('product_id')+'/'+sizeId;
     })
+
+
+    
     $(document).on('click', '.changeSize', function(e){
         e.preventDefault();
         var price=$(this).data('price');
@@ -385,8 +395,6 @@ $(document).on('click', '.minus', function() {
         var s=$(this).parent().parent().parent().siblings().find('.size-menu').text(size);
         $(this).closest('.productCard').children('input[name=size]').val(size_id);
         $(this).closest('.productCard').children('input[name=variation]').val(variation_id);
-        // __write_number(size,)
-        // var size_id=$(this).data('size_id');
     });
 </script>
 @endsection

@@ -53,10 +53,11 @@ class ProductController extends Controller
         if (request()->ajax()) {
 
             $products = Product::leftjoin('product_classes', 'products.product_class_id', 'product_classes.id')
-            ->orderBy('products.sort')->orderBy('products.created_at','desc');
-            if(env('ENABLE_POS_SYNC')){
-            $products->where('is_raw_material', 0);
-            }
+            ->orderBy('products.sort')->orderBy('products.created_at','desc')->where(function($query){
+                if(env('ENABLE_POS_SYNC')){
+                    $query->where('is_raw_material', 0);
+                }
+            });
             if (!empty(request()->product_class_id)) {
                 $products->where('products.product_class_id', request()->product_class_id);
             }
