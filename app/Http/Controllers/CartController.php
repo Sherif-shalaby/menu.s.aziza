@@ -94,7 +94,8 @@ class CartController extends Controller
                 'attributes' => [
                     'variation_id' => $variation->id,
                     'extra' => true,
-                    'discount' => $product->discount_value
+                    'discount' => $product->discount_value,
+                    'quantity' => $quantity,
                 ],
                 'associatedModel' => $product
             ));
@@ -139,24 +140,30 @@ class CartController extends Controller
             $item_exist = \Cart::session($user_id)->get($variation->id);
             // return $item_exist->quantity+$quantity;
             if (!empty($item_exist)) {
+                $attributes=$item_exist->attributes;
+                $attributes['quantity']=number_format((float)$item_exist->attributes->quantity+$quantity, 3, '.');
                 \Cart::session($user_id)->update($variation->id, array(
-                    // 'quantity' =>  $item_exist->quantity+$quantity
-                    'quantity' =>  array(
-                        'relative' => false,
-                        'value' => $item_exist->quantity+$quantity
-                    ),
+                    'attributes' =>$attributes
                 ));
+                // \Cart::session($user_id)->update($variation->id, array(
+                //     // 'quantity' =>  $item_exist->quantity+$quantity
+                //     'quantity' =>  array(
+                //         'relative' => false,
+                //         'value' => $item_exist->quantity+$quantity
+                //     ),
+                // ));
             } else {
                 \Cart::session($user_id)->add(array(
                     'id' => $variation->id,
                     'name' => $product->name,
                     'price' => $price,
-                    'quantity' =>  $quantity,
+                    'quantity' =>  1,
                     'attributes' => [
                         'variation_id' => $variation->id,
                         'extra' => false,
                         'discount' => $product_discount,
                         'size'=>$variation->size->name,
+                        'quantity' => $quantity
                     ],
                     'associatedModel' => $product
                 ));
@@ -220,14 +227,18 @@ class CartController extends Controller
                 $quantity=str_replace(',','.',$quantity);
             }
             $user_id = Session::get('user_id');
-
-
+            $item_exist = \Cart::session($user_id)->get($product_id);
+            $attributes=$item_exist->attributes;
+            $attributes['quantity']=number_format((float)$quantity, 3, '.');
             \Cart::session($user_id)->update($product_id, array(
-                'quantity' => array(
-                    'relative' => false,
-                    'value' => $quantity
-                ),
+                'attributes' =>$attributes
             ));
+            // \Cart::session($user_id)->update($product_id, array(
+            //     'quantity' => array(
+            //         'relative' => false,
+            //         'value' => $quantity
+            //     ),
+            // ));
 
             $this->cartUtil->createOrUpdateCart($user_id);
 

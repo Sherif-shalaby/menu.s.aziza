@@ -159,9 +159,6 @@
                 success: function (response) {
                 }
             });
-            // $('.add_to_cart_btn').attr('href',
-            //     '{{ action('CartController@addToCart', $product->id,) }}?quantity=' +
-            //     $(this).val());
         });
 
         $(document).ready(function() {
