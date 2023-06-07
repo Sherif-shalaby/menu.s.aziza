@@ -340,9 +340,14 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
 
             let product_id = $(this).data('id');
             let quantity = $(this).val();
-
-            window.location.href = base_path + "/cart/update-product-quantity/" + product_id + "/" +
-                quantity;
+            $.ajax({
+                type: "GET",
+                url: "/cart/update-product-quantity/" + product_id + "/" +quantity,
+                success: function (response) {
+                }
+            });
+            // window.location.href = base_path + "/cart/update-product-quantity/" + product_id + "/" +
+            //     quantity;
 
         })
 
