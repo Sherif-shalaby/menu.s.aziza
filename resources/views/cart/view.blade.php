@@ -301,7 +301,7 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
         <div class="flex justify-center">
             <button type="button" class="lg:w-1/4 md:w-1/2 xs:w-full h-10 mt-4 rounded-lg  bg11 text-white relative"
                 id="send_the_order">@lang('lang.send_the_order')
-                <span class="text-white text-base absolute right-2">{{ @num_format($total) }}
+                <span class="text-white text-base absolute right-2 order-total-price">{{ @num_format($total) }}
                     {{ session('currency')['code'] }}</span></button>
         </div>
 
@@ -345,6 +345,8 @@ $locale_direction = LaravelLocalization::getCurrentLocaleDirection();
                 type: "GET",
                 url: "/cart/update-product-quantity/" + product_id + "/" +quantity,
                 success: function (response) {
+                    console.log(response.total)
+                    $('.order-total-price').text(response.total);
                 }
             });
             // window.location.href = base_path + "/cart/update-product-quantity/" + product_id + "/" +
