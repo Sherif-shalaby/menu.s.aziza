@@ -56,7 +56,7 @@ class CartController extends Controller
         $total =$this->getTotal($user_id);
         $month_array = $this->commonUtil->getMonthsArray();
         $stores = Store::pluck('name', 'id');
-        $dining_tables = DiningTable::rightJoin('table_reservations', 'dining_tables.id', '=', 'table_reservations.dining_table_id')->pluck('name', 'dining_tables.id');
+        $dining_tables = DiningTable::pluck('name', 'dining_tables.id');
 
         return view('cart.view')->with(compact(
             'stores',
