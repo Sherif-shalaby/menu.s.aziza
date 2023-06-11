@@ -141,7 +141,7 @@ class CartController extends Controller
             // return $item_exist->quantity+$quantity;
             if (!empty($item_exist)) {
                 $attributes=$item_exist->attributes;
-                $attributes['quantity']=number_format((float)$item_exist->attributes->quantity+$quantity, 3, '.');
+                $attributes['quantity']=is_float($item_exist->attributes->quantity+$quantity)?number_format((float)$item_exist->attributes->quantity+$quantity, 3, '.'):$item_exist->attributes->quantity+$quantity;
                 \Cart::session($user_id)->update($variation->id, array(
                     'attributes' =>$attributes
                 ));
@@ -229,7 +229,7 @@ class CartController extends Controller
             $user_id = Session::get('user_id');
             $item_exist = \Cart::session($user_id)->get($product_id);
             $attributes=$item_exist->attributes;
-            $attributes['quantity']=number_format((float)$quantity, 3, '.');
+            $attributes['quantity']=strpos($quantity,'.')!==false?number_format((float)$quantity, 3, '.'):$quantity;
             \Cart::session($user_id)->update($product_id, array(
                 'attributes' =>$attributes
             ));
@@ -314,5 +314,9 @@ class CartController extends Controller
         }
 
         return redirect()->back()->with('status', $output);
+    }
+    public function getTotal()
+    {
+        
     }
 }
