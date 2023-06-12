@@ -23,8 +23,7 @@ $moment_time_format = 'hh:mm A';
 	<script src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
 	<script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 <!--===============================================================================================-->
-<script src="https://fastly.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-	{{-- <script src="{{ asset('vendor/select2/select2.min.js') }}"></script> --}}
+	<script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
 	<script>
 		$(".js-select2").each(function(){
 			$(this).select2({

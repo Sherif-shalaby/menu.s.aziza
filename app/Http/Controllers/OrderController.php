@@ -91,9 +91,9 @@ class OrderController extends Controller
                     'product_id' => $content->associatedModel->id,
                     'variation_id' => $content->attributes->variation_id,
                     'discount' => $discount,
-                    'quantity' => $content->quantity,
+                    'quantity' =>$content->attributes->quantity,
                     'price' => $content->price,
-                    'sub_total' => $content->price * $content->quantity,
+                    'sub_total' => $content->price * $content->attributes->quantity,
                 ];
                 // . " " .__('lang.size')." ".$content->attributes->size??'#'.
                 $product = Product::find($content->associatedModel->id);
