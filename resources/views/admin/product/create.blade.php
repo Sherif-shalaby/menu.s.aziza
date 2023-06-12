@@ -232,7 +232,7 @@
                 {!! Form::label('product_class_id', __('lang.category') . ' *', []) !!}
 
                 <div class="input-group my-group">
-                    {!! Form::select('product_class_id', $categories, false, ['class' => 'form-control select2','style' => 'width: 80% !important', 'placeholder' => __('lang.please_select'), 'required']) !!}
+                    {!! Form::select('product_class_id', $categories, false, ['class' => 'selectpicker form-control select2','data-live-search' => 'true','style' => 'width: 80% !important', 'placeholder' => __('lang.please_select'), 'required']) !!}
                     <span class="input-group-btn">
                         @can('categories.create')
                             <button class="btn-modal btn btn-default bg-white btn-flat"
