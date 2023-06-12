@@ -12,7 +12,7 @@
         </div>
     </div> --}}
     <script>
-        
+
         function filterSelection(class_id) {
 
             if(class_id != 'all'){
@@ -22,7 +22,7 @@
                 $(".filterDiv").removeClass('hide');
             }
         }
-        
+
         function w3AddClass(element, name) {
           var i, arr1, arr2;
           arr1 = element.className.split(" ");
@@ -31,19 +31,19 @@
             if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
           }
         }
-        
+
         function w3RemoveClass(element, name) {
           var i, arr1, arr2;
           arr1 = element.className.split(" ");
           arr2 = name.split(" ");
           for (i = 0; i < arr2.length; i++) {
             while (arr1.indexOf(arr2[i]) > -1) {
-              arr1.splice(arr1.indexOf(arr2[i]), 1);     
+              arr1.splice(arr1.indexOf(arr2[i]), 1);
             }
           }
           element.className = arr1.join(" ");
         }
-        
+
         // Add active class to the current button (highlight it)
         var btnContainer = document.getElementById("myBtnContainer");
         var btns = btnContainer.getElementsByClassName("btn");
@@ -58,7 +58,7 @@
 <style>
     .filterDiv {
       margin: 2px;
-     
+
     }
     .hide{
         display: none;
@@ -82,7 +82,7 @@
         transition: all 0.3s ease 0s;
         color: rgb(65, 75, 92);
     }
-   
+
     .main-cat-img{
         transition: all 0.3s ease 0s;
         position: absolute;
@@ -113,7 +113,7 @@
     border: #927c40 2px solid;
     border-radius: 10px;
     }
-    
+
     @media (max-width: 450px) {
         .flex{
             flex-direction: column;
@@ -121,7 +121,7 @@
         .w-8{
             width: 1.5rem;
         }
-        
+
         .h-8{
             height: 1.5rem;
         }
@@ -133,17 +133,17 @@
             <div class="flex-w flex-sb-m ">
                 <div class=" filter-tope-group m-tb-10" style="display: flex;">
                     <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1  main-cat-style"  onclick="filterSelection('all')" >
-                       @lang('lang.all_product') 
+                       @lang('lang.all_product')
                     </button>
                     @foreach ($categories as $category)
                         <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-7 m-tb-5 logo main-cat-style"  onclick="filterSelection({{$category->id}})" >
                             <div class="p-tb-3 logo">
-                                <img class="main-cat-img" 
+                                <img class="main-cat-img"
                                 src="{{images_asset($category->getFirstMediaUrl('product_class')) }}" alt="">
                                 <span>  {{ $category->name }}</span>
                             </div>
                         </button>
-                        
+
                     @endforeach
                 </div>
 
@@ -156,11 +156,11 @@
         <div class="w-full mx-auto p-4 ">
             <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6" >
                 @foreach ($products as $product)
-                <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}}">
+                <div class=" w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}} " id="product">
                     <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
                         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
                         background-image: url('{{images_asset($product->getFirstMediaUrl('product')) }}')">
-                
+
 
                     </div>
                     @php
@@ -178,16 +178,16 @@
                             @break
                         @endforeach
                         {{-- @if(count($product->sizes)>0) --}}
-                    
+
                         @foreach($variation_products as $s)
                         <div class="">
-                            <div class="">
+                            <div class="productName">
                                 <a href="{{ action('ProductController@show', $product->id) }}"
                                     class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
                                     style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
                                     <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>
                                     <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
-                                        {{ session('currency')['code'] }} 
+                                        {{ session('currency')['code'] }}
                                         <span class="sell-price">
                                         {{ @num_format($s->default_sell_price - $product->discount_value) }}
                                         </span>
@@ -196,16 +196,16 @@
                             </div>
                             <div>
                                 @if($s->size_id!==null)
-                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
+                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                                     <span>
-                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>                           
-                                    </span> 
+                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+                                    </span>
                                     &nbsp;
-                                    <span>@lang('lang.size')</span> 
-                                    &nbsp;   
+                                    <span>@lang('lang.size')</span>
+                                    &nbsp;
                                     <span class="size-menu">
                                         {{$s->size->name}}</span>
-                                
+
                                 </button>
                                 @endif
                                 <!-- Dropdown menu -->
@@ -220,10 +220,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-   
-
-
 
                         <div class="f-me">
                             <div class="flex flex-row  mt-2">
@@ -235,10 +231,10 @@
                                     class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
                             </div>
                             <div class="flex">
-                                
+
                                 @foreach($variation_products as $var)
-                                <a data-variation_id="{{ $var->id }}" 
-                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">  
+                                <a data-variation_id="{{ $var->id }}"
+                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">
                                     <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
                                 @break
                                 @endforeach
@@ -250,7 +246,7 @@
 
 
                 </div>
-                
+
                 @endforeach
             </div>
         </div>
@@ -289,7 +285,7 @@
         @endif
     @endif
 
- 
+
 </div>
 @endsection
 
@@ -384,7 +380,7 @@ $(document).on('click', '.minus', function() {
     })
 
 
-    
+
     $(document).on('click', '.changeSize', function(e){
         e.preventDefault();
         var price=$(this).data('price');

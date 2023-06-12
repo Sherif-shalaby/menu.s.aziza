@@ -854,6 +854,24 @@ input:checked + .toggle-bg {
 .container {
   width: 100%;
 }
+@media(max-width: 600px){
+    .productName{
+        height: 45px!important;
+    }
+    .productCard{
+        height: 0!important;
+        flex-direction: column;
+    }
+    #product{
+        margin-bottom: 7.5rem!important;
+    }
+}
+@media(min-width: 600px){
+    .quantity{
+        width: 1.4rem!important;
+        margin-bottom: 10px;
+    }
+}
 @media (min-width: 360px) {
 
   .container {
@@ -865,6 +883,10 @@ input:checked + .toggle-bg {
   .container {
     max-width: 640px;
   }
+    .quantity{
+        width: 3.4rem!important;
+        margin-bottom: 0;
+    }
 }
 @media (min-width: 768px) {
 
