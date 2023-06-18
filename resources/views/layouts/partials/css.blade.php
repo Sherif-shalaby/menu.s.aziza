@@ -1,5 +1,5 @@
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<link rel="stylesheet" href="{{ asset('css/all.min.css') }}" />
 <link href="{{ asset('css/sweetalert2.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/owl.carousel.min.css') }}" rel="stylesheet">
 <link href="{{ asset('css/owl.theme.default.min.css') }}" rel="stylesheet">
@@ -19,7 +19,7 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/animsition/css/animsition.min.css')}}">
 <!--===============================================================================================-->
-<link href="https://fastly.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="{{asset('vendor/animsition/css/select2.min.css')}}" rel="stylesheet" />
 	{{-- <link rel="stylesheet" type="text/css" href="{{asset('vendor/select2/select2.min.css')}}"> --}}
 <!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="{{asset('vendor/daterangepicker/daterangepicker.css')}}">
