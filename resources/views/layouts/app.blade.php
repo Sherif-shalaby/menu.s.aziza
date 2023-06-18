@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     
    
-<meta name="description" content="This is an menu of restaurants linked to the cashier program as the requests reaches you on the program directly, Category: Foods">
-<meta name="google-site-verification" content="qxW5PqYjtpOQSI6WJoytZMUkKkuD7iU0bo5v8wR_uHg" />
+    <meta name="description" content="{{ App\Models\System::getProperty('about_us_footer') }}">
+    <meta name="google-site-verification" content="qxW5PqYjtpOQSI6WJoytZMUkKkuD7iU0bo5v8wR_uHg" />
 
-<meta name="robots" content="index, follow">
-<meta name="googlebot" content="translate">
-<meta name="google" content="sitelinkssearchbox">    
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="translate">
+    <meta name="google" content="sitelinkssearchbox">    
 
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

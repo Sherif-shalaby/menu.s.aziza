@@ -111,7 +111,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                                                                                                                   class="fa fa-trash"></i></button>
                                 <span class="btn btn-xs btn-primary  crop-btn" id="crop-logo-btn" data-toggle="modal" data-target="#logoModal"><i style="font-size: 25px;"
                                 class="fas fa-crop"></i></span>
-                                     
+
                             </div>
                         @endif
 
@@ -170,7 +170,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                                                                                                                   class="fa fa-trash"></i></button>
                                 <span class="btn btn-xs btn-primary  crop-btn" id="crop-home-btn" data-toggle="modal" data-target="#homeModal"><i style="font-size: 25px;"
                                 class="fas fa-crop"></i></span>
-                                     
+
                             </div>
                         @endif
 
@@ -230,7 +230,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                                                                                                                   class="fa fa-trash"></i></button>
                                 <span class="btn btn-xs btn-primary  crop-btn" id="crop-breadcrumb-btn" data-toggle="modal" data-target="#breadcrumbModal"><i style="font-size: 25px;"
                                 class="fas fa-crop"></i></span>
-                                     
+
                             </div>
                         @endif
 
@@ -290,7 +290,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                                                                                                                   class="fa fa-trash"></i></button>
                                 <span class="btn btn-xs btn-primary  crop-btn" id="crop-page-btn" data-toggle="modal" data-target="#pageModal"><i style="font-size: 25px;"
                                 class="fas fa-crop"></i></span>
-                                     
+
                             </div>
                         @endif
 
@@ -321,7 +321,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                     </div>
                 </div>
             </div>
-          
+
         </div>
 
         <div class="row">
@@ -605,7 +605,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
             // edit Case
             @if(!empty($page_background_image) &&  isset($settings['page_background_image']))
                 document.getElementById("crop-page-btn").addEventListener('click', () => {
-                    
+
                     console.log(("#exampleModal"))
                     setTimeout(() => {
                         launchPageCropTool(document.getElementById("img_page_footer"));
@@ -716,8 +716,8 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
             // Set up Croppie options
             var croppieOptions = {
                 viewport: {
-                    width: 450,
-                    height: 250,
+                    width: 600,
+                    height: 200,
                     type: 'square' // or 'square'
                 },
                 boundary: {
@@ -765,7 +765,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                 // edit Case
                 @if(!empty($breadcrumb_background_image) &&  isset($settings['breadcrumb_background_image']))
                     document.getElementById("crop-breadcrumb-btn").addEventListener('click', () => {
-                        
+
                         console.log(("#exampleModal"))
                         setTimeout(() => {
                             launchBreadcrumbCropTool(document.getElementById("img_breadcrumb_footer"));
@@ -925,7 +925,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                 // edit Case
                 @if(!empty($home_background_image) &&  isset($settings['home_background_image']))
                     document.getElementById("crop-home-btn").addEventListener('click', () => {
-                        
+
                         console.log(("#exampleModal"))
                         setTimeout(() => {
                             launchHomeCropTool(document.getElementById("img_home_footer"));
@@ -1085,7 +1085,7 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
                 // edit Case
                 @if (!empty($logo) && isset($settings['logo']))
                     document.getElementById("crop-logo-btn").addEventListener('click', () => {
-                        
+
                         console.log(("#exampleModal"))
                         setTimeout(() => {
                             launchLogoCropTool(document.getElementById("img_logo_footer"));
