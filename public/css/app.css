@@ -864,8 +864,8 @@ input:checked + .toggle-bg {
     }
     #product{
         margin-bottom: 7.5rem!important;
-    }
-    /* .xs\:gap-2 {
+    } 
+    .xs\:gap-2 {
         gap: 4rem;
     }
     .xs\:grid-cols-3 {
@@ -876,8 +876,10 @@ input:checked + .toggle-bg {
     }
     .xs\:px-4 {
         padding-left: 1rem;
-        padding-right: 1rem; */
+        padding-right: 1rem;
+    } 
 }
+
 @media(min-width: 600px){
     .quantity{
         width: 1.4rem!important;
