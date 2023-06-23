@@ -854,6 +854,34 @@ input:checked + .toggle-bg {
 .container {
   width: 100%;
 }
+#dropdownMenuIconHorizontalButton{
+    position: absolute;
+    top: 13.5%;
+    opacity: 0.6;
+}
+#dropdownMenuIconHorizontalButton li{
+    margin-bottom: 5px;
+}
+#dropdownMenuIconHorizontalButton li button{
+    width: 100px;
+    text-align: center;
+}
+#dropdownMenuIconHorizontalButton li button:focus{
+    color: rgb(146, 124, 64)!important;;
+    background-color: #fff;
+}
+button.selected{
+    color: rgb(146, 124, 64)!important;;
+    background-color: #fff;
+}
+#selected{
+    position: absolute;
+    top: 24.3%;
+    color: rgb(146, 124, 64)!important;;
+    background-color: #fff;
+    opacity: 0.5;
+}
+
 @media(max-width: 600px){
     .productName{
         height: 45px!important;
@@ -864,7 +892,7 @@ input:checked + .toggle-bg {
     }
     #product{
         margin-bottom: 7.5rem!important;
-    } 
+    }
     .xs\:gap-2 {
         gap: 4rem;
     }
@@ -877,13 +905,22 @@ input:checked + .toggle-bg {
     .xs\:px-4 {
         padding-left: 1rem;
         padding-right: 1rem;
-    } 
+    }
+    #dropdownMenuIconHorizontalButton{
+        top: 14.5%;
+    }
+    #selected{
+        top: 21.6%;
+    }
 }
 
 @media(min-width: 600px){
     .quantity{
         width: 1.4rem!important;
         margin-bottom: 10px;
+    }
+    #selected{
+        top: 23.6%;
     }
 }
 @media (min-width: 360px) {
@@ -907,18 +944,37 @@ input:checked + .toggle-bg {
   .container {
     max-width: 768px;
   }
+    #dropdownMenuIconHorizontalButton{
+        top: 19.5%;
+    }
+    #selected{
+        top: 27.6%;
+    }
 }
 @media (min-width: 1024px) {
 
   .container {
     max-width: 1024px;
   }
+    #dropdownMenuIconHorizontalButton{
+        top: 16.5%;
+    }
+    #selected{
+        top: 28.6%;
+    }
 }
 @media (min-width: 1280px) {
 
   .container {
     max-width: 1280px;
   }
+    #dropdownMenuIconHorizontalButton{
+        top: 16.5%;
+    }
+
+    #selected{
+        top: 29.6%;
+    }
 }
 @media (min-width: 1536px) {
 

@@ -170,16 +170,17 @@
                         }else{
                             $variation_products=$product->variations->where('name','Default');
                         }
+
                     @endphp
                     <div class="productCard flex bg0 p-2 " style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
-                        @foreach($variation_products as $size)
+                        @foreach($product->variations as $size)
                             <input type="hidden" value="{{$size->size_id}}" name="size"/>
                             <input type="hidden" value="{{$size->id}}" name="variation"/>
                             @break
                         @endforeach
                         {{-- @if(count($product->sizes)>0) --}}
 
-                        @foreach($variation_products as $s)
+                        @foreach($product->variations as $s)
                         <div class="">
                             <div class="productName">
                                 <a href="{{ action('ProductController@show', $product->id) }}"
@@ -195,29 +196,44 @@
                                 </a>
                             </div>
                             <div>
+                                <button id="selected"  disabled class="size-menu p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >
+                                    {{$s->size->name}}<button>
+                            </div>
+                            <div>
                                 @if($s->size_id!==null)
-                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
-                                    <span>
-                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
-                                    </span>
-                                    &nbsp;
-                                    <span>@lang('lang.size')</span>
-                                    &nbsp;
-                                    <span class="size-menu">
-                                        {{$s->size->name}}</span>
-
-                                </button>
-                                @endif
-                                <!-- Dropdown menu -->
-                                <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">
-                                        @foreach($variation_products as $size)
+                                    <ul id="dropdownMenuIconHorizontalButton">
+                                        @foreach($product->variations as $size)
                                             <li>
-                                                <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>
+                                                <button id="sizes"  data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"
+                                                        class="changeSize bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                                                    {{$size->size->name}}
+                                                </button>
                                             </li>
                                         @endforeach
                                     </ul>
-                                </div>
+                                @endif
+{{--                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">--}}
+{{--                                    <span>--}}
+{{--                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>--}}
+{{--                                    </span>--}}
+{{--                                    &nbsp;--}}
+{{--                                    <span>@lang('lang.size')</span>--}}
+{{--                                    &nbsp;--}}
+{{--                                    <span class="size-menu">--}}
+{{--                                        {{$s->size->name}}</span>--}}
+
+{{--                                </button>--}}
+
+                                <!-- Dropdown menu -->
+{{--                                <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">--}}
+{{--                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">--}}
+{{--                                        @foreach($product->variations as $size)--}}
+{{--                                            <li>--}}
+{{--                                                <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>--}}
+{{--                                            </li>--}}
+{{--                                        @endforeach--}}
+{{--                                    </ul>--}}
+{{--                                </div>--}}
                             </div>
                         </div>
 
@@ -378,19 +394,25 @@ $(document).on('click', '.minus', function() {
             }
         });
     })
-
-
+$(document).ready(function() {
+    var selected_content = document.getElementById("selected").val;
+    var button_content = document.getElementById("sizes").textContent;
+    if(selected_content == button_content){
+        var add_selected = document.getElementById("sizes").classList.add("selected");
+    }
+});
 
     $(document).on('click', '.changeSize', function(e){
         e.preventDefault();
         var price=$(this).data('price');
         var size_id=$(this).data('size_id');
         var variation_id=$(this).data('variation_id');
-        $(this).parent().parent().parent().parent().siblings().find('.sell-price').text(price);
+        $(this).parent().parent().parent().siblings().find('.sell-price').text(price);
         var size=$(this).data('size_name');
         var s=$(this).parent().parent().parent().siblings().find('.size-menu').text(size);
         $(this).closest('.productCard').children('input[name=size]').val(size_id);
-        $(this).closest('.productCard').children('input[name=variation]').val(variation_id);
+        $(this).focus()
+
     });
 </script>
 @endsection
