@@ -893,6 +893,9 @@ button.selected{
     #dropdownMenuIconHorizontalButton{
         top: 14.5% !important;
     }
+    #product {
+        margin-bottom: 3.5rem !important;
+    }
 }
 @media(max-width: 359.5px){
     .xs\:gap-2 {
@@ -908,9 +911,7 @@ button.selected{
         padding-left: 1rem;
         padding-right: 1rem;
     }
-    #product {
-        margin-bottom: 5.5rem !important;
-    }
+
     #dropdownMenuIconHorizontalButton{
         top: 13% !important;
 
