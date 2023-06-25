@@ -945,6 +945,10 @@ button.selected{
   }
     #dropdownMenuIconHorizontalButton{
         top: 17.5% !important;
+        font-size: 8px;
+    }
+    #dropdownMenuIconHorizontalButton li button {
+        font-size: 8px;
     }
 }
 @media (min-width: 640px) {
