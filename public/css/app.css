@@ -918,10 +918,10 @@ button.selected{
     }
     #selected{
         top: 18%;
-        font-size: 8px;
+        /*font-size: 8px;*/
     }
     #dropdownMenuIconHorizontalButton li button {
-        font-size: 8px;
+        /*font-size: 8px;*/
     }
 }
 
@@ -937,6 +937,10 @@ button.selected{
     }
     #selected{
         top: 23.6%;
+        font-size: inherit
+    }
+    #dropdownMenuIconHorizontalButton li button {
+        font-size: inherit
     }
 }
 @media (min-width: 360px) {
@@ -945,10 +949,10 @@ button.selected{
     max-width: 360px;
   }
     #dropdownMenuIconHorizontalButton{
-        top: 17.5% !important;
+        top: 15% !important;
         font-size: 8px;
     }
-    #dropdownMenuIconHorizontalButton li button {
+    #selected{
         font-size: 8px;
     }
 }
@@ -961,6 +965,9 @@ button.selected{
         width: 3.4rem!important;
         margin-bottom: 0;
     }
+    #dropdownMenuIconHorizontalButton {
+        font-size: 15px;
+    }
 }
 @media (min-width: 768px) {
 
@@ -968,7 +975,7 @@ button.selected{
     max-width: 768px;
   }
     #dropdownMenuIconHorizontalButton{
-        top: 20.5%;
+        top: 20.5% !important;
     }
     #selected{
         top: 28.6%;
@@ -980,7 +987,7 @@ button.selected{
     max-width: 1024px;
   }
     #dropdownMenuIconHorizontalButton{
-        top: 16.5%;
+        top: 16.5% !important;
     }
     #selected{
         top: 28.6%;
@@ -992,7 +999,7 @@ button.selected{
     max-width: 1280px;
   }
     #dropdownMenuIconHorizontalButton{
-        top: 16.5%;
+        top: 16.5% !important;
     }
 
     #selected{
