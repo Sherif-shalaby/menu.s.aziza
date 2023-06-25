@@ -195,10 +195,10 @@
                                     </p>
                                 </a>
                             </div>
-                            <div>
-                                <button id="selected"  disabled class="size-menu p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >
-                                    {{$s->size->name}}<button>
-                            </div>
+{{--                            <div>--}}
+{{--                                <button id="selected"  disabled class="size-menu p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >--}}
+{{--                                    {{$s->size->name}}<button>--}}
+{{--                            </div>--}}
                             <div>
                                 @if($s->size_id!==null)
                                     <ul id="dropdownMenuIconHorizontalButton">
