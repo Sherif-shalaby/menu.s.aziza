@@ -913,15 +913,15 @@ button.selected{
     }
 
     #dropdownMenuIconHorizontalButton{
-        top: 13% !important;
+        top: 14% !important;
 
     }
     #selected{
         top: 18%;
-        /*font-size: 8px;*/
+        font-size: 8px;
     }
     #dropdownMenuIconHorizontalButton li button {
-        /*font-size: 8px;*/
+        font-size: 8px;
     }
 }
 
@@ -949,7 +949,7 @@ button.selected{
     max-width: 360px;
   }
     #dropdownMenuIconHorizontalButton{
-        top: 15% !important;
+        top: 16% !important;
         font-size: 8px;
     }
     #selected{
