@@ -1,0 +1,106 @@
+.toggle-bg:after {
+    border-color: #927c40;
+    background: #927c40;
+}
+input:checked + .toggle-bg:after {
+    border-color: #927c40;
+    background: #927c40;
+}
+
+input:checked + .toggle-bg {
+    background: #ffffff;
+    border-color: #ffffff;
+    border: 1px solid#927c40;
+}
+
+/* ************* */
+/* animation css */
+/* ************* */
+.rotate360 {
+    animation-name: rotate360;
+    animation-duration: 0.3s;
+}
+@keyframes rotate360 {
+    0% {
+        transform: rotate(-360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+.slideup {
+    animation-name: slideup;
+    animation-duration: 0.5s;
+}
+@keyframes slideup {
+    0% {
+        transform: rotate(-360deg);
+        margin-bottom: 0px;
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(0deg);
+        margin-bottom: 64px;
+        opacity: 1;
+    }
+}
+
+.strikethrough {
+    position: relative;
+}
+.strikethrough:before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid red;
+    -webkit-transform: rotate(10deg);
+    -moz-transform: rotate(10deg);
+    -ms-transform: rotate(10deg);
+    -o-transform: rotate(10deg);
+    transform: rotate(10deg);
+}
+[type="checkbox"],
+[type="radio"] {
+    color: #d3bf88;
+}
+.error{
+    color: #be0202;
+    font-size: 14px;
+}
+@media(max-width:991px){
+    .my-m-0{
+        margin-block: 0 !important;
+    }
+}
+@media(max-width:771px){
+    .product{
+
+        height: calc(40vw + 120px);
+
+    }
+
+}
+.rounded-25{
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+}
+.border-gold{
+    border:2px solid #927c40;
+}
+.boxshadow{
+    -webkit-box-shadow: 10px 10px 30px -5px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 30px -5px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 30px -5px rgba(0,0,0,0.75);
+}
+.product{
+    height: fit-content;
+    background: white;
+}
+.font-sm{
+    font-size: small !important;
+}
