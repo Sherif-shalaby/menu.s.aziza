@@ -238,7 +238,7 @@
                         </div>
 
                         <div class=" f-me">
-                            <div class="flex flex-row mt-2 mb-2">
+                            <div class="flex flex-row mb-2">
                                 <button
                                     class="w-8 h-8 text-lg text-center rounded-full minus border-gold cl0 bg11">-</button>
                                 <input type="quantity" value="1" name="quantity"
