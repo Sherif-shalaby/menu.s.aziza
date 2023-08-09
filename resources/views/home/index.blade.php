@@ -160,8 +160,6 @@
                     <div class="relative w-full bg-center bg-no-repeat bg-cover shadow-lg pb-full rounded-xl product_card img-s"
                         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
                         background-image: url('{{images_asset($product->getFirstMediaUrl('product')) }}')">
-
-
                     </div>
                     @php
                         $variation_products='';
@@ -184,8 +182,8 @@
                         <div class="">
                             <div class="productName">
                                 <a href="{{ action('ProductController@show', $product->id) }}"
-                                    class="w-full py-4 mt-2 text-xs text-center bg-white cl2 opacity-70 rounded-xl"
-                                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
+                                    class="w-full mt-2 text-xs text-center bg-white cl2 opacity-70 rounded-xl d-flex"
+                                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;  flex-wrap: wrap;">
                                     <p class="px-1 py-0 font-semibold cl2 font-sm">{{ Str::limit($product->name, 25) }}</p>
                                     <p class="px-1 py-0 font-semibold cl2 font-sm">
                                         {{ session('currency')['code'] }}
@@ -194,7 +192,27 @@
                                         </span>
                                     </p>
                                 </a>
+                                <div class=" f-me">
+                            <div class="flex flex-row mb-2">
+                                <button
+                                    class="w-8 h-8 text-lg text-center rounded-full minus border-gold cl0 bg11">-</button>
+                                <input type="quantity" value="1" name="quantity"
+                                    class="text-center bg-transparent quantityp quantity focus:outline-none text-dark " style="width: 3.4rem;">
+                                <button
+                                    class="w-8 h-8 text-lg text-center rounded-full plus border-gold cl0 bg11">+</button>
                             </div>
+                            <div class="flex mb-4">
+
+                                @foreach($variation_products as $var)
+                                <a data-variation_id="{{ $var->id }}"
+                                    class="px-4 py-2 font-semibold text-white rounded-25 cart_button bg11">
+                                    <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
+                                @break
+                                @endforeach
+                                </div>
+                        </div>
+                            </div>
+
 {{--                            <div>--}}
 {{--                                <button id="selected"  disabled class="inline-flex items-center p-1 text-center bg-gray-900 rounded-lg size-menu size-btn hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >--}}
 {{--                                    {{$s->size->name}}<button>--}}
@@ -237,25 +255,7 @@
                             </div>
                         </div>
 
-                        <div class=" f-me">
-                            <div class="flex flex-row mb-2">
-                                <button
-                                    class="w-8 h-8 text-lg text-center rounded-full minus border-gold cl0 bg11">-</button>
-                                <input type="quantity" value="1" name="quantity"
-                                    class="text-center bg-transparent quantityp quantity focus:outline-none text-dark " style="width: 3.4rem;">
-                                <button
-                                    class="w-8 h-8 text-lg text-center rounded-full plus border-gold cl0 bg11">+</button>
-                            </div>
-                            <div class="flex mb-4">
 
-                                @foreach($variation_products as $var)
-                                <a data-variation_id="{{ $var->id }}"
-                                    class="px-4 py-2 font-semibold text-white rounded-25 cart_button bg11">
-                                    <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
-                                @break
-                                @endforeach
-                                </div>
-                        </div>
                         @break
                         @endforeach
                     </div>
