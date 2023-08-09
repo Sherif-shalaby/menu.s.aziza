@@ -192,7 +192,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <div class=" f-me">
+                                <div class="pt-2  f-me">
                             <div class="flex flex-row mb-2">
                                 <button
                                     class="w-8 h-8 text-lg text-center rounded-full minus border-gold cl0 bg11">-</button>
@@ -212,7 +212,6 @@
                                 </div>
                         </div>
                             </div>
-
 {{--                            <div>--}}
 {{--                                <button id="selected"  disabled class="inline-flex items-center p-1 text-center bg-gray-900 rounded-lg size-menu size-btn hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >--}}
 {{--                                    {{$s->size->name}}<button>--}}
