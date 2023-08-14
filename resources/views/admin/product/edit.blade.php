@@ -398,7 +398,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         {!! Form::label('active', __('lang.status'), []) !!} <br>
-                        {!! Form::checkbox('active', 1, $product->active ? true : false, ['class']) !!}
+                        {!! Form::checkbox('menu_active', 1, $product->menu_active ? true : false, ['class']) !!}
                     </div>
                 </div>
 
