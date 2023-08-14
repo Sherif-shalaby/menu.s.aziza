@@ -240,6 +240,10 @@ class ProductController extends Controller
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
             $data['sort'] = !empty($data['sort']) ? $data['sort'] : 1;
+            $data['active'] = !empty($data['active']) ? 1 : 0;
+            if(env('ENABLE_POS_SYNC')){
+            $data['barcode_type'] = !empty($data['barcode_type']) ? $data['barcode_type'] : 'C128';
+            }
             DB::beginTransaction();
             $product = Product::create($data);
 
