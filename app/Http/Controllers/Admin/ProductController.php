@@ -232,7 +232,7 @@ class ProductController extends Controller
             $data = $request->except('_token', 'image');
             $data['sku'] = $this->productUtil->generateProductSku($data['name']);
             if(empty($request->variations)){
-                $data['purchase_price'] = $data['purchase_price'];
+                $data['purchase_price'] = !empty($data['purchase_price']) ? $data['purchase_price'] : 0;
                 $data['sell_price'] = $data['sell_price'];
             }else{
                     $data['purchase_price'] = 0;
@@ -248,8 +248,11 @@ class ProductController extends Controller
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
             $data['sort'] = !empty($data['sort']) ? $data['sort'] : 1;
-            $data['active'] = !empty($data['active']) ? 1 : 0;
-            $data['menu_active'] = !empty($data['menu_active']) ? 1 : 0;
+            if(env('ENABLE_POS_SYNC')){
+                $data['menu_active'] = !empty($data['menu_active']) ? 1 : 0;
+            }else{
+                $data['active'] = !empty($data['active']) ? 1 : 0;
+            }
             if(env('ENABLE_POS_SYNC')){
             $data['barcode_type'] = !empty($data['barcode_type']) ? $data['barcode_type'] : 'C128';
             }
@@ -362,8 +365,11 @@ class ProductController extends Controller
             }
             $data['discount'] = $data['discount'];
             $data['discount_type'] = $data['discount_type'];
-            // $data['active'] = !empty($data['active']) ? 1 : 0;
-            $data['menu_active'] = !empty($data['menu_active']) ? 1 : 0;
+            if(env('ENABLE_POS_SYNC')){
+                $data['menu_active'] = !empty($data['menu_active']) ? 1 : 0;
+            }else{
+                $data['active'] = !empty($data['active']) ? 1 : 0;
+            }
             $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
             $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
