@@ -362,7 +362,7 @@ class ProductController extends Controller
             }
             $data['discount'] = $data['discount'];
             $data['discount_type'] = $data['discount_type'];
-            $data['active'] = !empty($data['active']) ? 1 : 0;
+            // $data['active'] = !empty($data['active']) ? 1 : 0;
             $data['menu_active'] = !empty($data['menu_active']) ? 1 : 0;
             $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
             $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
