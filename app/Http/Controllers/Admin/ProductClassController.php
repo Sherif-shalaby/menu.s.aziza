@@ -299,9 +299,9 @@ class ProductClassController extends Controller
             }
 
 
-
+            if(!env('ENABLE_POS_SYNC')){
             $this->commonUtil->addSyncDataWithPos('ProductClass', $class, $data, 'PUT', 'product-class');
-
+            }
             $output = [
                 'success' => true,
                 'msg' => __('lang.success')
@@ -343,8 +343,9 @@ class ProductClassController extends Controller
         try {
 
             $class = ProductClass::find($id);
-
+            if(!env('ENABLE_POS_SYNC')){
             $this->commonUtil->addSyncDataWithPos('ProductClass', $class, null, 'DELETE', 'product-class');
+            }
             $class->delete();
             $output = [
                 'success' => true,

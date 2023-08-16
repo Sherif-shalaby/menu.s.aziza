@@ -398,7 +398,11 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         {!! Form::label('active', __('lang.status'), []) !!} <br>
+                           @if(env('ENABLE_POS_SYNC'))
+                        {!! Form::checkbox('menu_active', 1, $product->menu_active ? true : false, ['class']) !!}
+                        @else
                         {!! Form::checkbox('active', 1, $product->active ? true : false, ['class']) !!}
+                        @endif
                     </div>
                 </div>
 
