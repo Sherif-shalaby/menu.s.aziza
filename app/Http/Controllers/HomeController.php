@@ -22,6 +22,8 @@ class HomeController extends Controller
         $products = Product::orderBy('products.sort')->orderBy('products.created_at','desc')->where('active', 1)->where(function($query){
             if(env('ENABLE_POS_SYNC')){
                 $query->where('is_raw_material', 0);
+                $query->whereNull('deleted_at');
+                $query->where('menu_active', 1);
             }
         })
         ->get();
