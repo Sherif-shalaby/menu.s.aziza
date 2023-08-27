@@ -169,6 +169,7 @@ class ProductClassController extends Controller
         }
         //try {
             $data = $request->except('_token', 'quick_add');
+            $data['name'] = isset($request->name) ?$request->name : ' ';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['status'] = !empty($data['status']) ? $data['status'] : 0;
             DB::beginTransaction();
@@ -259,6 +260,7 @@ class ProductClassController extends Controller
 
         
             $data = $request->only('name', 'description', 'sort', 'translations', 'status');
+            $data['name'] = isset($request->name) ?$request->name : ' ';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['status'] = !empty($data['status']) ? 1 : 0;
             $class = ProductClass::where('id', $id)->first();
@@ -294,9 +296,9 @@ class ProductClassController extends Controller
                     }
                 }
             } 
-            if(!isset($request->cropImages[0]) || strlen($request->cropImages[0])==0){
-                $class->clearMediaCollection('product_class');
-            }
+            // if(!isset($request->cropImages[0]) || strlen($request->cropImages[0])==0){
+            //     $class->clearMediaCollection('product_class');
+            // }
 
 
             if(!env('ENABLE_POS_SYNC')){

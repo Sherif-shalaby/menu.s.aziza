@@ -245,6 +245,7 @@ class ProductController extends Controller
             
             $data['created_by'] = auth()->user()->id;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
+            $data['name'] = isset($request->name) ?$request->name : ' ';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
             $data['sort'] = !empty($data['sort']) ? $data['sort'] : 1;
@@ -373,6 +374,7 @@ class ProductController extends Controller
             $data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
             $data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
             $data['type'] = !empty($request->this_product_have_variant) ? 'variable' : 'single';
+            $data['name'] = isset($request->name) ?$request->name : ' ';
             $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
             $data['details_translations'] = !empty($data['details_translations']) ? $data['details_translations'] : [];
             $data['sort'] = !empty($data['sort']) ? $data['sort'] :1;
@@ -400,9 +402,9 @@ class ProductController extends Controller
                     }
                 }
             }
-            if(!$request->has('image') || strlen($request->input('image'))==0){
-                $product->clearMediaCollection('product');
-            }
+            // if(!$request->has('image') || strlen($request->input('image'))==0){
+            //     $product->clearMediaCollection('product');
+            // }
 
 
 
