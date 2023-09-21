@@ -55,6 +55,7 @@ class ProductController extends Controller
             $products = Product::leftjoin('product_classes', 'products.product_class_id', 'product_classes.id')
             ->orderBy('products.sort')->orderBy('products.created_at','desc')->where(function($query){
                 if(env('ENABLE_POS_SYNC')){
+                    $query->whereNull('deleted_at');
                     $query->where('is_raw_material', 0);
                 }
             });
