@@ -9,7 +9,7 @@
         <div class="header-cart-title flex-w flex-sb-m ">
             <span class="mtext-103 cl2">
                 <a href="{{ action('HomeController@index') }}" >
-                    <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO" style="    height: 100px;">
+                    <img src="{{ images_asset() }}" alt="IMG-LOGO" style="    height: 100px;">
                 </a>
             </span>
 

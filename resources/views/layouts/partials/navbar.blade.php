@@ -10,7 +10,7 @@
 
                 <!-- Logo desktop -->	
                 <a href="{{ action('HomeController@index') }}"  class="logo ">
-                    <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO">
+                    <img src="{{ images_asset() }}" alt="IMG-LOGO">
                     <p class="p-lr-20 cl2 mtext-102">{{ App\Models\System::getProperty('site_title') }}</p>
                 </a>
 
@@ -32,7 +32,7 @@
     <div class="wrap-header-mobile">
         <!-- Logo moblie -->		
         <div class="logo-mobile">
-            <a href="{{ action('HomeController@index') }}" ><img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO"></a>
+            <a href="{{ action('HomeController@index') }}" ><img src="{{ images_asset() }}" alt="IMG-LOGO"></a>
             <p class="p-lr-55 cl2 mtext-102">{{ App\Models\System::getProperty('site_title') }}</p>
         </div>
 
