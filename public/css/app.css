@@ -6,10 +6,6 @@
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
 */
 
-:root {
-    --primary-color: #14b8a6;
-    --primary-color-hover: #0d9488;
-}
 
 *,
 ::before,
@@ -1011,42 +1007,6 @@ input:checked+.toggle-bg {
     text-align: center;
 }
 
-#dropdownMenuIconHorizontalButton li button:focus {
-    color: var(--primary-color) !important;
-    background-color: #fff;
-    transition: 0.5s;
-}
-
-#dropdownMenuIconHorizontalButton li button:focus:hover {
-    color: var(--primary-color-hover) !important;
-
-}
-
-button.selected {
-    color: var(--primary-color) !important;
-    transition: 0.5s;
-    background-color: #fff;
-}
-
-button.selected:hover {
-    color: var(--primary-color-hover) !important;
-
-}
-
-#selected {
-    position: absolute;
-    top: 24.3%;
-    color: var(--primary-color) !important;
-    transition: 0.5s;
-    background-color: #fff;
-    opacity: 0.5;
-}
-
-#selected:hover {
-
-    color: var(--primary-color-hover) !important;
-
-}
 
 @media(max-width: 600px) {
     .productName {
@@ -1910,11 +1870,6 @@ button.selected:hover {
     border-color: rgb(34 34 34 / var(--tw-border-opacity));
 }
 
-.border-red {
-    --tw-border-opacity: 1;
-    border: var(--primary-color-hover) 1px solid;
-}
-
 .border-transparent {
     border-color: transparent;
 }
@@ -1964,10 +1919,6 @@ button.selected:hover {
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-red {
-    --tw-bg-opacity: 1;
-    background-color: var(--primary-color);
-}
 
 .bg-gray-200 {
     --tw-bg-opacity: 1;
@@ -2532,10 +2483,6 @@ button.selected:hover {
     transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
 }
 
-.checked\:border-red:checked {
-    --tw-border-opacity: 1;
-    border: var(--primary-color-hover) 1px solid;
-}
 
 .checked\:bg-red:checked {
     --tw-bg-opacity: 1;
@@ -2750,10 +2697,7 @@ button.selected:hover {
     border-color: rgb(75 85 99 / var(--tw-border-opacity));
 }
 
-.dark .dark\:border-red {
-    --tw-border-opacity: 1;
-    border: var(--primary-color-hover) 1px solid;
-}
+
 
 .dark .dark\:border-gray-700 {
     --tw-border-opacity: 1;

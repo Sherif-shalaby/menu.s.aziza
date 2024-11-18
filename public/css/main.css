@@ -97,11 +97,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
     src: url('../fonts/Montserrat/Montserrat-Bold.ttf');
 }
 
-:root {
-    --primary-color: #14b8a6;
-    --primary-color-hover: #0d9488;
-}
-
 /*//////////////////////////////////////////////////////////////////
 [ RS PLUGIN ]*/
 
@@ -754,18 +749,6 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 
 }
 
-.main-menu-m {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: var(--primary-color);
-    transition: 0.5s;
-}
-
-.main-menu-m:hover {
-
-    background-color: var(--primary-color-hover);
-
-}
 
 .main-menu-m>li>a {
     font-family: Poppins-Medium;
@@ -2204,12 +2187,6 @@ input.num-product::-webkit-inner-spin-button {
     color: #717fe0;
 }
 
-.cl2 {
-    color: var(--primary-color-hover);
-    font-weight: 600;
-    transition: 0.5s;
-}
-
 .cl3 {
     color: #666;
 }
@@ -2240,15 +2217,6 @@ input.num-product::-webkit-inner-spin-button {
 
 .cl10 {
     color: #1d1d1d;
-}
-
-.cl11 {
-    color: var(--primary-color);
-    transition: 0.5s;
-}
-
-.cl11:hover {
-    color: var(--primary-color-hover);
 }
 
 .cl12 {
@@ -2811,23 +2779,6 @@ input.num-product::-webkit-inner-spin-button {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
-.bg10 {
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-color-hover));
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 15px;
-}
-
-.bg10:hover {
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 15px;
-}
-
-.bg11 {
-    background-color: var(--primary-color);
-    transition: 0.5s;
-}
-
-.bg12 {
-    background-color: var(--primary-color);
-}
 
 .opacity-80 {
     opacity: 0.8;
@@ -3078,19 +3029,6 @@ input.num-product::-webkit-inner-spin-button {
     top: calc(50% - 8px);
     right: auto;
     left: 90%;
-}
-
-/*---------------------------------------------*/
-.how-active1 {
-
-    background: var(--primary-color) !important;
-    transition: 0.5s;
-    color: #fff !important;
-    border-radius: 10px;
-}
-
-.how-active1:hover {
-    background: var(--primary-color-hover) !important;
 }
 
 
