@@ -127,56 +127,5 @@ $moment_time_format = 'hh:mm A';
         })
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        loadPrimaryColor();
-        });
-
-        function changePrimaryColor(color , hoverColor) {
-        document.documentElement.style.setProperty('--primary-color', color);
-        document.documentElement.style.setProperty('--primary-color-hover', hoverColor);
-        localStorage.setItem('azizaMenuBg', color);
-        localStorage.setItem('azizaMenuBgHover', hoverColor);
-
-            // Update the specific color input value
-            const colorInput = document.querySelector(`[data-input-id="primary"]`);
-            if (colorInput) {
-            colorInput.value = color;
-            }
-
-
-        }
-
-        function loadPrimaryColor() {
-        const savedColor = localStorage.getItem('azizaMenuBg');
-        const savedColorHover = localStorage.getItem('azizaMenuBgHover');
-        if (savedColor) {
-        document.documentElement.style.setProperty('--primary-color', savedColor);
-        document.documentElement.style.setProperty('--primary-color-hover', savedColorHover);
-        // Update all inputs with the saved color
-        const colorInputs = document.querySelectorAll('[data-input-id]');
-        colorInputs.forEach(input => {
-        input.value = savedColor;
-        });
-        }
-
-        }
-
-
-   function changeColorFromInput(input) {
-    const color = input.value;
-    const hoverColor = darkenColor(color, 25);
-    changePrimaryColor(color, hoverColor);
-    }
-
-    function darkenColor(color, amount) {
-    const num = parseInt(color.slice(1), 16);
-    let r = (num >> 16) - amount;
-    let g = ((num >> 8) & 0x00FF) - amount;
-    let b = (num & 0x0000FF) - amount;
-
-    r = r < 0 ? 0 : r; g=g < 0 ? 0 : g; b=b < 0 ? 0 : b; return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0' )}`;
-        }
-</script>
 <!--===============================================================================================-->
 <script src="{{ asset('js/main.js') }}"></script>

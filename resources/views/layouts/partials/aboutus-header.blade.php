@@ -19,59 +19,7 @@
 
         <div class="header-cart-content flex-w js-pscroll">
             <hr>
-            <ul class="">
-                <li class="d-flex" style="gap: 5px">
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#2563eb' , '#1d4ed8')">
-                        <span style="width: 25px;height: 25px;background-color: #2563eb" class="rounded-circle">
-                        </span>
-                    </button>
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#16a34a' , '#15803d')">
-                        <span style="width: 25px;height: 25px;background-color: #16a34a" class="rounded-circle">
-                        </span>
-                    </button>
 
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#dc2626','#b91c1c')">
-                        <span style="width: 25px;height: 25px;background-color: #dc2626" class="rounded-circle">
-                        </span>
-                    </button>
-
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#0284c7','#0369a1')">
-                        <span style="width: 25px;height: 25px;background-color: #0284c7" class="rounded-circle">
-                        </span>
-                    </button>
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#475569','#334155')">
-                        <span style="width: 25px;height: 25px;background-color: #475569" class="rounded-circle">
-                        </span>
-                    </button>
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#14b8a6','#0d9488')">
-                        <span style="width: 25px;height: 25px;background-color: #14b8a6" class="rounded-circle">
-                        </span>
-                    </button>
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#eab308','#c8b400')">
-                        <span style="width: 25px;height: 25px;background-color: #eab308" class="rounded-circle">
-                        </span>
-                    </button>
-                    <button class="border-0 d-flex justify-content-center align-items-center"
-                        onclick="changePrimaryColor('#4f46e5','#3730a3')">
-                        <span style="width: 25px;height: 25px;background-color: #4f46e5" class="rounded-circle">
-                        </span>
-                    </button>
-                </li>
-
-                <li>
-                    <!-- Add the color input -->
-                    <input data-input-id="primary" id="colorPicker" type="color" type="color"
-                        style="margin: 10px 0;width: 100%;" oninput="changeColorFromInput(this)"
-                        title="Choose your color" />
-                </li>
-            </ul>
             <ul class="header-cart-wrapitem w-full">
                 <br>
                 <hr>

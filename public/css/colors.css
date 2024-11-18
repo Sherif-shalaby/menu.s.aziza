@@ -1,10 +1,8 @@
 
 :root {
-    --primary-color: #14b8a6;
-    --primary-color-hover: #0d9488;
+    --primary-color: rgb(146, 124, 64);
+    --primary-color-hover: rgb(146, 124, 64);
 }
-
-
 
 #dropdownMenuIconHorizontalButton li button:focus {
     color: var(--primary-color) !important;
