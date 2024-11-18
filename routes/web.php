@@ -4,6 +4,7 @@ use App\Events\NewOrderEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PostSitemapController;
+use Illuminate\Support\Facades\Auth;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +57,7 @@ Route::group(['middleware' => ['SetSessionData', 'localeSessionRedirect', 'local
 require __DIR__ . '/auth.php';
 
 
-Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'SetSessionData']], function () {
+Route::group(['middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'SetSessionData']], function () {
     Auth::routes();
     Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
         Route::get('/test', function () {
@@ -99,7 +100,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 });
 
 
-
+//
 Route::get('/clear-cache', function () {
     \Artisan::call('cache:clear');
     \Artisan::call('config:cache');

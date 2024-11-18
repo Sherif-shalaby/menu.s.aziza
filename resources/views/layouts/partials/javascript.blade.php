@@ -138,11 +138,13 @@ $moment_time_format = 'hh:mm A';
         localStorage.setItem('azizaMenuBg', color);
         localStorage.setItem('azizaMenuBgHover', hoverColor);
 
-// Update the specific color input value
-const colorInput = document.querySelector(`[data-input-id="${inputId}"]`);
-if (colorInput) {
-colorInput.value = color;
-}
+            // Update the specific color input value
+            const colorInput = document.querySelector(`[data-input-id="primary"]`);
+            if (colorInput) {
+            colorInput.value = color;
+            }
+
+
         }
 
         function loadPrimaryColor() {
@@ -151,11 +153,11 @@ colorInput.value = color;
         if (savedColor) {
         document.documentElement.style.setProperty('--primary-color', savedColor);
         document.documentElement.style.setProperty('--primary-color-hover', savedColorHover);
-     // Update all inputs with the saved color
-    const colorInputs = document.querySelectorAll('[data-input-id]');
-    colorInputs.forEach(input => {
-    input.value = savedColor;
-    });
+        // Update all inputs with the saved color
+        const colorInputs = document.querySelectorAll('[data-input-id]');
+        colorInputs.forEach(input => {
+        input.value = savedColor;
+        });
         }
 
         }
