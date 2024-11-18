@@ -16,6 +16,8 @@ use App\Http\Controllers\PostSitemapController;
 */
 
 Route::get('general/switch-language/{lang}', 'GeneralController@switchLanguage');
+
+
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['SetSessionData', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'prevent-back-history']], function () {
     Route::get('/', 'HomeController@index');
     Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');

@@ -1,16 +1,16 @@
 .toggle-bg:after {
-    border-color: #927c40;
-    background: #927c40;
+    border-color: var(--primary-color-hover);
+    background: var(--primary-color-hover);
 }
 input:checked + .toggle-bg:after {
-    border-color: #927c40;
-    background: #927c40;
+    border-color: var(--primary-color-hover);
+    background: var(--primary-color-hover);
 }
 
 input:checked + .toggle-bg {
     background: #ffffff;
     border-color: #ffffff;
-    border: 1px solid#927c40;
+    border: 1px solidvar(--primary-color-hover);
 }
 
 /* ************* */

@@ -1,7 +1,8 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
 
-        {!! Form::open(['url' => action('Admin\SizeController@update', $size->id), 'method' => 'put', 'id' => 'size_add_form'
+        {!! Form::open(['url' => action('Admin\SizeController@update', $size->id), 'method' => 'put', 'id' =>
+        'size_add_form'
         ]) !!}
 
         <div class="modal-header">
@@ -15,13 +16,13 @@
             <div class="form-group">
                 {!! Form::label('name', __( 'lang.name' ) . ':*') !!}
                 {!! Form::text('name', $size->name, ['class' => 'form-control', 'placeholder' => __( 'lang.name' ),
-                'required' ]);
+                'required' ])
                 !!}
             </div>
             <div class="form-group">
                 {!! Form::label('size_code', __( 'lang.size_code' ) . ':') !!}
                 {!! Form::text('size_code', $size->size_code, ['class' => 'form-control', 'placeholder' => __(
-                'lang.size_code' )]);
+                'lang.size_code' )])
                 !!}
             </div>
         </div>
