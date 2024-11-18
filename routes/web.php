@@ -4,6 +4,7 @@ use App\Events\NewOrderEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\PostSitemapController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,10 +16,23 @@ use App\Http\Controllers\PostSitemapController;
 |
 */
 
+
+// Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
+//     /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
+//     Route::get('/', function () {
+//         return 'hello';
+//     });
+
+//     Route::get('test', function () {
+//         return 'test';
+//     });
+// });
+
+
 Route::get('general/switch-language/{lang}', 'GeneralController@switchLanguage');
 
 
-Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['SetSessionData', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'prevent-back-history']], function () {
+Route::group(['middleware' => ['SetSessionData', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'prevent-back-history']], function () {
     Route::get('/', 'HomeController@index');
     Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
     Route::get('/sitemap/posts.xml', [PostSitemapController::class, 'index'])->name('sitemap.posts.index');
