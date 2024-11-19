@@ -112,9 +112,9 @@ $page_background_image=App\Models\System::where('key','page_background_image')->
 $color=App\Models\System::where('key','color')->first();
 $font=App\Models\System::where('key','font')->first();
 
-$defaultColor = $color->value;
+$defaultColor = $color->value ?? "rgb(146, 124, 64)";
 
-$defaultFont = $font->value;
+$defaultFont = $font->value ?? "Roboto";
 @endphp
 {!! Form::open(['url' => action('Admin\SettingController@saveSystemSettings'), 'method' => 'post', 'id' =>
 'setting_form', 'files' => true]) !!}
@@ -593,12 +593,12 @@ $defaultFont = $font->value;
     ];
 
     const fontSelect = document.getElementById('font');
-    const defaultFont = "{{ $defaultFont ?? '' }}"; // Default font from the backend
+    const defaultFont = "{{ $defaultFont ?? 'Roboto' }}"; // Default font from the backend
 
     fonts.forEach(font => {
     const option = document.createElement('option');
     option.value = font;
-    option.textContent = `${font} - ABC أبجد هوز`;
+    option.textContent = `${font} - ABC     أبجد هوز`;
     option.style.setProperty("font-family", font, "important");
 
     // Check if this font is the default and set it as selected

@@ -136,9 +136,9 @@ for ($i = 0; $i < 3; $i++) { $rgb[$i]=round($rgb[$i] * (1 - $percentage)); $rgb[
     sprintf("#%02x%02x%02x", $rgb[0], $rgb[1], $rgb[2]); } // Get the primary color and darken it
     $color=App\Models\System::where('key', 'color' )->first();
     $font=App\Models\System::where('key', 'font' )->first();
-    $defaultColor = $color ? $color->value : '#000000'; // Fallback color
+    $defaultColor = $color ? $color->value : 'rgb(146, 124, 64)'; // Fallback color
     $darkenDefaultColor = darkenColor($defaultColor, 0.2); // Darken by 20%
-    $defaultFont = $font ? $font->value : ''; // Fallback color
+    $defaultFont = $font ? $font->value : 'Roboto'; // Fallback color
     @endphp
 
     <script>
