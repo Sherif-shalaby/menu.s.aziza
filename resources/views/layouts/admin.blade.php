@@ -1,126 +1,121 @@
 @extends('adminlte::page')
 @section('css')
-    <link rel="stylesheet" href="{{ asset('js/datatable/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
-    <style>
+<link rel="stylesheet" href="{{ asset('js/datatable/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/theme.css') }}">
+<style>
     .select2-selection__rendered {
-    line-height: 40px !important;
+        line-height: 40px !important;
     }
-    
+
     .select2-selection {
-    height: 39px !important;
+        height: 39px !important;
     }
-    </style>
+</style>
 @endsection
 @section('content_top_nav_right')
-    @if (!empty(env('POS_SYSTEM_URL')))
-        <a class="btn btn-primary btn-flat mb-3" href="{{ env('POS_SYSTEM_URL') }}" target="_blank"
-            rel="noopener noreferrer">@lang('lang.pos')</a>
-    @endif
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-expanded="true">
-            <img class="h-5 w-5 rounded-full object-cover mx-1"
-                src="{{ asset('images/' . app()->getLocale() . '-flag.png') }}"
-                style="object-fit: cover; width: 1.25rem; height: 1.25rem; color: grey; @if(app()->getLocale() == 'ar') visiblity:hidden; @endif" alt="avatar">
-            @lang('lang.'.app()->getLocale())
-        </a>
-        <ul class="dropdown-menu border-0 shadow" style="left: 0px; right: 0;">
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('ar') }}">
-                    <img class="" src="{{ asset('images/ar-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey; visiblity:hidden;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;"> Arabic</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('nl') }}">
-                    <img class="" src="{{ asset('images/nl-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">Deutsch</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('fr') }}">
-                    <img class="" src="{{ asset('images/fr-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">français</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('en') }}">
-                    <img class="" src="{{ asset('images/en-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">English</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('tr') }}">
-                    <img class="" src="{{ asset('images/tr-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">Turkce</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('fa') }}">
-                    <img class="" src="{{ asset('images/fa-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">فارسی</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('ur') }}">
-                    <img class="" src="{{ asset('images/ur-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">اردو</p>
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                    href="{{ LaravelLocalization::getLocalizedURL('hi') }}">
-                    <img class="" src="{{ asset('images/hi-flag.png') }}"
-                        style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
-                    <p style="margin-left: 30px; padding-top: 0px;">हिन्दी</p>
-                </a>
-            </li>
-        </ul>
-    </li>
+@if (!empty(env('POS_SYSTEM_URL')))
+<a class="btn btn-primary btn-flat mb-3" href="{{ env('POS_SYSTEM_URL') }}" target="_blank"
+    rel="noopener noreferrer">@lang('lang.pos')</a>
+@endif
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-expanded="true">
+        <img class="h-5 w-5 rounded-full object-cover mx-1"
+            src="{{ asset('images/' . app()->getLocale() . '-flag.png') }}"
+            style="object-fit: cover; width: 1.25rem; height: 1.25rem; color: grey; @if(app()->getLocale() == 'ar') visiblity:hidden; @endif"
+            alt="avatar">
+        @lang('lang.'.app()->getLocale())
+    </a>
+    <ul class="dropdown-menu border-0 shadow" style="left: 0px; right: 0;">
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('ar') }}">
+                <img class="" src="{{ asset('images/ar-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey; visiblity:hidden;"
+                    alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;"> Arabic</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('nl') }}">
+                <img class="" src="{{ asset('images/nl-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">Deutsch</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('fr') }}">
+                <img class="" src="{{ asset('images/fr-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">français</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('en') }}">
+                <img class="" src="{{ asset('images/en-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">English</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('tr') }}">
+                <img class="" src="{{ asset('images/tr-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">Turkce</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('fa') }}">
+                <img class="" src="{{ asset('images/fa-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">فارسی</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('ur') }}">
+                <img class="" src="{{ asset('images/ur-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">اردو</p>
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ LaravelLocalization::getLocalizedURL('hi') }}">
+                <img class="" src="{{ asset('images/hi-flag.png') }}"
+                    style="float: left; margin-top: 3px; width: 1.25rem; height: 1.25rem; color: grey;" alt="avatar">
+                <p style="margin-left: 30px; padding-top: 0px;">हिन्दी</p>
+            </a>
+        </li>
+    </ul>
+</li>
 @endsection
 @section('content')
-    @if (session('status'))
-        <div class="row alert-div">
-            <div class="col-md-12">
-                @if (session('status.success') == '1')
-                    <x-adminlte-alert theme="success" title="{{ __('lang.success') }}" dismissable>
-                        {{ session('status.msg') }}
-                    </x-adminlte-alert>
-                @endif
-                @if (session('status.success') == '0')
-                    <x-adminlte-alert theme="danger" title="{{ __('lang.error') }}" dismissable>
-                        {{ session('status.msg') }}
-                    </x-adminlte-alert>
-                @endif
-            </div>
-        </div>
-    @endif
-    @yield('main_content')
+@if (session('status'))
+<div class="row alert-div">
+    <div class="col-md-12">
+        @if (session('status.success') == '1')
+        <x-adminlte-alert theme="success" title="{{ __('lang.success') }}" dismissable>
+            {{ session('status.msg') }}
+        </x-adminlte-alert>
+        @endif
+        @if (session('status.success') == '0')
+        <x-adminlte-alert theme="danger" title="{{ __('lang.error') }}" dismissable>
+            {{ session('status.msg') }}
+        </x-adminlte-alert>
+        @endif
+    </div>
+</div>
+@endif
+@yield('main_content')
 
 @section('footer')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="text-center">
-                <p style="margin: 0">&copy; Copyright {{ date('Y') }} @lang('lang.proudly_developed_at') <a
-                        href="http://sherifshalaby.tech">sherifshalaby.tech</a></p>
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-center">
+            <p style="margin: 0">&copy; Copyright {{ date('Y') }} @lang('lang.proudly_developed_at') <a
+                    href="http://sherifshalaby.tech">sherifshalaby.tech</a></p>
         </div>
     </div>
+</div>
 @stop
 
 <div class="modal fade view_modal no-print" role="dialog" aria-hidden="true"></div>
@@ -156,8 +151,8 @@
 <script src="{{ asset('js/accounting.min.js') }}"></script>
 
 @section('js')
-    <script type="text/javascript">
-        base_path = "{{ url('/') }}";
+<script type="text/javascript">
+    base_path = "{{ url('/') }}";
 
         $.ajaxSetup({
             headers: {
@@ -169,27 +164,27 @@
                 }
             },
         });
-    </script>
-    <script type="text/javascript" src="{{ asset('js/datatable/pdfmake.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/vfs_fonts.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/dataTables.bootstrap4.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/dataTables.buttons.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/buttons.bootstrap4.min.js') }}">
-        ">
-    </script>
-    <script type="text/javascript" src="{{ asset('js/datatable/buttons.colVis.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/buttons.html5.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/buttons.print.min.js') }}"></script>
+</script>
+<script type="text/javascript" src="{{ asset('js/datatable/pdfmake.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/vfs_fonts.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/dataTables.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/dataTables.buttons.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/buttons.bootstrap4.min.js') }}">
 
-    <script type="text/javascript" src="{{ asset('js/datatable/sum().js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/dataTables.checkboxes.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/datatable/date-eu.js') }}"></script>
-    <script src="{{ asset('js/common.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    <script src="{{ asset('admin/js/cropper.js') }}"></script>
-    <script>
-        $(document).on('select2:open', () => {
+</script>
+<script type="text/javascript" src="{{ asset('js/datatable/buttons.colVis.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/buttons.html5.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/buttons.print.min.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('js/datatable/sum().js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/dataTables.checkboxes.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/datatable/date-eu.js') }}"></script>
+<script src="{{ asset('js/common.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script src="{{ asset('admin/js/cropper.js') }}"></script>
+<script>
+    $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
         $(document).on('click', '.delete_item', function(e) {
@@ -299,7 +294,7 @@
         });
         $('.hidden_menu').hide();
         $('.select2').select2();
-    </script>
-    @yield('javascript')
+</script>
+@yield('javascript')
 @endsection
 @endsection

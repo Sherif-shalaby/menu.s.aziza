@@ -127,5 +127,31 @@ $moment_time_format = 'hh:mm A';
         })
 </script>
 
-<!--===============================================================================================-->
-<script src="{{ asset('js/main.js') }}"></script>
+@php
+// Function to darken the color
+function darkenColor($color, $percentage) {
+$color = str_replace('#', '', $color);
+$rgb = sscanf($color, "%02x%02x%02x");
+for ($i = 0; $i < 3; $i++) { $rgb[$i]=round($rgb[$i] * (1 - $percentage)); $rgb[$i]=max(0, min(255, $rgb[$i])); } return
+    sprintf("#%02x%02x%02x", $rgb[0], $rgb[1], $rgb[2]); } // Get the primary color and darken it
+    $color=App\Models\System::where('key', 'color' )->first();
+    $font=App\Models\System::where('key', 'font' )->first();
+    $defaultColor = $color ? $color->value : '#000000'; // Fallback color
+    $darkenDefaultColor = darkenColor($defaultColor, 0.2); // Darken by 20%
+    $defaultFont = $font ? $font->value : ''; // Fallback color
+    @endphp
+
+    <script>
+        // Access the root element (CSS variables are applied here)
+    const root = document.documentElement;
+
+    // Set the primary color dynamically
+    root.style.setProperty('--primary-color', "{{ $defaultColor }}");
+
+    // Set the darkened primary color dynamically
+    root.style.setProperty('--primary-color-hover', "{{ $darkenDefaultColor }}");
+
+    root.style.setProperty('--font', "{{ $defaultFont }}");
+    </script>
+    <!--===============================================================================================-->
+    <script src="{{ asset('js/main.js') }}"></script>

@@ -49,6 +49,7 @@ class SettingController extends Controller
     }
     public function saveSystemSettings(Request $request)
     {
+
         if (!auth()->user()->can('settings.system_setting.create') && !auth()->user()->can('settings.system_setting.edit')) {
             abort(403, __('lang.not_authorized'));
         }
@@ -98,10 +99,18 @@ class SettingController extends Controller
                 ['key' => 'language'],
                 ['value' => $request->language, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
-            
+
             System::updateOrCreate(
                 ['key' => 'currency'],
                 ['value' => $request->currency, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
+            System::updateOrCreate(
+                ['key' => 'color'],
+                ['value' => $request->color, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
+            System::updateOrCreate(
+                ['key' => 'font'],
+                ['value' => $request->font, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
             if (!empty($request->currency)) {
                 $currency = Currency::find($request->currency);
@@ -144,11 +153,10 @@ class SettingController extends Controller
             $data['logo'] = null;
             if ($request->has('logo') && !is_null('logo')) {
                 // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($request->logo, 'uploads', 250, 250);
-                if(preg_match('/^data:image/', $request->input('logo')))
-                {
-                    $logo=System::where('key','logo')->first();
-                    if(!empty($logo->value)&&$logo->value!=null && file_exists("uploads/".System::getProperty('logo'))){
-                        unlink( "uploads/".System::getProperty('logo'));
+                if (preg_match('/^data:image/', $request->input('logo'))) {
+                    $logo = System::where('key', 'logo')->first();
+                    if (!empty($logo->value) && $logo->value != null && file_exists("uploads/" . System::getProperty('logo'))) {
+                        unlink("uploads/" . System::getProperty('logo'));
                     }
                     $imageData = $this->getCroppedImage($request->logo);
                     $extention = explode(";", explode("/", $imageData)[1])[0];
@@ -162,21 +170,20 @@ class SettingController extends Controller
                         ['value' => $data['logo'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
                     );
                     $data['logo_url'] = asset('uploads/' . $data['logo']);
-                    if(!env('ENABLE_POS_SYNC')){
-                    $this->commonUtil->addSyncDataWithPos('System', $logo_setting, $data, 'POST', 'setting');
-                    unset($data['logo_url']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $logo_setting, $data, 'POST', 'setting');
+                        unset($data['logo_url']);
                     }
                 }
             }
             $data['home_background_image'] = null;
             // $data['home_background_image'] = $this->commonUtil->ImageResizeAndUpload($request->home_background_image, 'uploads');
             if ($request->has('home') && !is_null('home')) {
-                if(preg_match('/^data:image/', $request->input('home')))
-                {
-                    $home=System::where('key','home_background_image')->first();
-                    if(!empty($home->value)&&$home->value!=null && file_exists("uploads/".System::getProperty('home_background_image'))){
+                if (preg_match('/^data:image/', $request->input('home'))) {
+                    $home = System::where('key', 'home_background_image')->first();
+                    if (!empty($home->value) && $home->value != null && file_exists("uploads/" . System::getProperty('home_background_image'))) {
                         // return System::getProperty('home_background_image');
-                        unlink( "uploads/".System::getProperty('home_background_image'));
+                        unlink("uploads/" . System::getProperty('home_background_image'));
                     }
                     $imageData = $this->getCroppedImage($request->home);
                     $extention = explode(";", explode("/", $imageData)[1])[0];
@@ -190,15 +197,14 @@ class SettingController extends Controller
                     );
                 }
             }
-            
+
             $data['breadcrumb_background_image'] = null;
-            if ($request->has('breadcrumb') ) {
-                if(preg_match('/^data:image/', $request->input('breadcrumb')))
-                {
-                    $breadcrumb=System::where('key','breadcrumb_background_image')->first();
-                    if(!empty($breadcrumb->value)&& $breadcrumb->value!=null && file_exists("uploads/".System::getProperty('breadcrumb_background_image'))){
+            if ($request->has('breadcrumb')) {
+                if (preg_match('/^data:image/', $request->input('breadcrumb'))) {
+                    $breadcrumb = System::where('key', 'breadcrumb_background_image')->first();
+                    if (!empty($breadcrumb->value) && $breadcrumb->value != null && file_exists("uploads/" . System::getProperty('breadcrumb_background_image'))) {
                         // return System::getProperty('breadcrumb_background_image');
-                        unlink( "uploads/".System::getProperty('breadcrumb_background_image'));
+                        unlink("uploads/" . System::getProperty('breadcrumb_background_image'));
                     }
                     $imageData = $this->getCroppedImage($request->breadcrumb);
                     $extention = explode(";", explode("/", $imageData)[1])[0];
@@ -212,15 +218,14 @@ class SettingController extends Controller
                     );
                 }
             }
-          
+
             $data['page_background_image'] = null;
-            if ($request->has('page') ) {
-                if(preg_match('/^data:image/', $request->input('page')))
-                {
-                    $page=System::where('key','page_background_image')->first();
-                    if(!empty($page->value)&&$page->value!=null && file_exists("uploads/".System::getProperty('page_background_image'))){
+            if ($request->has('page')) {
+                if (preg_match('/^data:image/', $request->input('page'))) {
+                    $page = System::where('key', 'page_background_image')->first();
+                    if (!empty($page->value) && $page->value != null && file_exists("uploads/" . System::getProperty('page_background_image'))) {
                         // return System::getProperty('page_background_image');
-                        unlink( "uploads/".System::getProperty('page_background_image'));
+                        unlink("uploads/" . System::getProperty('page_background_image'));
                     }
                     $imageData = $this->getCroppedImage($request->page);
                     $extention = explode(";", explode("/", $imageData)[1])[0];
@@ -257,8 +262,8 @@ class SettingController extends Controller
                 'msg' => __('lang.something_went_wrong')
             ];
         }
-        $url= LaravelLocalization::getLocalizedURL($request->language);
-        return redirect(!empty($url)?$url:'')->with('status', $output);
+        $url = LaravelLocalization::getLocalizedURL($request->language);
+        return redirect(!empty($url) ? $url : '')->with('status', $output);
     }
 
     public function removeImage($type)
@@ -288,7 +293,7 @@ class SettingController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $image_content = curl_exec($ch);
         curl_close($ch);
-//    $image_content = file_get_contents($image_path);
+        //    $image_content = file_get_contents($image_path);
         $base64_image = base64_encode($image_content);
         $b64image = "data:image/jpeg;base64," . $base64_image;
         return $b64image;

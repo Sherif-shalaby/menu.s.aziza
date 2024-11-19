@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             CurrenciesTableSeeder::class,
             SystemSeeder::class,
             StoreSeeder::class,
+            ThemeSeeder::class,
         ]);
     }
 }
