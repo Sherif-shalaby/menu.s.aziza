@@ -2,18 +2,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
 @section('content')
 
-   {{-- <div class="container mx-auto">
-        <div class="flex">
-            <div class="flex-1">
-                <div class="w-1/2 h-10 bg-red text-white mx-auto text-center -mt-5 rounded-xl">
-                    <h3 class="text-2xl text-white font-semibold py-1">@lang('lang.categories')</h3>
-                </div>
+{{-- <div class="container mx-auto">
+    <div class="flex">
+        <div class="flex-1">
+            <div class="w-1/2 h-10 bg-red text-white mx-auto text-center -mt-5 rounded-xl">
+                <h3 class="text-2xl text-white font-semibold py-1">@lang('lang.categories')</h3>
             </div>
         </div>
-    </div> --}}
-    <script>
-
-        function filterSelection(class_id) {
+    </div>
+</div> --}}
+<script>
+    function filterSelection(class_id) {
 
             if(class_id != 'all'){
                 $(".filterDiv").addClass('hide');
@@ -54,20 +53,22 @@
             this.className += " active";
           });
         }
-        </script>
+</script>
 <style>
     .filterDiv {
-      margin: 2px;
+        margin: 2px;
 
     }
-    .hide{
+
+    .hide {
         display: none;
     }
+
     .show {
-      display: block;
+        display: block;
     }
 
-    .main-cat-style{
+    .main-cat-style {
         position: relative;
         display: flex;
         -webkit-box-align: center;
@@ -83,7 +84,7 @@
         color: rgb(65, 75, 92);
     }
 
-    .main-cat-img{
+    .main-cat-img {
         transition: all 0.3s ease 0s;
         position: absolute;
         border-radius: 8px;
@@ -102,203 +103,232 @@
         box-shadow: rgba(0, 0, 0, 0.1) -7px 5px 7px;
         overflow: hidden;
     }
-    .f-me{
+
+    .f-me {
         display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-content: space-around;
-    align-items: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: space-around;
+        align-items: center;
     }
-    .img-s{
-    border: #927c40 2px solid;
-    border-radius: 10px;
+
+    .img-s {
+        border: 2px solid var(--primary-color);
+        border-radius: 10px;
     }
 
     @media (max-width: 450px) {
-        .flex{
+        .flex {
             flex-direction: column;
         }
-        .w-8{
+
+        .w-8 {
             width: 1.5rem;
         }
 
-        .h-8{
+        .h-8 {
             height: 1.5rem;
+        }
+
+        .filterDiv {
+            height: 180px;
         }
     }
 </style>
-    <div class="container-fluid mx-auto m-t-80 " style="background-image: url('{{ asset('images/test.jpg') }}')">
-        <div class="p-tb-5 " style="overflow-x: scroll;">
-            <!-- Search product -->
-            <div class="flex-w flex-sb-m ">
-                <div class=" filter-tope-group m-tb-10" style="display: flex;">
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1  main-cat-style"  onclick="filterSelection('all')" >
-                       @lang('lang.all_product')
-                    </button>
-                    @foreach ($categories as $category)
-                        <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-7 m-tb-5 logo main-cat-style"  onclick="filterSelection({{$category->id}})" >
-                            <div class="p-tb-3 logo">
-                                <img class="main-cat-img"
-                                src="{{images_asset($category->getFirstMediaUrl('product_class')) }}" alt="">
-                                <span>  {{ $category->name }}</span>
-                            </div>
-                        </button>
+<div class="container-fluid mx-auto m-t-80 " style="background-image: url('{{ asset('images/test.jpg') }}')">
+    <div class="p-tb-5 " style="overflow-x: scroll;">
+        <!-- Search product -->
+        <div class="flex-w flex-sb-m ">
+            <div class=" filter-tope-group m-tb-10" style="display: flex;">
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1  main-cat-style"
+                    onclick="filterSelection('all')">
+                    @lang('lang.all_product')
+                </button>
+                @foreach ($categories as $category)
+                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-7 m-tb-5 logo main-cat-style"
+                    onclick="filterSelection({{$category->id}})">
+                    <div class="p-tb-3 logo">
+                        <img class="main-cat-img" src="{{images_asset($category->getFirstMediaUrl('product_class')) }}"
+                            alt="">
+                        <span> {{ $category->name }}</span>
+                    </div>
+                </button>
 
-                    @endforeach
-                </div>
-
+                @endforeach
             </div>
-            <!-- Filter -->
-        </div>
-    </div>
 
-    <div class="container mx-auto mt-14" style="min-height: 100vh;">
-        <div class="w-full mx-auto p-4 ">
-            <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6" >
-                @foreach ($products as $product)
-                <div class=" w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}} " id="product">
-                    <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
-                        style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
+        </div>
+        <!-- Filter -->
+    </div>
+</div>
+
+<div class="container mx-auto mt-14" style="min-height: 100vh;">
+    <div class="w-full mx-auto p-4 ">
+        <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6">
+            @foreach ($products as $product)
+            <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}} " id="product">
+                <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
+                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
                         background-image: url('{{images_asset($product->getFirstMediaUrl('product')) }}')">
 
 
-                    </div>
-                    @php
-                        $variation_products='';
-                        if($product->variations->where('name','!=','Default')->count()>0){
-                            $variation_products=$product->variations->where('name','!=','Default');
-                        }else{
-                            $variation_products=$product->variations->where('name','Default');
-                        }
+                </div>
+                @php
+                $variation_products='';
+                if($product->variations->where('name','!=','Default')->count()>0){
+                $variation_products=$product->variations->where('name','!=','Default');
+                }else{
+                $variation_products=$product->variations->where('name','Default');
+                }
 
-                    @endphp
-                    <div class="productCard flex bg0 p-2 " style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
-                        @foreach($product->variations as $size)
-                            <input type="hidden" value="{{$size->size_id}}" name="size"/>
-                            <input type="hidden" value="{{$size->id}}" name="variation"/>
-                            @break
-                        @endforeach
-                        {{-- @if(count($product->sizes)>0) --}}
+                @endphp
+                <div class="productCard flex bg0 p-2 "
+                    style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
+                    @foreach($product->variations as $size)
+                    <input type="hidden" value="{{$size->size_id}}" name="size" />
+                    <input type="hidden" value="{{$size->id}}" name="variation" />
+                    @break
+                    @endforeach
+                    {{-- @if(count($product->sizes)>0) --}}
 
-                        @foreach($product->variations as $s)
-                        <div class="">
-                            <div class="productName">
-                                <a href="{{ action('ProductController@show', $product->id) }}"
-                                    class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
-                                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
-                                    <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{ Str::limit($product->name, 15) }}</p>
-                                    <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
-                                        {{ session('currency')['code'] }}
-                                        <span class="sell-price">
+                    @foreach($product->variations as $s)
+                    <div class="">
+                        <div class="productName">
+                            <a href="{{ action('ProductController@show', $product->id) }}"
+                                class=" w-full  cl2 text-xs text-center bg-white opacity-70 rounded-xl py-4 mt-2"
+                                style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px; text-align: start !important;">
+                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">{{
+                                    Str::limit($product->name, 10) }}</p>
+                                <p class="md:text-sm xs:text-tiny font-semibold cl2 py-0 px-1">
+                                    {{ session('currency')['code'] }}
+                                    <span class="sell-price">
                                         {{ @num_format($s->default_sell_price - $product->discount_value) }}
-                                        </span>
-                                    </p>
-                                </a>
-                            </div>
-{{--                            <div>--}}
-{{--                                <button id="selected"  disabled class="size-menu p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" >--}}
-{{--                                    {{$s->size->name}}<button>--}}
-{{--                            </div>--}}
-                            <div>
-                                @if($s->size_id!==null)
-                                    <ul id="dropdownMenuIconHorizontalButton">
-                                        @foreach($product->variations as $size)
-                                            <li>
-                                                <button id="sizes"  data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"
-                                                        class="changeSize bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-                                                    {{$size->size->name}}
-                                                </button>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @endif
-{{--                                <button id="dropdownMenuIconHorizontalButton" data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}" class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">--}}
-{{--                                    <span>--}}
-{{--                                        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>--}}
-{{--                                    </span>--}}
-{{--                                    &nbsp;--}}
-{{--                                    <span>@lang('lang.size')</span>--}}
-{{--                                    &nbsp;--}}
-{{--                                    <span class="size-menu">--}}
-{{--                                        {{$s->size->name}}</span>--}}
-
-{{--                                </button>--}}
-
-                                <!-- Dropdown menu -->
-{{--                                <div id="dropdownDotsHorizontal{{$product->id}}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">--}}
-{{--                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">--}}
-{{--                                        @foreach($product->variations as $size)--}}
-{{--                                            <li>--}}
-{{--                                                <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"  data-size_name="{{$size->size->name}}" data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"  class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>--}}
-{{--                                            </li>--}}
-{{--                                        @endforeach--}}
-{{--                                    </ul>--}}
-{{--                                </div>--}}
-                            </div>
+                                    </span>
+                                </p>
+                            </a>
                         </div>
-
-                        <div class="f-me">
-                            <div class="flex flex-row  mt-2">
-                                <button
-                                    class="minus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">-</button>
-                                <input type="quantity" value="1" name="quantity"
-                                    class="quantityp quantity text-center focus:outline-none text-dark bg-transparent " style="width: 3.4rem;">
-                                <button
-                                    class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
-                            </div>
-                            <div class="flex">
-
-                                @foreach($variation_products as $var)
-                                <a data-variation_id="{{ $var->id }}"
-                                    class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">
-                                    <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
-                                @break
+                        {{-- <div>--}}
+                            {{-- <button id="selected" disabled
+                                class="size-menu p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">--}}
+                                {{-- {{$s->size->name}}<button>--}}
+                                    {{-- </div>--}}
+                        <div>
+                            @if($s->size_id!==null)
+                            <ul id="dropdownMenuIconHorizontalButton">
+                                @foreach($product->variations as $size)
+                                <li>
+                                    <button id="sizes" data-size_id="{{$size->size_id}}"
+                                        data-variation_id="{{$size->id}}" data-size_name="{{$size->size->name}}"
+                                        data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"
+                                        class="changeSize bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                                        {{$size->size->name}}
+                                    </button>
+                                </li>
                                 @endforeach
-                                </div>
+                            </ul>
+                            @endif
+                            {{-- <button id="dropdownMenuIconHorizontalButton"
+                                data-dropdown-toggle="dropdownDotsHorizontal{{$product->id}}"
+                                class="bg11 text-white p-1 size-btn inline-flex items-center text-center bg-gray-900 rounded-lg hover:bg-white focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                                type="button">--}}
+                                {{-- <span>--}}
+                                    {{-- <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z">
+                                        </path>
+                                    </svg>--}}
+                                    {{-- </span>--}}
+                                {{-- &nbsp;--}}
+                                {{-- <span>@lang('lang.size')</span>--}}
+                                {{-- &nbsp;--}}
+                                {{-- <span class="size-menu">--}}
+                                    {{-- {{$s->size->name}}</span>--}}
+
+                                {{-- </button>--}}
+
+                            <!-- Dropdown menu -->
+                            {{-- <div id="dropdownDotsHorizontal{{$product->id}}"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                --}}
+                                {{-- <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdownMenuIconHorizontalButton">--}}
+                                    {{-- @foreach($product->variations as $size)--}}
+                                    {{-- <li>--}}
+                                        {{-- <a data-size_id="{{$size->size_id}}" data-variation_id="{{$size->id}}"
+                                            data-size_name="{{$size->size->name}}"
+                                            data-price="{{ @num_format($size->default_sell_price - $product->discount_value) }}"
+                                            class="changeSize block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{$size->size->name}}</a>--}}
+                                        {{-- </li>--}}
+                                    {{-- @endforeach--}}
+                                    {{-- </ul>--}}
+                                {{-- </div>--}}
                         </div>
-                        @break
-                        @endforeach
                     </div>
 
+                    <div class="f-me">
+                        <div class="flex flex-row  mt-2">
+                            <button
+                                class="minus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">-</button>
+                            <input type="quantity" value="1" name="quantity"
+                                class="quantityp quantity text-center focus:outline-none text-dark bg-transparent "
+                                style="width: 3.4rem;">
+                            <button
+                                class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
+                        </div>
+                        <div class="flex">
 
+                            @foreach($variation_products as $var)
+                            <a data-variation_id="{{ $var->id }}"
+                                class="cart_button bg11 text-white font-semibold rounded-lg px-4 py-2">
+                                <i class="fa md:text-sm xs:text-sm fa-cart-plus cart_icon"></i></a>
+                            @break
+                            @endforeach
+                        </div>
+                    </div>
+                    @break
+                    @endforeach
                 </div>
 
-                @endforeach
+
+            </div>
+
+            @endforeach
+        </div>
+    </div>
+</div>
+@if(count($offers_array) > 0)
+<div class="container mx-auto">
+    <div class="flex">
+        <div class="flex-1">
+            <div class="w-1/2 h-10 bg-red text-white mx-auto text-center mt-14 rounded-xl">
+                <h3 class="text-2xl text-white font-semibold py-1">@lang('lang.promotions')</h3>
             </div>
         </div>
     </div>
-    @if(count($offers_array) > 0)
-        <div class="container mx-auto">
-            <div class="flex">
-                <div class="flex-1">
-                    <div class="w-1/2 h-10 bg-red text-white mx-auto text-center mt-14 rounded-xl">
-                        <h3 class="text-2xl text-white font-semibold py-1">@lang('lang.promotions')</h3>
-                    </div>
-                </div>
-            </div>
+</div>
+<div class="container mx-auto mt-14">
+    <div class="w-full mx-auto p-4">
+        <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6">
+            @foreach ($offers_array as $offer)
+            @if ($loop->index == 4)
+            @break
+            @endif
+            @include('home.partial.promotion_card', [
+            'offer' => $offer,
+            ])
+            @endforeach
         </div>
-        <div class="container mx-auto mt-14">
-            <div class="w-full mx-auto p-4">
-                <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6">
-                    @foreach ($offers_array as $offer)
-                        @if ($loop->index == 4)
-                        @break
-                    @endif
-                    @include('home.partial.promotion_card', [
-                        'offer' => $offer,
-                    ])
-                @endforeach
-            </div>
-        </div>
+    </div>
 
-        @if (count($offers_array) != 0 && $offers_count > 4)
-            <div class="container mx-auto">
-                <div class="flex md:justify-end xs:justify-center">
-                    <a href="{{ action('ProductController@getPromotionProducts') }}"
-                        class="bg-red text-white font-semibold py-1 md:px-4 xs:px-8 rounded-md md:mr-16 md:mt-8">@lang('lang.show_more')</a>
-                </div>
-            </div>
-        @endif
+    @if (count($offers_array) != 0 && $offers_count > 4)
+    <div class="container mx-auto">
+        <div class="flex md:justify-end xs:justify-center">
+            <a href="{{ action('ProductController@getPromotionProducts') }}"
+                class="bg-red text-white font-semibold py-1 md:px-4 xs:px-8 rounded-md md:mr-16 md:mt-8">@lang('lang.show_more')</a>
+        </div>
+    </div>
+    @endif
     @endif
 
 
@@ -311,8 +341,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
 @if (!empty($homepage_category_carousel))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             var slider = tns({
                 container: ".category-slider",
                 all-items: 4,
@@ -332,13 +362,13 @@
                 slider.goTo("prev");
             };
         });
-    </script>
+</script>
 @endif
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
 <script>
-$(document).on('click', '.plus', function() {
+    $(document).on('click', '.plus', function() {
   const $quantityInput = $(this).siblings('.quantity');
   let quantity = parseInt($quantityInput.val());
   $quantityInput.val(quantity + 1).change();

@@ -8,15 +8,15 @@
 
                 </div>
 
-                <!-- Logo desktop -->	
-                <a href="{{ action('HomeController@index') }}"  class="logo ">
+                <!-- Logo desktop -->
+                <a href="{{ action('HomeController@index') }}" class="logo ">
                     <img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO">
                     <p class="p-lr-20 cl2 mtext-102">{{ App\Models\System::getProperty('site_title') }}</p>
                 </a>
 
                 <!-- Icon header -->
                 <div class="flex-r-m">
-                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11   js-show-cart"  >
+                    <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11   js-show-cart">
                         <span class="hamburger-box">
                             <span class="hamburger-inner"></span>
                         </span>
@@ -24,15 +24,16 @@
                 </div>
 
             </nav>
-        </div>	
+        </div>
     </div>
 
 
     <!-- Header Mobile -->
     <div class="wrap-header-mobile">
-        <!-- Logo moblie -->		
+        <!-- Logo moblie -->
         <div class="logo-mobile">
-            <a href="{{ action('HomeController@index') }}" ><img src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO"></a>
+            <a href="{{ action('HomeController@index') }}"><img
+                    src="{{ images_asset(asset('uploads/' . session('logo'))) }}" alt="IMG-LOGO"></a>
             <p class="p-lr-55 cl2 mtext-102">{{ App\Models\System::getProperty('site_title') }}</p>
         </div>
 
@@ -51,61 +52,126 @@
 
         <ul class="main-menu-m p-lr-5">
             <li>
-                <a href="{{ action('HomeController@index') }}" >Home</a>
+                <a href="{{ action('HomeController@index') }}">Home</a>
 
             </li>
 
-            <br><hr>
-            <span class=" mtext-102-bold cl0">@lang('lang.contact_us')</span>
-                <p class="w-full cl0 ">whatsapp : {{ App\Models\System::getProperty('whatsapp') }} </p>
-                <p class="w-full cl0   ">Tel : {{ App\Models\System::getProperty('phone_number_1') }} </p>
+            <br>
             <hr>
-                <p class="w-full cl0  ">
-                    <a class="cl0"  href="https://maps.google.com/maps?q={{ App\Models\System::getProperty('address') }}" target="_blank"> 
-                        location : {{ App\Models\System::getProperty('address') }} 
-                </p>
+            <span class=" mtext-102-bold cl0">@lang('lang.contact_us')</span>
+            <p class="w-full cl0 ">whatsapp : {{ App\Models\System::getProperty('whatsapp') }} </p>
+            <p class="w-full cl0   ">Tel : {{ App\Models\System::getProperty('phone_number_1') }} </p>
+            <hr>
+            <p class="w-full cl0  ">
+                <a class="cl0" href="https://maps.google.com/maps?q={{ App\Models\System::getProperty('address') }}"
+                    target="_blank">
+                    location : {{ App\Models\System::getProperty('address') }}
+            </p>
             <hr>
             <div class="pr-4   ltext-101 ">
-                <a target="_blank" href="{{ App\Models\System::getProperty('instagram') }}"
-                class=" ltext-101">
-                
-                <i class="fab fa-instagram w-6 h-6 mr-2 cl0"></i>
+                <a target="_blank" href="{{ App\Models\System::getProperty('instagram') }}" class=" ltext-101">
+
+                    <i class="fab fa-instagram w-6 h-6 mr-2 cl0"></i>
                 </a>
-        
-                <a target="_blank" href="{{ App\Models\System::getProperty('twitter') }}"
-                    class="ltext-101">
-            
+
+                <a target="_blank" href="{{ App\Models\System::getProperty('twitter') }}" class="ltext-101">
+
                     <i class="fab fa-twitter w-6 h-6 mr-2 cl0  "></i>
                 </a>
-        
-                <a target="_blank" href="{{ App\Models\System::getProperty('youtube') }}"
-                    class="ltext-101">
+
+                <a target="_blank" href="{{ App\Models\System::getProperty('youtube') }}" class="ltext-101">
                     <i class="fab fa-youtube w-6 h-6 mr-2 cl0  "></i>
                 </a>
-        
+
                 <a target="_blank" href="https://t.me/{{ App\Models\System::getProperty('telegram') }}"
                     class="ltext-101">
-            
+
                     <i class="fab fa-telegram-plane w-6 h-6 mr-2 cl0  "></i>
                 </a>
-        
-                <a target="_blank" href="https://api.whatsapp.com/send?phone={{ App\Models\System::getProperty('whatsapp') }}"
+
+                <a target="_blank"
+                    href="https://api.whatsapp.com/send?phone={{ App\Models\System::getProperty('whatsapp') }}"
                     class="ltext-101">
-    
+
                     <i class="fab fa-whatsapp w-6 h-6 mr-2 cl0  "></i>
                 </a>
-        
-                <a target="_blank" href="{{ App\Models\System::getProperty('facebook') }}"
-                    class="ltext-101">
-            
+
+                <a target="_blank" href="{{ App\Models\System::getProperty('facebook') }}" class="ltext-101">
+
                     <i class="fab fa-facebook-f w-6 h-6 mr-2 cl0  "></i>
+                </a>
+            </div>
+
+            <span class="mtext-102-bold cl2 text-white"> @lang('lang.language')</span>
+            <div class="text-white">
+                <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1 invisible" src="" alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        عربي
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('nl') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/nl-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        Deutsch
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('fr') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/fr-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        français
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('en') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/en-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        English
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('tr') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/tr-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        Turkce
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('fa') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/fa-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        فارسی
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('ur') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/ur-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        اردو
+                    </p>
+                </a>
+
+                <a href="{{ LaravelLocalization::getLocalizedURL('hi') }}" class="flex items-center   -mx-2">
+                    <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/hi-flag.png') }}"
+                        alt="avatar">
+                    <p class="text-white text-sm mx-2">
+                        हिन्दी
+                    </p>
                 </a>
             </div>
         </ul>
     </div>
 
     <!-- Modal Search -->
-  {{--  <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
+    {{-- <div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
         <div class="container-search-header">
             <button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
                 <img src="images/icons/icon-close2.png" alt="CLOSE">
