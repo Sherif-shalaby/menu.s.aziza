@@ -163,8 +163,8 @@
 </div>
 
 <div class="container mx-auto mt-14" style="min-height: 100vh;">
-    <div class="w-full mx-auto p-4 ">
-        <div class="grid xs:grid-cols-3 md:grid-cols-4 xs:gap-2 md:gap-16 md:mt-12 xs:mt-6">
+    <div class="w-full mx-auto p-1 ">
+        <div class="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-8 xs:mt-12 ">
             @foreach ($products as $product)
             <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}} " id="product">
                 <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
