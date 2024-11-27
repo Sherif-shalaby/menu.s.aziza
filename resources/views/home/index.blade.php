@@ -162,17 +162,19 @@
     </div>
 </div>
 
-<div class="container mx-auto mt-14" style="min-height: 100vh;">
+<div class="container mx-auto mt-14 px-1" style="min-height: 100vh;">
     <div class="w-full mx-auto p-1 ">
-        <div class="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-8 xs:mt-12 ">
+        <div class="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-10 xs:mt-12 ">
             @foreach ($products as $product)
-            <div class="w-full mb-4 filterDiv filterDiv-{{$product->product_class_id}} " id="product">
-                <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
-                    style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
+            <div class="w-full mb-5 ml-1 flex-shrink-0 filterDiv filterDiv-{{$product->product_class_id}} " id="product"
+                style="height: fit-content!important">
+                <a href="{{ action('ProductController@show', $product->id) }}">
+                    <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
+                        style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
                         background-image: url('{{images_asset($product->getFirstMediaUrl('product')) }}')">
 
-
-                </div>
+                    </div>
+                </a>
                 @php
                 $variation_products='';
                 if($product->variations->where('name','!=','Default')->count()>0){
@@ -182,7 +184,7 @@
                 }
 
                 @endphp
-                <div class="productCard flex bg0 p-2 "
+                <div class="productCard flex bg0 p-1 "
                     style="flex-wrap: nowrap;justify-content: space-between;align-items: center;height:80px">
                     @foreach($product->variations as $size)
                     <input type="hidden" value="{{$size->size_id}}" name="size" />
@@ -267,14 +269,14 @@
                     </div>
 
                     <div class="f-me">
-                        <div class="flex flex-row  mt-2">
+                        <div class="flex flex-row">
                             <button
-                                class="minus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">-</button>
+                                class="minus border-2 rounded-full  text-center border-dark cl0 bg11 h-8 w-8">-</button>
                             <input type="quantity" value="1" name="quantity"
                                 class="quantityp quantity text-center focus:outline-none text-dark bg-transparent "
                                 style="width: 3.4rem;">
                             <button
-                                class="plus border-2 rounded-full text-lg text-center border-dark cl0 bg11 h-8 w-8">+</button>
+                                class="plus border-2 rounded-full  text-center border-dark cl0 bg11 h-8 w-8">+</button>
                         </div>
                         <div class="flex">
 

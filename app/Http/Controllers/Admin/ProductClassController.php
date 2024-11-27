@@ -50,14 +50,24 @@ class ProductClassController extends Controller
 
         if (request()->ajax()) {
 
-            $product_classes = ProductClass::leftJoin("products", "products.product_class_id", "=", "product_classes.id")
-                ->groupBy('product_classes.id')->orderBy('product_classes.sort')->orderBy('product_classes.created_at', 'desc');
+            // $product_classes = ProductClass::leftJoin("products", "products.product_class_id", "=", "product_classes.id")
+            //     ->groupBy('product_classes.id')->orderBy('product_classes.sort')->orderBy('product_classes.created_at', 'desc');
 
+
+            // $product_classes = $product_classes->selectRaw(
+            //     'product_classes.*,count("products.id") as product_count'
+
+            // );
+
+            $product_classes = ProductClass::leftJoin("products", "products.product_class_id", "=", "product_classes.id")
+                ->groupBy('product_classes.id', 'product_classes.name', 'product_classes.status', 'product_classes.sort', 'product_classes.created_at') // List all selected columns
+                ->orderBy('product_classes.sort')
+                ->orderBy('product_classes.created_at', 'desc');
 
             $product_classes = $product_classes->selectRaw(
-                'product_classes.*,count("products.id") as product_count'
-
+                'product_classes.id, product_classes.name, product_classes.status, product_classes.sort, product_classes.created_at, COUNT(products.id) as product_count'
             );
+
 
             return DataTables::of($product_classes)
                 ->addColumn('image', function ($row) {

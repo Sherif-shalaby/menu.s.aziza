@@ -1765,6 +1765,10 @@ button.selected {
     gap: 2rem;
 }
 
+.gap-10 {
+    gap: 2.5rem;
+}
+
 .gap-2 {
     gap: 0.7rem;
 }
@@ -3105,6 +3109,10 @@ button.selected {
     .sm\:text-sm {
         font-size: 0.875rem;
         line-height: 1.25rem;
+    }
+
+    .sm\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 

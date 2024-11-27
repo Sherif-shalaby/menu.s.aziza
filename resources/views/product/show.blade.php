@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
 @section('content')
 @include('layouts.partials.product-header')
-
 <div class="container mx-auto mt-14">
     <div class="flex flex-col md:flex-row  h-96 min-h-full">
         <div
@@ -39,7 +38,7 @@
             <div class="flex flex-col bg12   px-16 py-8">
                 <div class="flex-1">
                     <h1 class="text-2xl font-bold">{{ $product->name }}</h1>
-                    <p class="py-2 text-gray-600">{!! $product->product_details !!}</p>
+                    <p class="py-2 text-gray-600" style="word-break: break-all">{!! $product->product_details !!}</p>
                 </div>
                 <div class="flex-1 pt-4">
                     <div class="flex flex-col">
