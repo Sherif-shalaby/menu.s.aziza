@@ -166,8 +166,8 @@
     <div class="w-full mx-auto p-1 ">
         <div class="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 gap-10 xs:mt-12 ">
             @foreach ($products as $product)
-            <div class="w-full mb-5 ml-1 flex-shrink-0 filterDiv filterDiv-{{$product->product_class_id}} " id="product"
-                style="height: fit-content!important">
+            <div class="w-full mb-5 mx-2 pl-1 flex-shrink-0 filterDiv filterDiv-{{$product->product_class_id}} "
+                id="product" style="height: fit-content!important;">
                 <a href="{{ action('ProductController@show', $product->id) }}">
                     <div class="w-full  shadow-lg pb-full rounded-xl bg-center bg-no-repeat bg-cover relative   product_card img-s"
                         style="box-shadow: rgba(0, 0, 0, 0.2) -7px 5px 7px;
