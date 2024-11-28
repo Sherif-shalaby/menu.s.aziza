@@ -83,6 +83,7 @@ class OrderController extends Controller
 
 
             $cart_content = \Cart::session($user_id)->getContent();
+            $final_total=0;
             $text = '%20';
             foreach ($cart_content as $content) {
                 $discount_attr = $content->attributes->discount;
@@ -99,11 +100,12 @@ class OrderController extends Controller
                 // . " " .__('lang.size')." ".$content->attributes->size??'#'.
                 $product = Product::find($content->associatedModel->id);
                 $text.=urlencode($product->name).'+'.$content->attributes->size.'+%3A'.$order_details['quantity'] ."+%2A+".$order_details['price'].'='.$order_details['sub_total']."+".session('currency')['code']. "%0A";
-                
+                $final_total+=$content->price * $content->attributes->quantity;
                 // $text .= urlencode($product->name) .'+  +'.$content->attributes->size.'+%3A+' . $order_details['quantity'] . "+%2A+" . $order_details['price'] . '+=+' . $order_details['sub_total'] . " " . session('currency')['code'] . " +%0D%0A+";
                 OrderDetails::create($order_details);
             }
             $order->discount_amount = $order->order_details->sum('discount') ?? 0;
+            $order->final_total = $final_total - $order->discount_amount;
             $order->save();
 
             \Cart::session($user_id)->clear();
