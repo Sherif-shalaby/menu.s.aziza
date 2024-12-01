@@ -38,7 +38,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $most_demanded =
+        $most_demanded_query =
             DB::table('order_details')
             ->join('products', 'order_details.product_id', '=', 'products.id')
             ->select(
@@ -51,6 +51,11 @@ class HomeController extends Controller
             ->orderByDesc('total_quantity')
             ->take(10)
             ->get();
+
+        // Convert stdClass to Product model collection
+        $productIds = $most_demanded_query->pluck('product_id');
+        $most_demanded = Product::whereIn('id', $productIds)->get();
+
 
 
         $user_id = Session::get('user_id');

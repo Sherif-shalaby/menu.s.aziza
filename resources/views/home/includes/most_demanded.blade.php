@@ -4,18 +4,21 @@
     @foreach ($most_demanded as $product)
 
     <div
-        class="w-32 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 productCard">
-        <a href="{{ action('ProductController@show', $product->product_id) }}">
-            <img class="rounded-t-lg card_border" src="https://aziza.sherifshalaby.tech/storage/1994012/1446_image.jpeg"
-                alt="" />
+        class=" w-48 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 productCard">
+        <a href="{{ action('ProductController@show', $product->id) }}" style="height: 100%">
+
+            <img class="h-full" src="{{ images_asset($product->getFirstMediaUrl('product')) }}"
+                alt="{{ $product->name }}">
+
+
         </a>
         <div class="p-2 dark-bg rounded-b-lg">
-            <a href="{{ action('ProductController@show', $product->product_id) }}">
-                <h5 class="mb-2 text-xl font-bold text-center tracking-tight text-white">{{ $product->product_name
+            <a href="{{ action('ProductController@show', $product->id) }}">
+                <h5 class="mb-2 text-xl font-bold text-center tracking-tight text-white">{{ $product->name
                     }}</h5>
             </a>
             <h5 class="text-white flex justify-between">
-                {{ $product->product_price }}
+                {{ $product->sell_price }}
 
                 {{-- <span style="background-color: var(--primary-color)"
                     class="text-white font-bold rounded-full w-6 h-6 flex justify-center items-center cursor-pointer cart_button">+</span>
