@@ -43,7 +43,6 @@ $(document).ready(function () {
         canvas = cropper.getCroppedCanvas({
             aspectRatio: 1 / 1,
             dragMode: "move",
-            
         });
 
         canvas.toBlob(function (blob) {

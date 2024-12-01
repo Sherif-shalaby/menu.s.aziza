@@ -77,7 +77,7 @@ return [
     'filter' => 'filtre',
     'active' => 'Aktif',
     'deactivated' => 'devre dışı',
-    'sort' => ' Sıralama',
+    'sort' => 'Sıralama',
     'create_offer' => 'Teklif Oluştur',
     'products' => 'Ürün:% s',
     'start_date' => 'Başlangıç ​​tarihi',
@@ -244,10 +244,4 @@ return [
     'pay_and_close' => 'Öde ve Kapat',
     'dining_room' => 'Yemek odası',
     'dining_table' => 'Yemek masası',
-
-    'language' => 'Dil',
-    'contact_us' => 'Bize Ulaşın',
-    'social_media' => 'Sosyal medya',
-    'view_cart' => 'Sepeti Görüntüle',
-     'all_product' => 'Tüm ürünler',
 ];

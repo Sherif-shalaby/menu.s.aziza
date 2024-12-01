@@ -4,12 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Offer;
 use App\Models\ProductClass;
-use App\Models\Product;
 use App\Models\System;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+
+use App\Models\Cart;
+use App\Models\DiningTable;
+
+use App\Models\Product;
+use App\Models\Store;
+use App\Models\Variation;
+use App\Utils\CartUtil;
+use App\Utils\Util;
+
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
+    protected $cartUtil;
+    protected $commonUtil;
+
+    public function __construct(CartUtil $cartUtil, Util $commonUtil)
+    {
+        $this->cartUtil = $cartUtil;
+        $this->commonUtil = $commonUtil;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,16 +38,40 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $most_demanded =
+            DB::table('order_details')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->select(
+                'products.id as product_id',
+                'products.name as product_name',
+                'products.sell_price as product_price',
+                DB::raw('SUM(order_details.quantity) as total_quantity')
+            )
+            ->groupBy('products.id', 'products.name', 'products.sell_price')
+            ->orderByDesc('total_quantity')
+            ->take(10)
+            ->get();
+
+
+        $user_id = Session::get('user_id');
+
+        $cart_content = \Cart::session($user_id)->getContent()->sortBy('name');
+
+        $extras = Product::leftjoin('product_classes', 'products.product_class_id', 'product_classes.id')
+            ->where('product_classes.name', 'Extras')
+            ->where('active', 1)
+            ->select('products.*')
+            ->get();
+
+        $total = $this->getTotal($user_id);
+        $month_array = $this->commonUtil->getMonthsArray();
+        $stores = Store::pluck('name', 'id');
+        $dining_tables = DiningTable::pluck('name', 'id');
+
+
         $homepage_category_carousel = System::getProperty('homepage_category_carousel');
         $categories = ProductClass::orderBy('product_classes.sort')->orderBy('product_classes.created_at', 'desc')->where('status', 1)->where('name', '!=', 'Extras')->get();
-        $products = Product::orderBy('products.sort')->orderBy('products.created_at', 'desc')->where('active', 1)->where(function ($query) {
-            if (env('ENABLE_POS_SYNC')) {
-                $query->where('is_raw_material', 0);
-            }
-        })->whereHas('category', function ($query) {
-            $query->where('status', 1);
-        })
-            ->get();
+
         $offers_array = [];
 
         $offers = Offer::where(function ($q) {
@@ -46,16 +91,31 @@ class HomeController extends Controller
                 $offers_count++;
             }
         }
-        // return $products;
+
         return view('home.index')->with(compact(
             'categories',
-            'products',
             'offers_array',
             'offers_count',
             'homepage_category_carousel',
+            'most_demanded',
+            'stores',
+            'extras',
+            'total',
+            'cart_content',
+            'dining_tables',
+            'month_array'
         ));
     }
 
+    public function getTotal($user_id)
+    {
+        $cart_content = \Cart::session($user_id)->getContent();
+        $total = 0;
+        foreach ($cart_content as $item) {
+            $total += $item->price * $item->attributes->quantity;
+        }
+        return $total;
+    }
     /**
      * Show the form for creating a new resource.
      *

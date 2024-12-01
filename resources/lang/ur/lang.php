@@ -248,11 +248,4 @@ return [
     'pay_and_close' => 'ادائیگی کریں اور بند کریں۔',
     'dining_room' => 'کھانا کھانے کا کمرہ',
     'dining_table' => 'کھانے کی میز',
-
-    'language' => 'زبان',
-    'contact_us' => 'ہم سے رابطہ کریں۔',
-    'social_media' => 'سوشل میڈیا',
-    'view_cart' => 'ٹوکری دیکھیں',
-    
-    'all_product' => 'تمام مصنوعات',
 ];

@@ -13,7 +13,6 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Mockery\Undefined;
 
 class CartController extends Controller
 {
@@ -53,10 +52,10 @@ class CartController extends Controller
             ->select('products.*')
             ->get();
 
-        $total =$this->getTotal($user_id);
+        $total = $this->getTotal($user_id);
         $month_array = $this->commonUtil->getMonthsArray();
         $stores = Store::pluck('name', 'id');
-        $dining_tables = DiningTable::pluck('name', 'dining_tables.id');
+        $dining_tables = DiningTable::pluck('name', 'id');
 
         return view('cart.view')->with(compact(
             'stores',
@@ -128,25 +127,25 @@ class CartController extends Controller
         // return request()->quantity;
         try {
             $quantity = !empty(request()->quantity) ? abs(request()->quantity) : 1;
-            $variation = Variation::find( $id);
+            $variation = Variation::find($id);
             $product = Product::find($variation->product_id);
-            $IsproductHasDiscount = Product::where('id',$variation->product_id)
-            ->whereDate('discount_start_date', '<=', date('Y-m-d'))->whereDate('discount_end_date', '>=', date('Y-m-d'))->first();
-            $product_discount= !empty($IsproductHasDiscount)?$product->discount_value:0;
-           
+            $IsproductHasDiscount = Product::where('id', $variation->product_id)
+                ->whereDate('discount_start_date', '<=', date('Y-m-d'))->whereDate('discount_end_date', '>=', date('Y-m-d'))->first();
+            $product_discount = !empty($IsproductHasDiscount) ? $product->discount_value : 0;
+
             $user_id = Session::get('user_id');
             $price = $variation->default_sell_price;
             $price = $price - $product_discount;
             $item_exist = \Cart::session($user_id)->get($variation->id);
             // return $item_exist->quantity+$quantity;
-            if(strpos($quantity,',')!==false){
-                $quantity=str_replace(',','.',$quantity);
+            if (strpos($quantity, ',') !== false) {
+                $quantity = str_replace(',', '.', $quantity);
             }
             if (!empty($item_exist)) {
-                $attributes=$item_exist->attributes;
-                $attributes['quantity']=strpos($quantity,'.')!==false?number_format((float)$item_exist->attributes->quantity+$quantity, 3, '.'):$item_exist->attributes->quantity+$quantity;
+                $attributes = $item_exist->attributes;
+                $attributes['quantity'] = strpos($quantity, '.') !== false ? number_format((float)$item_exist->attributes->quantity + $quantity, 3, '.') : $item_exist->attributes->quantity + $quantity;
                 \Cart::session($user_id)->update($variation->id, array(
-                    'attributes' =>$attributes
+                    'attributes' => $attributes
                 ));
                 // \Cart::session($user_id)->update($variation->id, array(
                 //     // 'quantity' =>  $item_exist->quantity+$quantity
@@ -165,7 +164,7 @@ class CartController extends Controller
                         'variation_id' => $variation->id,
                         'extra' => false,
                         'discount' => $product_discount,
-                        'size'=>$variation->size->name,
+                        'size' => $variation->size->name,
                         'quantity' => $quantity  ///used quantity
                     ],
                     'associatedModel' => $product
@@ -176,6 +175,7 @@ class CartController extends Controller
 
             $output = [
                 'success' => 1,
+
                 'msg' => __('lang.added_to_the_cart_successfully')
             ];
         } catch (\Exception $e) {
@@ -186,9 +186,61 @@ class CartController extends Controller
             ];
         }
 
-        return response()->json(['status'=> $output]);
+        return response()->json(['status' => $output]);
     }
 
+    // public function addToCart($id)
+    // {
+    //     try {
+    //         $quantity = !empty(request()->quantity) ? request()->quantity : 1;
+    //         $product = Product::find($id);
+    //         $variation = Variation::where('product_id', $id)->first();
+
+    //         $user_id = Session::get('user_id');
+    //         $price = $variation->default_sell_price;
+
+    //         $price = $price - $product->discount_value;
+    //         $item_exist = \Cart::session($user_id)->get($product->id);
+
+
+    //         if (!empty($item_exist)) {
+    //             \Cart::session($user_id)->update($product->id, array(
+    //                 'quantity' =>  array(
+    //                     'relative' => false,
+    //                     'value' => $item_exist->quantity + 1
+    //                 ),
+    //             ));
+    //         } else {
+    //             \Cart::session($user_id)->add(array(
+    //                 'id' => $product->id,
+    //                 'name' => $product->name,
+    //                 'price' => $price,
+    //                 'quantity' =>  $quantity,
+    //                 'attributes' => [
+    //                     'variation_id' => $variation->id,
+    //                     'extra' => false,
+    //                     'discount' => $product->discount_value
+    //                 ],
+    //                 'associatedModel' => $product
+    //             ));
+    //         }
+
+    //         $this->cartUtil->createOrUpdateCart($user_id);
+
+    //         $output = [
+    //             'success' => 1,
+    //             'msg' => __('lang.added_to_the_cart_successfully')
+    //         ];
+    //     } catch (\Exception $e) {
+    //         Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+    //         $output = [
+    //             'success' => false,
+    //             'msg' => __('lang.something_went_wrong')
+    //         ];
+    //     }
+
+    //     return redirect()->back()->with('status', $output);
+    // }
     /**
      * remove product from cart
      *
@@ -226,16 +278,16 @@ class CartController extends Controller
     public function updateProductQuantity($product_id, $quantity)
     {
         try {
-            if(strpos($quantity,',')!==false){
-                $quantity=str_replace(',','.',$quantity);
+            if (strpos($quantity, ',') !== false) {
+                $quantity = str_replace(',', '.', $quantity);
             }
-            $quantity=abs($quantity);
+            $quantity = abs($quantity);
             $user_id = Session::get('user_id');
             $item_exist = \Cart::session($user_id)->get($product_id);
-            $attributes=$item_exist->attributes;
-            $attributes['quantity']=strpos($quantity,'.')!==false?number_format((float)$quantity, 3, '.'):$quantity;
+            $attributes = $item_exist->attributes;
+            $attributes['quantity'] = strpos($quantity, '.') !== false ? number_format((float)$quantity, 3, '.') : $quantity;
             \Cart::session($user_id)->update($product_id, array(
-                'attributes' =>$attributes
+                'attributes' => $attributes
             ));
             // \Cart::session($user_id)->update($product_id, array(
             //     'quantity' => array(
@@ -245,10 +297,10 @@ class CartController extends Controller
             // ));
 
             $this->cartUtil->createOrUpdateCart($user_id);
-            $total=$this->getTotal($user_id);
+            $total = $this->getTotal($user_id);
             $output = [
                 'success' => true,
-                'total'=>$total,
+                'total' => $total,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
@@ -323,9 +375,9 @@ class CartController extends Controller
     public function getTotal($user_id)
     {
         $cart_content = \Cart::session($user_id)->getContent();
-        $total=0;
-        foreach ($cart_content as $item){
-            $total+=$item->price * $item->attributes->quantity;
+        $total = 0;
+        foreach ($cart_content as $item) {
+            $total += $item->price * $item->attributes->quantity;
         }
         return $total;
     }

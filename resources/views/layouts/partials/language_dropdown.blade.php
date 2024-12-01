@@ -1,8 +1,8 @@
 <div x-data="{ dropdownOpen: false }" class="relative">
     <button @click="dropdownOpen = !dropdownOpen"
-        class="relative z-10 block rounded-tr-full rounded-br-full bg-red p-2 focus:outline-none w-32 flex items-center  border border-dark">
+        class="relative z-10 block rounded-lg   bg-red px-2 focus:outline-none w-32 flex items-center box-shadow-btn h-10   text-white    ">
         <img class="h-5 w-5 text-gray-800 @if(app()->getLocale() == 'ar')invisible @endif" src="{{ asset('images/' . app()->getLocale() . '-flag.png') }}" alt="">
-        <p class="text-dark text-sm mx-2">
+        <p class="  text-sm mx-2">
             @lang('lang.'.app()->getLocale())
         </p>
         <i class="fa fa-chevron-down text-base"></i>
@@ -15,7 +15,7 @@
             <a href="{{ LaravelLocalization::getLocalizedURL('ar') }}" class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1 invisible" src=""
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     عربي
                 </p>
             </a>
@@ -23,7 +23,7 @@
             <a href="{{ LaravelLocalization::getLocalizedURL('nl') }}" class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/nl-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     Deutsch
                 </p>
             </a>
@@ -31,7 +31,7 @@
             <a href="{{ LaravelLocalization::getLocalizedURL('fr') }}" class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/fr-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     français
                 </p>
             </a>
@@ -40,7 +40,7 @@
                 class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/en-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     English
                 </p>
             </a>
@@ -49,7 +49,7 @@
                 class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/tr-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     Turkce
                 </p>
             </a>
@@ -58,7 +58,7 @@
                 class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/fa-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     فارسی
                 </p>
             </a>
@@ -67,7 +67,7 @@
                 class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/ur-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     اردو
                 </p>
             </a>
@@ -76,7 +76,7 @@
                 class="flex items-center px-4 py-1 -mx-2">
                 <img class="h-5 w-5 rounded-full object-cover mx-1" src="{{ asset('images/hi-flag.png') }}"
                     alt="avatar">
-                <p class="text-dark text-sm mx-2">
+                <p class="  text-sm mx-2">
                     हिन्दी
                 </p>
             </a>

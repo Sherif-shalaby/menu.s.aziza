@@ -248,11 +248,4 @@ return [
     'pay_and_close' => 'Payer et fermer',
     'dining_room' => 'Salle à manger',
     'dining_table' => 'Table à manger',
-
-    'language' => 'Langue',
-    'contact_us' => 'Contactez-nous',
-    'social_media' => 'Réseaux sociaux',
-    'view_cart' => 'Voir le panier',
-    'all_product' => 'Tous les produits',
-    
 ];

@@ -12,27 +12,27 @@
 <style>
     .preview-logo-container {
         /* display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 20px; */
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px; */
         display: grid;
         grid-template-columns: repeat(auto-fill, 170px);
     }
 
     .preview-header-container {
         /* display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 20px; */
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px; */
         display: grid;
         grid-template-columns: repeat(auto-fill, 170px);
     }
 
     .preview-footer-container {
         /* display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 20px; */
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px; */
         display: grid;
         grid-template-columns: repeat(auto-fill, 170px);
     }
@@ -81,6 +81,7 @@
         color: #007bff;
     }
 </style>
+
 <style>
     /* Customizing the Coloris picker */
     .clr-picker {
@@ -118,10 +119,9 @@ $defaultColor = $color->value ?? "rgb(146, 124, 64)";
 $defaultFont = $font->value ?? "Roboto";
 @endphp
 {!! Form::open(['url' => action('Admin\SettingController@saveSystemSettings'), 'method' => 'post', 'id' =>
-'setting_form', 'files' => true]) !!}
+'setting_form', 'files' => true,'enctype'=>"multipart/form-data"]) !!}
 <x-adminlte-card title="{{ __('lang.system_settings') }}" theme="{{ config('adminlte.right_sidebar_theme') }}"
     theme-mode="outline" icon="fas fa-file">
-
     <div class="row">
         {{-- logo --}}
         <div class="col-md-4">
@@ -253,7 +253,7 @@ $defaultFont = $font->value ?? "Roboto";
                         <div class="input-group-text bg-lightblue">
                             <i class="fas fa-upload"></i>
                         </div>
-                    </x-slot>
+                    </x-slot> //Breadcrumb_background_image
                 </x-adminlte-input-file>
             </div>
         </div>
@@ -527,9 +527,6 @@ $defaultFont = $font->value ?? "Roboto";
 @stop
 @section('javascript')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-
-
-{{-- Theme --}}
 <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
 <script>
     const fonts = [
@@ -660,10 +657,6 @@ $defaultFont = $font->value ?? "Roboto";
             ],
     });
 </script>
-
-{{-- End Theme --}}
-
-
 <script>
     $("[name='homepage_category_carousel']").bootstrapSwitch();
 
@@ -1196,7 +1189,7 @@ $defaultFont = $font->value ?? "Roboto";
                         deleteBtn.classList.add('delete-btn');
                         deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
                         deleteBtn.addEventListener('click', () => {
-                            Swal({
+                            Swal.fire({
                                 title: '{{ __("site.Are you sure?") }}',
                                 text: "{{ __("site.You won't be able to delete!") }}",
                                 icon: 'warning',
@@ -1206,7 +1199,7 @@ $defaultFont = $font->value ?? "Roboto";
                                 confirmButtonText: 'Yes, delete it!'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    Swal(
+                                    Swal.fire(
                                         'Deleted!',
                                         '{{ __("site.Your Image has been deleted.") }}',
                                         'success'
@@ -1233,7 +1226,7 @@ $defaultFont = $font->value ?? "Roboto";
                     });
                     reader.readAsDataURL(file);
                 }else{
-                    Swal({
+                    Swal.fire({
                         icon: 'error',
                         title: '{{ __("site.Oops...") }}',
                         text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',

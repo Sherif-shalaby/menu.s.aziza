@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use App\Models\System;
-use DateTime;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        //
     }
 
     /**
@@ -100,5 +97,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('replace_space', function ($string) {
             return "str_replace(' ', '_', $string)";
         });
+
+
+ 
     }
 }

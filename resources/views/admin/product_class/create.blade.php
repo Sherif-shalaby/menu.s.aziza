@@ -220,7 +220,7 @@
 
         <div class="modal-body">
             <div class="form-group">
-                <x-adminlte-input name="name" required label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
+                <x-adminlte-input name="name" label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
                     enable-old-support>
                     <x-slot name="appendSlot">
                         <div class="input-group-text text-primary translation_btn"  data-type="product_class">
@@ -250,8 +250,6 @@
                   {!! Form::label('image', __('lang.image'), []) !!}
                 <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                     <div class="col-12">
-                       
-           
                             <div class="row">
                                 <div class="col-10 offset-1">
                                     <div class="variants">
@@ -265,7 +263,6 @@
                                     </div>
                                 </div>
                             </div>
-                       
                     </div>
                     <div class="col-10 offset-1">
                         <div class="preview-container"></div>
@@ -321,7 +318,7 @@
 
 
 <script>
-  var fileInput = document.querySelector('#file-input');
+    var fileInput = document.querySelector('#file-input');
     var previewContainer = document.querySelector('.preview-container');
     var croppieModal = document.querySelector('#croppie-modal');
     var croppieContainer = document.querySelector('#croppie-container');

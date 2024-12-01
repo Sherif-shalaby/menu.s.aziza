@@ -37,7 +37,7 @@ return [
     'send_the_order' => 'أرسل الطلب',
     'pay_online' => 'ادفع عبر الإنترنت',
     'cash_on_delivery' => 'الدفع عند الاستلام',
-    'home' => 'الصفحة الرئيسية',
+    'home' => 'الرئيسية',
     'cart' => 'عربة التسوق',
 
     'view' => 'عرض',
@@ -53,9 +53,8 @@ return [
     'not_authorized' => 'غير مخول',
     'please_select' => 'الرجاء التحديد',
     'done' => 'منجز',
-    'create' => 'إنشاء',
-
-
+    'create' => 'خلق',
+    
     'category' => 'فئة',
     'categories' => 'الأقسام',
     'add_category' => 'إضافة فئة',
@@ -245,19 +244,11 @@ return [
     'pay_and_close' => 'دفع وإغلاق',
     'dining_room' => 'غرفة العشاء',
     'dining_table' => 'طاولة الطعام',
-
-    'language' => 'اللغة',
-    'contact_us' => 'اتصل بنا',
-    'social_media' => 'وسائل التواصل الاجتماعي',
-    'view_cart' => 'عربة التسوق',
-    'all_product' => 'كل المنتجات',
     'default'=>'مقاس عادى',
     'products_count'=>'عدد المنتجات',
     'dinnig_in_restaurant'=>'داخل المطعم',
     'table_no'=>'طاولة رقم',
     'enter_restaurant_store'=>'ادخل اسم المطعم',
-
-
     'Are you sure?'=>'هل متأكد من حذف الصورة',
     'Your Image has been deleted.'=>'تم حذف الصورة',
 ];

@@ -244,10 +244,4 @@ return [
     'pay_and_close' => 'پرداخت و بستن',
     'dining_room' => 'ناهارخوری',
     'dining_table' => 'میز غذاخوری',
-
-    'language' => 'زبان',
-    'contact_us' => 'با ما تماس بگیرید',
-    'social_media' => 'رسانه های اجتماعی',
-    'view_cart' => 'مشاهده سبد خرید',
-    'all_product' => 'همه محصولات',
 ];

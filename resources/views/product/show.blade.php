@@ -1,46 +1,70 @@
-@extends('layouts.app')
+@extends('layouts.new_design')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
 @section('content')
-@include('layouts.partials.product-header')
-<div class="container mx-auto mt-14">
-    <div class="flex flex-col md:flex-row  h-96 min-h-full">
-        <div
-            class="flex-1 xs:w-full lg:w-1/2  @if ($product->getMedia('product')->count() == 0) md:block xs:hidden @endif">
+@php
+$user_id = request()
+->session()
+->get('user_id');
+$cart_count = 0;
+if (!empty($user_id)) {
+$cart_collection = Cart::session($user_id)->getContent();
+$cart_count = $cart_collection->count();
+}
+@endphp
 
-            <div class="flex flex-row items-center @if ($product->getMedia('product')->count() == 0) xs:hidden @endif">
-                <div class="flex-3 w-20 block md:block xs:hidden ">
+@php
+$locale_direction = LaravelLocalization::getCurrentLocaleDirection();
+@endphp
+@include('home.includes.carousel')
+
+<!-- End carousel -->
+
+
+<div class="px-3 relative">
+
+    {{-- Start navbar --}}
+    @include('home.includes.navbar')
+    {{-- end navbar --}}
+
+</div>
+<div class="container mx-auto">
+    <div class="flex flex-row flex-wrap mb-16 dark-bg text-white" style="min-height: 80vh">
+        <div class="flex-1  @if ($product->getMedia('product')->count() == 0) md:block xs:hidden @endif">
+
+            <div class="h-full border-r @if ($product->getMedia('product')->count() == 0) xs:hidden @endif">
+                {{-- <div class="flex-3 w-20 block md:block xs:hidden ">
                     <div class="owl-nav">
                         <div class="prev-nav">
                             <img src="{{ asset('images/slider-arrow-left.png') }}" alt="" class="m-auto">
                         </div>
                     </div>
-                </div>
-                <div class="flex-1 ">
+                </div> --}}
+                <div class="w-full h-full">
                     <div class="product-slider">
                         @foreach ($product->getMedia('product') as $image)
-                        <img src="@if (!empty($image->getUrl())) {{ $image->getUrl() }}@else{{ asset('uploads/' . session('logo')) }} @endif"
+                        <img src="@if (!empty($image->getUrl())) {{ $image->getUrl() }}@else{{ images_asset() }} @endif"
                             class="aspect-square" alt="" style="">
                         @endforeach
                     </div>
                 </div>
-                <div class="flex-3 w-20 block md:block xs:hidden  justify-center">
+                {{-- <div class="flex-3 w-20 block md:block xs:hidden  justify-center">
                     <div class="owl-nav">
                         <div class="next-nav">
                             <img src="{{ asset('images/slider-arrow-right.png') }}" alt="" class="m-auto">
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
 
         </div>
-        <div class="flex-1 xs:w-full lg:w-1/2 text-dark">
-            <div class="flex flex-col bg12   px-16 py-8">
-                <div class="flex-1">
+        <div class="flex-1 p-3">
+            <div class="flex flex-col">
+                <div class="flex-1 text-center">
                     <h1 class="text-2xl font-bold">{{ $product->name }}</h1>
-                    <p class="py-2 text-gray-600" style="word-break: break-all">{!! $product->product_details !!}</p>
+                    <p class="py-2 text-gray-600">{!! $product->product_details !!}</p>
                 </div>
-                <div class="flex-1 pt-4">
+                <div class="flex-1 text-center">
                     <div class="flex flex-col">
                         <div class="flex-1">
                             <h2 class="text-xl font-bold">
@@ -59,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-1 pt-4">
+                <div class="flex-1 text-center ">
                     <div class="flex flex-col">
                         <div class="flex-1">
                             @if($product->variations->where('name','!=','Default')->count()>=1)
@@ -87,55 +111,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-1 pt-4">
-                    <div class="flex flex-col">
-                        <div class="flex-1">
+                <div class="flex-1 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="flex-1 flex flex-col items-center">
                             <div class="flex flex-row">
                                 <button
-                                    class="minus border-2 rounded-full text-lg text-center border-dark text-dark h-8 w-8">-</button>
+                                    class="minus border-2 rounded-full text-lg text-center border-white text-white h-8 w-8">-</button>
                                 <input type="quantity" value="1"
-                                    class="quantity text-center focus:outline-none text-dark bg-transparent w-16">
+                                    class="quantity text-center focus:outline-none text-white bg-transparent w-16">
                                 <button
-                                    class="plus border-2 rounded-full text-lg text-center border-dark text-dark h-8 w-8">+</button>
+                                    class="plus border-2 rounded-full text-lg text-center border-white text-white h-8 w-8">+</button>
                             </div>
                             <div class="flex">
                                 <span id="addToCart" style="cursor:pointer"
-                                    class="add_to_cart_btn bg-red text-white font-semibold rounded-lg px-4 py-2 mt-4 ">@lang('lang.add_to_cart')</span>
+                                    class="add_to_cart_btn bg-white flex justify-center items-center font-semibold rounded-lg px-4 py-2 mt-4 "><i
+                                        class="fa md:text-xl xs:text-sm fa-cart-plus cart_icon"
+                                        style="pointer-events:none;color: var(--primary-color);"></i></span>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    @php
-    $user_id = request()
-    ->session()
-    ->get('user_id');
-    $cart_count = 0;
-    if (!empty($user_id)) {
-    $cart_collection = Cart::session($user_id)->getContent();
-    $cart_count = $cart_collection->count();
-    }
-    @endphp
-    <div class="flex">
-
-        <div class="flex-1 text-center mt-2 ml-1 mr-1 cart_items_page">
-            <a href="{{ action('CartController@view') }}" class=" text-center">
-                <button class="bg10 text-white font-semibold relative  rounded-xl w-full flex-c-m" style="    height: 50px;
-            padding: 5px;
-            width: 100%;
-            min-width: fit-content;
-            font-size: 13px;">
-
-                    <p class="p-lr-5"> @lang('lang.view_cart')</p>
-                    <i class="fa fa-lg fa-shopping-cart icon-header-noti" data-notify="{{ $cart_count }}"></i>
-
-                </button>
+            <a href="{{ action('ProductController@getProductListByCategory', $product->category->id) }}">
+                <h5
+                    class="mb-2 mx-3 rounded-md border-dark my-3 py-2 text-xl font-bold text-center tracking-tight text-white border shadow w-full">
+                    {{$product->category->name}}</h5>
             </a>
         </div>
     </div>
+    {{-- @include('layouts.partials.cart-row') --}}
 
+    @include('layouts.partials.footer')
+    @include('home.includes.cart')
 </div>
 @endsection
 
@@ -155,13 +163,13 @@
             }
         })
         $(document).on('change', '.quantity', function() {
-            $.ajax({
+           $.ajax({
                 type: "GET",
                 url: "/cart/update-product-quantity/" + "{{$product->id}}" + "/" +$(this).val(),
                 success: function (response) {
                 }
             });
-        });
+        })
 
         $(document).ready(function() {
             var slider = tns({
@@ -183,7 +191,7 @@
                 slider.goTo("prev");
             };
         });
-        $(document).on('change','#size_id',function(){
+          $(document).on('change','#size_id',function(){
             let variatioId=$(this).val();
             let price = $(this).find("option:selected").attr("data-price");
             $('.variatioId').val(variatioId);
@@ -200,9 +208,55 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.status.success) {
-                        swal("", response.status.msg, "success");
+                        Swal.fire({
+                        position: 'top', // Set the position to the top
+                        title: response.status.msg, // Message from your response
+                        showConfirmButton: false, // No buttons
+                        timer: 1000, // Auto-close after 1000ms
+                        toast: true, // Display as a toast
+                        background: '#28a745', // Set the background color to green (or your desired shade)
+                        color: '#fff', // Set text color for better contrast
+                        showClass: {
+                        popup: `
+                        animate__animated
+                        animate__bounceInDown
+                        animate__faster
+                        `
+                        },
+                        hideClass: {
+                        popup: `
+                        animate__animated
+                        animate__bounceOutUp
+                        animate__faster
+                        `
+                        }
+                        });
                     }else{
-                        swal("@lang('lang.error')!", response.status.msg, "error");
+                        // swal.fire("@lang('lang.error')!", response.status.msg, "error");
+
+                        Swal.fire({
+                        position: 'top', // Set the position to the top
+                        title: response.status.msg, // Message from your response
+                        showConfirmButton: false, // No buttons
+                        timer: 1000, // Auto-close after 1000ms
+                        toast: true, // Display as a toast
+                        background: '#dc3545', // Set the background color to green (or your desired shade)
+                        color: '#fff', // Set text color for better contrast
+                        showClass: {
+                        popup: `
+                        animate__animated
+                        animate__bounceInDown
+                        animate__faster
+                        `
+                        },
+                        hideClass: {
+                        popup: `
+                        animate__animated
+                        animate__bounceOutUp
+                        animate__faster
+                        `
+                        }
+                        });
                     }
 
                     $('.cart_items_page').load(document.URL +  ' .cart_items_page');
@@ -211,6 +265,5 @@
                 }
             });
         });
-
 </script>
 @endsection

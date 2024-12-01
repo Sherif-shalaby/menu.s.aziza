@@ -31,7 +31,7 @@
                     <div class="col-sm-12 col-md-12 invoice-col">
                         <div class="thumbnail">
                             <img class="img-fluid"
-                                src="{{images_asset($product->getFirstMediaUrl('product')) }}"
+                                src=" {{ images_asset($product->getFirstMediaUrl('product')) }}"
                                 alt="Product Image">
                         </div>
                     </div>

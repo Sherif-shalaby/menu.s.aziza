@@ -10,8 +10,8 @@
 
 <style>
     .modal-content{
-        /* overflow: scroll; */
-        /* height: 90vh; */
+        /* overflow: scroll;
+        height: 90vh; */
     }
 </style>
 
@@ -214,13 +214,6 @@
             color: hsl(48, 100%, 67%);
         }
     }
-    .select2-selection__rendered {
-    line-height: 40px !important;
-    }
-    
-    .select2-selection {
-    height: 39px !important;
-    }
 </style>
 
     {!! Form::open(['url' => action('Admin\ProductController@store'), 'method' => 'post', 'files' => true, 'id' => 'product_form']) !!}
@@ -228,11 +221,11 @@
         theme-mode="outline" icon="fas fa-file">
 
         <div class="row">
-           <div class="col-md-4">
+            <div class="col-md-4">
                 {!! Form::label('product_class_id', __('lang.category') . ' *', []) !!}
 
                 <div class="input-group my-group">
-                    {!! Form::select('product_class_id', $categories, false, ['class' => 'selectpicker form-control select2','data-live-search' => 'true','style' => 'width: 80% !important', 'placeholder' => __('lang.please_select'), 'required']) !!}
+                    {!! Form::select('product_class_id', $categories, false, ['class' => 'select2 form-control', 'style' => 'width: 80%', 'placeholder' => __('lang.please_select'), 'required']) !!}
                     <span class="input-group-btn">
                         @can('categories.create')
                             <button class="btn-modal btn btn-default bg-white btn-flat"
@@ -246,14 +239,16 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <x-adminlte-input name="name" required label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
-                        enable-old-support style="width: 80%">
-                        <x-slot name="prependSlot">
-                            <div class="input-group-text text-primary translation_btn"  data-type="product">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                        </x-slot>
-                    </x-adminlte-input>
+                    <div class="form-group">
+                        <x-adminlte-input name="name" required label="{{ __('lang.name') }}" placeholder="{{ __('lang.name') }}"
+                            enable-old-support style="width: 80%">
+                            <x-slot name="prependSlot">
+                                <div class="input-group-text text-primary translation_btn"  data-type="product">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                            </x-slot>
+                        </x-adminlte-input>
+                    </div>
                 </div>
                 @include('admin.partial.translation_inputs', [
                     'attribute' => 'name',
@@ -299,8 +294,7 @@
                     ])
                 </div>
             </div>
-   
-           
+
             <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('purchase_price', __('lang.cost'), []) !!}
@@ -310,7 +304,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('sell_price', __('lang.sell_price'), []) !!}
-                    {!! Form::text('sell_price', null, ['class' => 'form-control', 'placeholder' => __('lang.sell_price')]) !!}
+                    {!! Form::text('sell_price', null, ['class' => 'form-control', 'placeholder' => __('lang.sell_price'), 'required']) !!}
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -345,24 +339,16 @@
             <div class="col-md-2">
                 <div class="form-group">
                     {!! Form::label('active', __('lang.status'), []) !!} <br>
+                    @if(env('ENABLE_POS_SYNC'))
+                    {!! Form::checkbox('menu_active', 1, true, ['class']) !!}
+                    @else
                     {!! Form::checkbox('active', 1, true, ['class']) !!}
+                    @endif
                 </div>
             </div>
-            {{-- <div class="col-md-12">
-                <div class="form-group">
-                    {!! Form::label('product_details', __('lang.description'), []) !!} <button type="button" class="translation_textarea_btn btn btn-sm text-primary"> <i class="fas fa-globe"></i></button>
-                    @php
-                        $config = config('adminlte.editor');
-                    @endphp
-                    <x-adminlte-text-editor name="product_details" :config="$config" />
-
-                </div>
-            </div> --}}
-            
-
             <div class="col-md-12" style="margin-top: 10px">
                 <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" name="this_product_have_variant" type="checkbox" id="this_product_have_variant">
+                    <input class="custom-control-input" type="checkbox" name="this_product_have_variant" id="this_product_have_variant">
                     <label for="this_product_have_variant"
                         class="custom-control-label">@lang('lang.this_product_have_variant')</label>
                 </div>

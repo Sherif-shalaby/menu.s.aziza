@@ -50,13 +50,12 @@ class ProductClassController extends Controller
 
         if (request()->ajax()) {
 
-              $product_classes = ProductClass::leftJoin("products","products.product_class_id","=","product_classes.id")
+            $product_classes = ProductClass::leftJoin("products","products.product_class_id","=","product_classes.id")
             ->groupBy('product_classes.id')->orderBy('product_classes.sort')->orderBy('product_classes.created_at','desc');
 
 
             $product_classes = $product_classes->selectRaw(
                 'product_classes.*,count("products.id") as product_count'
-
             );
 
             return DataTables::of($product_classes)
@@ -65,11 +64,8 @@ class ProductClassController extends Controller
                     if (!empty($image)) {
                         return '<img src="' . $image . '" height="50px" width="50px">';
                     } else {
-                        return '<img src="' . images_asset(asset('/uploads/' . session('logo'))) . '" height="50px" width="50px">';
+                        return '<img src="' . images_asset() . '" height="50px" width="50px">';
                     }
-                })
-                ->addColumn('products_count', function ($row) {
-                    return $row->product_count;
                 })
                 ->editColumn('status', function ($row) {
                     if ($row->status == 1) {
@@ -78,9 +74,11 @@ class ProductClassController extends Controller
                         return '<span class="badge badge-danger">' . __('lang.deactivated') . '</span>';
                     }
                 })
-                ->addColumn(
+                ->addColumn('products_count', function ($row) {
+                    return $row->product_count;
+                })->addColumn(
                     'action',
-                    function ($row) {
+                    function ($row){
                         $html =
                             '<div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
@@ -168,43 +166,44 @@ class ProductClassController extends Controller
             }
         }
         //try {
-        $data = $request->except('_token', 'quick_add');
-        $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
-        $data['status'] = !empty($data['status']) ? $data['status'] : 0;
-        DB::beginTransaction();
-        $class = ProductClass::create($data);
+            $data = $request->except('_token', 'quick_add');
+            $data['name'] = isset($request->name) ?$request->name : ' ';
+            $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
+            $data['status'] = !empty($data['status']) ? $data['status'] : 0;
+            DB::beginTransaction();
+            $class = ProductClass::create($data);
 
-        if ($request->has('image')) {
-            if (!empty($request->input('image'))) {
+            if ($request->has('image')) {
+                if (!empty($request->input('image'))) {
 
-
-                $extention = explode(";", explode("/", $request->image)[1])[0];
-                $image = rand(1, 1500) . "_image." . $extention;
-                $filePath = public_path($image);
-                $fp = file_put_contents($filePath, base64_decode(explode(",", $request->image)[1]));
-                $class->addMedia($filePath)->toMediaCollection('product_class');
-
-
-                // $class->addMediaFromDisk($request->input('uploaded_image_name'), 'temp')->toMediaCollection('product_class');
+                   
+                            $extention = explode(";",explode("/",$request->image)[1])[0];
+                            $image = rand(1,1500)."_image.".$extention;
+                            $filePath = public_path($image);
+                            $fp = file_put_contents($filePath,base64_decode(explode(",",$request->image)[1]));
+                            $class->addMedia($filePath)->toMediaCollection('product_class');
+                
+        
+                    // $class->addMediaFromDisk($request->input('uploaded_image_name'), 'temp')->toMediaCollection('product_class');
+                }
             }
-        }
 
 
-        //  $this->commonUtil->addSyncDataWithPos('ProductClass', $class, $data, 'POST', 'product-class');
-        DB::commit();
+          //  $this->commonUtil->addSyncDataWithPos('ProductClass', $class, $data, 'POST', 'product-class');
+            DB::commit();
 
-        $output = [
-            'success' => true,
-            'id' => $class->id,
-            'msg' => __('lang.success')
-        ];
-        // } catch (\Exception $e) {
-        //Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => true,
+                'id' => $class->id,
+                'msg' => __('lang.success')
+            ];
+       // } catch (\Exception $e) {
+//Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
         ///    $output = [
-        //'success' => false,
-        //'msg' => __('lang.something_went_wrong')
-        //];
-        //}
+//'success' => false,
+//'msg' => __('lang.something_went_wrong')
+//];
+//}
 
 
         if ($request->quick_add) {
@@ -247,7 +246,7 @@ class ProductClassController extends Controller
 
     public function update(Request $request, $id)
     {
-
+    
         if (!auth()->user()->can('category.edit')) {
             abort(403, __('lang.not_authorized'));
         }
@@ -257,95 +256,79 @@ class ProductClassController extends Controller
             ['name' => ['required', 'max:255']]
         );
 
-
-        $data = $request->only('name', 'description', 'sort', 'translations', 'status');
-        $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
-        $data['status'] = !empty($data['status']) ? 1 : 0;
-        $class = ProductClass::where('id', $id)->first();
-        $class->update($data);
-
-        /*  if ($request->has('uploaded_image_name')) {
+        
+            $data = $request->only('name', 'description', 'sort', 'translations', 'status');
+            $data['name'] = isset($request->name) ?$request->name : ' ';
+            $data['translations'] = !empty($data['translations']) ? $data['translations'] : [];
+            $data['status'] = !empty($data['status']) ? 1 : 0;
+            $class = ProductClass::where('id', $id)->first();
+            $class->update($data);
+            
+          /*  if ($request->has('uploaded_image_name')) {
                 if (!empty($request->input('uploaded_image_name'))) {
                     $class->clearMediaCollection('product_class');
                     $class->addMediaFromDisk($request->input('uploaded_image_name'), 'temp')->toMediaCollection('product_class');
                 }
             }*/
 
+     
 
-
-        if ($request->cropImages && count($request->cropImages) > 0) {
-            foreach ($this->getCroppedImages($request->cropImages) as $img) {
-                if ($class->media()->count() > 0) {
-                    foreach ($class->media as $media) {
-                        if (File::exists(public_path($media->file_name))) {
-                            @unlink(public_path($media->file_name));
+            if ($request->cropImages && count($request->cropImages) > 0) {
+                foreach ($this->getCroppedImages($request->cropImages) as $img) {
+                    if ($class->media()->count() > 0) {
+                        foreach ($class->media as $media) {
+                            if (File::exists(public_path($media->file_name))) {
+                                @unlink(public_path($media->file_name));
+                            }
+                            $media->delete();
                         }
-                        $media->delete();
+                    }
+                    if(preg_match('/^data:image/', $request->cropImages[0]))
+                    {
+                    $class->clearMediaCollection('class');
+                    $extention = explode(";",explode("/",$img)[1])[0];
+                    $image = rand(1,1500)."_image.".$extention;
+                    $filePath = public_path($image);
+                    $fp = file_put_contents($filePath,base64_decode(explode(",",$img)[1]));
+                    $class->addMedia($filePath)->toMediaCollection('product_class');
                     }
                 }
-                if (preg_match('/^data:image/', $request->cropImages[0])) {
-                    $class->clearMediaCollection('class');
-                    $extention = explode(";", explode("/", $img)[1])[0];
-                    $image = rand(1, 1500) . "_image." . $extention;
-                    $filePath = public_path($image);
-                    $fp = file_put_contents($filePath, base64_decode(explode(",", $img)[1]));
-                    $class->addMedia($filePath)->toMediaCollection('product_class');
-                }
+            } 
+
+            // if(!isset($request->cropImages[0]) || strlen($request->cropImages[0])==0){
+            //     $class->clearMediaCollection('product_class');
+            // }
+
+            if(!env('ENABLE_POS_SYNC')){
+            $this->commonUtil->addSyncDataWithPos('ProductClass', $class, $data, 'PUT', 'product-class');
             }
-        }
-        if (!isset($request->cropImages[0]) || strlen($request->cropImages[0]) == 0) {
-            $class->clearMediaCollection('product_class');
-        }
-
-
-
-        // $this->commonUtil->addSyncDataWithPos('ProductClass', $class, $data, 'PUT', 'product-class');
-
-        $output = [
-            'success' => true,
-            'msg' => __('lang.success')
-        ];
-
+            $output = [
+                'success' => true,
+                'msg' => __('lang.success')
+            ];
+  
 
         return redirect()->back()->with('status', $output);
     }
 
-    public function getCroppedImages($cropImages)
-    {
+    public function getCroppedImages($cropImages){
         $dataNewImages = [];
         foreach ($cropImages as $img) {
-            if (strlen($img) < 200) {
-                $base64Image = $this->getBase64Image($img);
-                if ($base64Image) { // Only add non-null images
-                    $dataNewImages[] = $base64Image;
-                } else {
-                    $dataNewImages[] = $img;
-                }
-            } else {
+            if (strlen($img) < 200){
+                $dataNewImages[] = $this->getBase64Image($img);
+            }else{
                 $dataNewImages[] = $img;
             }
         }
         return $dataNewImages;
     }
     public function getBase64Image($Image)
-    {
-        $image_path = str_replace(env("APP_URL") . "/", "", $Image);
-
-        // Check if the file exists before accessing it
-        if (File::exists(public_path($image_path)) || File::exists($image_path)) {
-
-            $fullPath = File::exists(public_path($image_path))
-                ? public_path($image_path)
-                : $image_path;
-
-            $image_content = file_get_contents($fullPath);
+        {
+            $image_path = str_replace(env("APP_URL") . "/", "", $Image);
+            $image_content = file_get_contents($image_path);
             $base64_image = base64_encode($image_content);
             return "data:image/jpeg;base64," . $base64_image;
         }
-
-        // Return a default or empty response if the file doesn't exist
-        return null; // Or handle this case as needed
-    }
     /**
      * Remove the specified resource from storage.
      *
@@ -360,8 +343,9 @@ class ProductClassController extends Controller
         try {
 
             $class = ProductClass::find($id);
-
+            if(!env('ENABLE_POS_SYNC')){
             $this->commonUtil->addSyncDataWithPos('ProductClass', $class, null, 'DELETE', 'product-class');
+            }
             $class->delete();
             $output = [
                 'success' => true,

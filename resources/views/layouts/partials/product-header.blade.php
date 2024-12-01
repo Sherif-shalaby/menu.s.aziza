@@ -1,4 +1,4 @@
-<div class="w-full flex flex-row bg-no-repeat bg-center  text-center items-center"
+<div class="w-full flex flex-row bg-no-repeat bg-center text-center items-center"
     style="height: 200px;background-size:100% 100%; background-image: url('@if (!empty(session('breadcrumb_background_image'))) {{ images_asset(asset('uploads/' . session('breadcrumb_background_image'))) }}@else{{ asset('images/default-breadcrumb-bg.png') }} @endif');">
     <div class="w-full">
         <div class="flex flex-row">
@@ -9,7 +9,7 @@
 
             </div>
             <div class="flex-3 w-48 items-end">
-                @include('layouts.partials.social_icons')
+              
             </div>
         </div>
         <div class="flex flex-row mt-2 text-center">

@@ -33,6 +33,7 @@ class ProductUtil extends Util
     {
         $this->commonUtil = $commonUtil;
     }
+
     /**
      * Generates product sku
      *
@@ -110,7 +111,7 @@ class ProductUtil extends Util
                 }
 
                 if (!empty($v['id']) || !empty($v['pos_model_id'])) {
-                    $v['default_purchase_price'] = isset($v['default_purchase_price'])? (float)$v['default_purchase_price']:0;
+                    $v['default_purchase_price'] =isset($v['default_purchase_price'])? (float)$v['default_purchase_price']:0;
                     $v['default_sell_price'] = (float)$v['default_sell_price'];
                     if (!empty($v['pos_model_id'])) {
                         $variation = Variation::where('pos_model_id', $v['pos_model_id'])->first();
@@ -126,7 +127,9 @@ class ProductUtil extends Util
                     $variation->size_id = $v['size_id'] ?? null;
                     $variation->default_purchase_price = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation->default_sell_price = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
-                    $variation->pos_model_id = $v['pos_model_id'] ?? null;
+                    if(!env('ENABLE_POS_SYNC')){
+                        $variation->pos_model_id = $v['pos_model_id'] ?? null;
+                    }
                     $variation->save();
 
                     $keey_variations[] = $variation->id;
@@ -138,7 +141,9 @@ class ProductUtil extends Util
                     $variation_data['default_purchase_price'] = !empty($v['default_purchase_price']) ? $this->num_uf($v['default_purchase_price']) : $this->num_uf($product->purchase_price);
                     $variation_data['default_sell_price'] = !empty($v['default_sell_price']) ? $this->num_uf($v['default_sell_price']) : $this->num_uf($product->sell_price);
                     $variation_data['is_dummy'] = 0;
-                    $variation_data['pos_model_id'] = $v['pos_model_id'] ?? null;
+                    if(!env('ENABLE_POS_SYNC')){
+                        $variation_data['pos_model_id'] = $v['pos_model_id'] ?? null;
+                    }
                     $variation = Variation::create($variation_data);
                     $keey_variations[] = $variation->id;
                 }
@@ -153,7 +158,6 @@ class ProductUtil extends Util
             $variation_data['default_sell_price'] = $this->num_uf($product->sell_price);
             $variation = Variation::create($variation_data);
             $keey_variations[] = $variation->id;
-            
         }
 
         if (!empty($keey_variations)) {
@@ -211,63 +215,7 @@ class ProductUtil extends Util
 
         return true;
     }
-    // public function createOrUpdateProductSizes($product, $sizes)
-    // {
-    //     $key_sizes = [];
-    //     if (!empty($sizes)) {
-    //         foreach ($sizes as $s) {
 
-    //             if (!empty($s['id']) && !empty($s['size_id'])) {
-    //                 $product_sizes = ProductSize::where('size_id',$s['id'])->where('product_id',$product->id)->first();
-    //                 $product_sizes->size_id = $s['size_id'];
-    //                 $product_sizes->product_id = $product->id;
-    //                 $product_sizes->discount_type = !empty($s['discount_type'])?$s['discount_type'] : $product_sizes->discount_type;
-    //                 $product_sizes->sell_price = !empty($s['sell_price']) ? $this->num_uf($s['sell_price']) : $this->num_uf($product_sizes->sell_price);
-    //                 $product_sizes->purchase_price = !empty($s['purchase_price']) ? $this->num_uf($s['purchase_price']) : $this->num_uf($product_sizes->purchase_price);
-    //                 $product_sizes->discount = !empty($s['discount'])?$s['discount'] : $product_sizes->discount;
-    //                 $product_sizes->discount_start_date = !empty($s['discount_start_date'])?$s['discount_start_date'] : $product_sizes->discount_start_date;
-    //                 $product_sizes->discount_end_date = !empty($s['discount_end_date'])?$s['discount_end_date'] : $product_sizes->discount_end_date;
-    //                 $product_sizes->active = !empty($s['active'])?$s['active'] : $product_sizes->active;
-                    
-    //                 $product_sizes->update();
-
-    //                 $key_sizes[] = $product_sizes->id;
-    //             } else {
-            
-    //                 $size_data['product_id'] = $product->id;
-    //                 $size_data['size_id'] = $s['size_id'];
-    //                 $size_data['discount'] = $s['discount'];
-    //                 $size_data['purchase_price'] = $s['purchase_price'];
-    //                 $size_data['sell_price'] = $s['sell_price'];
-    //                 $size_data['discount_type'] = $s['discount_type'];
-    //                 $size_data['discount_start_date'] = !empty($data['discount_start_date']) ? $this->commonUtil->uf_date($data['discount_start_date']) : null;
-    //                 $size_data['discount_end_date'] = !empty($data['discount_end_date']) ? $this->commonUtil->uf_date($data['discount_end_date']) : null;
-    //                 $size_data['active'] = !empty($data['active']) ? 1 : 0;
-                
-    //                 $size = ProductSize::create($size_data);
-    //                 $key_sizes[] = $size->id;
-    //             }
-    //         }
-    //     }
-    //     //  else{
-    //     //     $size_data['name'] = 'Default';
-    //     //     $size_data['product_id'] = $product->id;
-    //     //     $size_data['sub_sku'] = $product->sku;
-    //     //     $size_data['size_id'] = !empty($product->multiple_sizes) ? $product->multiple_sizes[0] : null;
-    //     //     $size_data['is_dummy'] = 1;
-    //     //     $size_data['default_purchase_price'] = $this->num_uf($product->purchase_price);
-    //     //     $size_data['default_sell_price'] = $this->num_uf($product->sell_price);
-    //     //     $variation = Variation::create($size_data);
-    //     //     $keey_variations[] = $variation->id;
-    //     // }
-
-    //     if (!empty($key_sizes)) {
-    //         //delete the size product removed by user
-    //         ProductSize::where('product_id', $product->id)->whereNotIn('id', $key_sizes)->delete();
-    //     }
-
-    //     return true;
-    // }
     /**
      * Get all details for a product from its variation id
      *

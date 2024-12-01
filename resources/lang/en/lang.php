@@ -257,10 +257,6 @@ return [
     'use_tags_info' => 'Use tags in text like {store_name} to display data automatically.',
 
     'language' => 'Language',
-    'contact_us' => 'Contact Us',
-    'social_media' => 'Social Media',
-    'view_cart' => 'View Cart',
-    'all_product' => 'All Products',
     'default'=>'Default',
     'products_count'=>'Products Count',
     'dinnig_in_restaurant'=>'In The Restaurant ',

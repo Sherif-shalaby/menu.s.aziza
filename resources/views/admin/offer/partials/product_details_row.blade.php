@@ -1,6 +1,6 @@
 @foreach ($products as $product)
 <tr>
-    <td><img src="{{images_asset($product->getFirstMediaUrl('product')) }}"
+    <td><img src="{{images_asset($product->getFirstMediaUrl('product'))}}"
             alt="photo" width="50" height="50"></td>
     <td>{{$product->name}}</td>
     <td>{{$product->sku}}</td>

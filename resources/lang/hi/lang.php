@@ -248,10 +248,4 @@ return [
     'pay_and_close' => 'भुगतान करें और बंद करें',
     'dining_room' => 'भोजन कक्ष',
     'dining_table' => 'खाने की मेज',
-
-    'language' => 'भाषा',
-    'contact_us' => 'संपर्क करें',
-    'social_media' => 'सामाजिक मीडिया',
-    'view_cart' => 'टोकरी देखें',
-    'all_product' => 'सभी प्रोडक्ट',
 ];

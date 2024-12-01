@@ -4,7 +4,7 @@
     @endif
     <td style = 'width: 15%'>
         <div class="input-group my-group ">
-            {!! Form::select('sizes[' . $row_id . '][size_id]', $sizes,null,['class' => 'form-control select2','data-live-search' => 'true', 'placeholder' => __('lang.size')]) !!}
+            {!! Form::select('sizes[' . $row_id . '][size_id]', $sizes,null,['class' => 'form-control select2','style' => 'width: 60%','data-live-search' => 'true', 'placeholder' => __('lang.size')]) !!}
             <span class="input-group-btn">
                 @can('settings.size.create')
                     <button class="btn-modal btn btn-default bg-white btn-flat"
@@ -15,10 +15,10 @@
         </div>
     </td>
     <td>
-        {!! Form::text('sizes[' . $row_id . '][purchase_price]', null, ['class' => 'form-control','id'=>'purchase_price', 'placeholder' => session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost')]) !!}
+        {!! Form::text('sizes[' . $row_id . '][purchase_price]', null, ['class' => 'form-control', 'placeholder' => session('system_mode') == 'pos' || session('system_mode') == 'garments' || session('system_mode') == 'supermarket' ? __('lang.purchase_price') : __('lang.cost')]) !!}
     </td>
     <td>
-        {!! Form::text('sizes[' . $row_id . '][sell_price]', null, ['class' => 'form-control','id'=>'sell_price', 'placeholder' => __('lang.sell_price'), 'required']) !!}
+        {!! Form::text('sizes[' . $row_id . '][sell_price]', null, ['class' => 'form-control', 'placeholder' => __('lang.sell_price'), 'required']) !!}
     </td>
     <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="fa fa-times"></i></button>
 </tr>

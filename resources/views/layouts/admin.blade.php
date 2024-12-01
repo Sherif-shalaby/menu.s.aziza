@@ -4,15 +4,9 @@
 <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('css/theme.css') }}">
-<style>
-    .select2-selection__rendered {
-        line-height: 40px !important;
-    }
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
-    .select2-selection {
-        height: 39px !important;
-    }
-</style>
 @endsection
 @section('content_top_nav_right')
 @if (!empty(env('POS_SYSTEM_URL')))

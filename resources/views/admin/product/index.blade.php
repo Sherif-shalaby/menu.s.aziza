@@ -98,7 +98,7 @@
                 { data: 'category', name: 'product_classes.name'  },
                 { data: 'sort', name: 'products.sort'  },
                 { data: 'product_details', name: 'product_details'  },
-                { data: 'size', "searchable": false ,name: 'size'  },
+                { data: 'size',"searchable": false , name: 'size'  },
                 { data: 'purchase_price', name: 'purchase_price'  },
                 { data: 'sell_price', name: 'sell_price'  },
                 { data: 'discount', name: 'discount'  },

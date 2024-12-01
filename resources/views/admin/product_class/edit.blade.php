@@ -278,9 +278,9 @@
                     </div>
                     <div class="col-10 offset-1">
                         <div class="preview-container">
-                            @if(!empty($product_class->getFirstMediaUrl('product_class')))
+                            @if($product_class)
                                     <div id="preview{{ $product_class->id }}" class="preview">
-                                          <img src="{{ images_asset($product_class->getFirstMediaUrl('product_class')) }}"
+                                          <img src="{{  images_asset($product_class->getFirstMediaUrl('product_class')) }}"
                                                id="img{{  $product_class->id }}"   alt="">
                               
                                         <div class="action_div"></div>
@@ -320,9 +320,7 @@
                 </div>
             </div>
 
-            <div class="col-10 offset-1">
-                <div class="preview-container"></div>
-            </div>
+
         
 
             <div id="cropped_images"></div>

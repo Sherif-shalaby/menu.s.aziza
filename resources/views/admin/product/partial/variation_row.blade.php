@@ -18,25 +18,16 @@
     @endphp
     <td>{!! Form::hidden('name_hidden', $product_name, ['class' => 'form-control name_hidden']) !!}
         {!! Form::hidden('variations[' . $row_id . '][sub_sku]', !empty($item) ? $item->sub_sku : null, ['class' => 'form-control v_sub_sku']) !!}
-        {!! Form::text('variations[' . $row_id . '][name]', $product_name, ['class' => 'form-control v_name']) !!}</td>
+        {!! Form::text('variations[' . $row_id . '][name]', $product_name, ['class' => 'form-control v_name','required']) !!}</td>
 
-    <td>
-        <div class="input-group my-group ">
-            {!! Form::select('variations[' . $row_id . '][size_id]', $sizes, !empty($item) ? $item->size_id : false, ['class' => 'form-control  v_size', 'data-live-search' => 'true', 'placeholder' =>  __('lang.please_select')]) !!}
-            <span class="input-group-btn">
-                @can('settings.size.create')
-                    <button class="btn-modal btn btn-default bg-white btn-flat"
-                        data-href="{{ action('Admin\SizeController@create') }}"
-                        data-container=".view_modal"><i class="fa fa-plus-circle text-primary fa-lg"></i></button>
-                @endcan
-            </span>
-        </div>
+    <td>{!! Form::select('variations[' . $row_id . '][size_id]', $sizes, !empty($item) ? $item->size_id : false, ['class' => 'form-control select2 v_size', 'data-live-search' => 'true', 'placeholder' => '']) !!}
     </td>
     <td>{!! Form::text('variations[' . $row_id . '][default_purchase_price]', $product_purchase_price, [
     'class' => 'form-control
-        default_purchase_price'
+        default_purchase_price',
+    'required',
 ]) !!}</td>
-    <td>{!! Form::text('variations[' . $row_id . '][default_sell_price]', $product_sale_price, ['class' => 'form-control default_sell_price', 'required']) !!}</td>
+    <td>{!! Form::text('variations[' . $row_id . '][default_sell_price]', $product_sale_price, ['class' => 'form-control default_sell_price']) !!}</td>
     <td> <button type="button" class="btn btn-danger btn-xs remove_row mt-2"><i class="fa fa-times"></i></button>
     </td>
 </tr>

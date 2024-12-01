@@ -102,6 +102,14 @@ class SettingController extends Controller
                 ['key' => 'currency'],
                 ['value' => $request->currency, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
+            System::updateOrCreate(
+                ['key' => 'color'],
+                ['value' => $request->color, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
+            System::updateOrCreate(
+                ['key' => 'font'],
+                ['value' => $request->font, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+            );
             if (!empty($request->currency)) {
                 $currency = Currency::find($request->currency);
                 $currency_data = [
@@ -139,16 +147,6 @@ class SettingController extends Controller
                 ['key' => 'homepage_category_carousel'],
                 ['value' => !empty($request->homepage_category_carousel) ? 1 : 0, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
-
-            System::updateOrCreate(
-                ['key' => 'color'],
-                ['value' => $request->color, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
-            );
-            System::updateOrCreate(
-                ['key' => 'font'],
-                ['value' => $request->font, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
-            );
-
             $data['logo'] = null;
             if ($request->has('logo') && !is_null('logo')) {
                 // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($request->logo, 'uploads', 250, 250);
@@ -169,8 +167,10 @@ class SettingController extends Controller
                         ['value' => $data['logo'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
                     );
                     $data['logo_url'] = asset('uploads/' . $data['logo']);
-                    $this->commonUtil->addSyncDataWithPos('System', $logo_setting, $data, 'POST', 'setting');
-                    unset($data['logo_url']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $logo_setting, $data, 'POST', 'setting');
+                        unset($data['logo_url']);
+                    }
                 }
             }
             $data['home_background_image'] = null;
@@ -236,6 +236,10 @@ class SettingController extends Controller
                     );
                 }
             }
+            // if ($request->hasFile('page_background_image')) {
+            //     $data['page_background_image'] = $this->commonUtil->ImageResizeAndUpload($request->page_background_image, 'uploads');
+            // }
+
             // foreach ($data as $key => $value) {
             //     if (!empty($value)) {
             //         System::updateOrCreate(
@@ -260,7 +264,8 @@ class SettingController extends Controller
             ];
         }
 
-        return redirect()->back()->with('status', $output);
+        $url = LaravelLocalization::getLocalizedURL($request->language);
+        return redirect(!empty($url) ? $url : '')->with('status', $output);
     }
 
     public function removeImage($type)

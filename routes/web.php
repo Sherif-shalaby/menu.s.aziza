@@ -3,7 +3,6 @@
 use App\Events\NewOrderEvent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\PostSitemapController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,10 +17,9 @@ use App\Http\Controllers\PostSitemapController;
 Route::get('general/switch-language/{lang}', 'GeneralController@switchLanguage');
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['SetSessionData', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'prevent-back-history']], function () {
     Route::get('/', 'HomeController@index');
-    Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
-    Route::get('/sitemap/posts.xml', [PostSitemapController::class, 'index'])->name('sitemap.posts.index');
-    Route::get('/sitemap/posts/{Products}.xml', [PostSitemapController::class, 'show'])->name('sitemap.posts.show');
-    Route::get('/cart/update-product-quantity/{product_id}/{quantity}', 'CartController@updateProductQuantity');
+         
+Route::get('sitemap.xml', [SitemapController::class, 'index' ])->name('website.sitemap');
+    
     Route::get('/product/list/{category_id}', 'ProductController@getProductListByCategory');
     Route::get('/product/promotions', 'ProductController@getPromotionProducts');
     Route::resource('/product', 'ProductController');
@@ -32,6 +30,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['Se
     Route::get('/cart/add-to-cart/{product_id}/{size_id?}', 'CartController@addToCart');
     Route::get('/cart/add-to-cart-extra/{product_id}', 'CartController@addToCartExtra');
     Route::get('/cart/update-product-variation/{product_id}/{variation_id}', 'CartController@updateProductVariation');
+    Route::get('/cart/update-product-quantity/{product_id}/{quantity}', 'CartController@updateProductQuantity');
     Route::resource('/cart', 'CartController');
     Route::resource('/order', 'OrderController');
 });

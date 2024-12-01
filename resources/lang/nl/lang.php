@@ -245,9 +245,5 @@ return [
     'dining_room' => 'Eetkamer',
     'dining_table' => 'Eettafel',
 
-    'language' => 'Sprache',
-    'contact_us' => 'Kontaktiere uns',
-    'social_media' => 'Sozialen Medien',
-    'view_cart' => 'Warenkorb ansehen',
-    'all_product' => 'Alle Produkte',
+
 ];

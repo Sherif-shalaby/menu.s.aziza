@@ -51,18 +51,4 @@ class GeneralController extends Controller
 
         return ['success' => true, 'url' => url('/temp/' . $image_name), 'filename' => $image_name];
     }
-    
-        public function uploadFileTemp(Request $request)
-    {
-        $data = $request->all();
-        $file = $data['file'];
-
-        $file_name = time() . '_' . $file->getClientOriginalName();
-
-        $file->move(public_path('temp'), $file_name);;
-
-        return ['success' => true, 'url' => url('/temp/' . $file_name), 'filename' => $file_name];
-    }
-    
-    
 }
