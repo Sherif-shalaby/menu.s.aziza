@@ -47,6 +47,23 @@
         border: 1px solid #ddd;
     }
 
+    .preview-main-background-container .preview {
+        width: 300px;
+        height: 100px;
+        margin-bottom: 30px !important;
+        margin-top: 0 !important
+    }
+
+    .preview-main-background-container .delete-btn {
+        top: 100px !important;
+        font-size: 25px !important
+    }
+
+    .preview-main-background-container .crop-btn {
+        top: 100px !important;
+        font-size: 25px !important
+    }
+
     .preview img {
         width: 100%;
         height: 100%;
@@ -107,6 +124,13 @@
 </style>
 @php
 $logo=App\Models\System::where('key','logo')->get();
+$main_background=App\Models\System::where('key','main_background')->first();
+// Step 1: Remove the square brackets and quotes
+$cleanedValue = str_replace(['[', ']', '"'], '', $main_background['value']);
+
+// Step 2: Convert the cleaned string into an array using explode
+$backgrounds = explode(',', $cleanedValue);
+
 $home_background_image=App\Models\System::where('key','home_background_image')->get();
 $breadcrumb_background_image=App\Models\System::where('key','breadcrumb_background_image')->get();
 $page_background_image=App\Models\System::where('key','page_background_image')->get();
@@ -118,6 +142,8 @@ $defaultColor = $color->value ?? "rgb(146, 124, 64)";
 
 $defaultFont = $font->value ?? "Roboto";
 @endphp
+
+
 {!! Form::open(['url' => action('Admin\SettingController@saveSystemSettings'), 'method' => 'post', 'id' =>
 'setting_form', 'files' => true,'enctype'=>"multipart/form-data"]) !!}
 <x-adminlte-card title="{{ __('lang.system_settings') }}" theme="{{ config('adminlte.right_sidebar_theme') }}"
@@ -141,12 +167,11 @@ $defaultFont = $font->value ?? "Roboto";
                 <div class="preview-logo-container">
                     @if (!empty($logo) && isset($settings['logo']))
                     <div class="preview">
-                        <img src="{{ asset(" uploads/". $settings['logo']) }}" id="img_logo_footer" alt="">
+                        <img src="{{ asset('uploads/'. $settings['logo']) }}" id="img_logo_footer" alt="">
                         <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="logo"><i
                                 style="font-size: 25px;" class="fa fa-trash"></i></button>
                         <span class="btn btn-xs btn-primary  crop-btn" id="crop-logo-btn" data-toggle="modal"
                             data-target="#logoModal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
-
                     </div>
                     @endif
 
@@ -154,6 +179,7 @@ $defaultFont = $font->value ?? "Roboto";
             </div>
         </div>
         <div id="cropped_logo_images"></div>
+
         <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -178,6 +204,57 @@ $defaultFont = $font->value ?? "Roboto";
             </div>
         </div>
         {{-- end logo --}}
+
+
+
+
+        {{-- main background --}}
+        <div class="col-md-4 mb-2">
+            <div class="form-group mb-0">
+                {!! Form::label('main_background', __('lang.main_background'), []) !!}
+                <small class="text-red">@lang('lang.250_750')</small>
+                <x-adminlte-input-file name="main_background[]" placeholder="{{ __('lang.choose_files') }}"
+                    id="file-input-main-background" multiple>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+            <button type="button" class="btn btn-primary mb-2" id="add-more-images-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="col-md-8 mb-2">
+            <div class="col-12">
+                <div class="preview-main-background-container" style="display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;">
+                    @if (!empty($main_background) && isset($settings['main_background']))
+
+                    @foreach ($backgrounds as $background)
+
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $background) }}" id="img_logo_footer" alt="">
+                    </div>
+                    @endforeach
+
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div id="cropped_main_background_images"></div>
+
+        <!-- Dynamic Modals Container -->
+        <div id="dynamic-modals"></div>
+        {{-- end main background --}}
+
+
+
+
+
+
         <div class="col-md-4">
             <div class="form-group">
                 @if (!empty($home_background_image) && isset($settings['home_background_image']))
@@ -1316,4 +1393,172 @@ $defaultFont = $font->value ?? "Roboto";
         }
 
 </script>
+
+
+
+<script>
+    var fileInput = document.querySelector('#file-input-main-background');
+    var previewContainer = document.querySelector('.preview-main-background-container');
+    var modalContainer = document.querySelector('#dynamic-modals');
+    var addMoreImagesBtn = document.querySelector('#add-more-images-btn');
+
+    // To handle dynamically selected images
+    let allFiles = [];
+
+    fileInput.addEventListener('change', handleFiles);
+
+    addMoreImagesBtn.addEventListener('click', () => {
+        fileInput.value = ''; // Clear previous selection
+        fileInput.click();
+    });
+
+    function handleFiles() {
+        let files = Array.from(fileInput.files);
+        allFiles = allFiles.concat(files);
+
+        files.forEach((file, index) => {
+            let fileType = file.type.slice(file.type.indexOf('/') + 1).toLowerCase();
+            let validTypes = ["jpg", "jpeg", "png", "bmp"];
+
+            if (validTypes.includes(fileType)) {
+                const reader = new FileReader();
+                reader.addEventListener('load', () => {
+                    const preview = document.createElement('div');
+                    preview.classList.add('preview');
+
+                    const img = document.createElement('img');
+                    img.src = reader.result;
+                    preview.appendChild(img);
+
+                    // Action Buttons
+                    const actions = document.createElement('div');
+                    actions.classList.add('actions');
+
+                    const deleteBtn = document.createElement('span');
+                    deleteBtn.classList.add('btn', 'btn-xs', 'btn-danger', 'delete-btn');
+                    deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
+                    deleteBtn.addEventListener('click', () => {
+                        Swal.fire({
+                            title: '{{ __("site.Are you sure?") }}',
+                            text: "{{ __("site.You won't be able to delete!") }}",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                preview.remove();
+                                updateHiddenInputs();
+                                Swal.fire('{{ __("site.Deleted!") }}', '{{ __("site.Your Image has been deleted.") }}', 'success');
+                            }
+                        });
+                    });
+
+                    const cropBtn = document.createElement('span');
+                    cropBtn.classList.add('btn', 'btn-xs', 'btn-primary', 'crop-btn');
+                    cropBtn.innerHTML = '<i class="fas fa-crop"></i>';
+                    cropBtn.setAttribute('data-toggle', 'modal');
+                    cropBtn.setAttribute('data-target', `#cropModal${allFiles.length - 1}`);
+                    cropBtn.addEventListener('click', () => {
+                        setTimeout(() => launchCropTool(img, allFiles.length - 1), 500);
+                    });
+
+                    actions.appendChild(deleteBtn);
+                    actions.appendChild(cropBtn);
+                    preview.appendChild(actions);
+
+                    previewContainer.appendChild(preview);
+
+                    // Dynamically add cropping modal
+                    addDynamicModal(allFiles.length - 1);
+                });
+
+                reader.readAsDataURL(file);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{{ __("site.Oops...") }}',
+                    text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                });
+            }
+        });
+
+        updateHiddenInputs();
+    }
+
+    function addDynamicModal(index) {
+        const modalHTML = `
+            <div class="modal fade" id="cropModal${index}" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel${index}" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cropModalLabel${index}">{{ __('Crop Image') }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="croppie-container-${index}"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                            <button type="button" class="btn btn-primary" id="crop-submit-btn-${index}">{{ __('Crop') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modalContainer.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    function launchCropTool(img, index) {
+        var croppieContainer = document.querySelector(`#croppie-container-${index}`);
+        croppieContainer.innerHTML = ''; // Clear previous instance
+
+        var croppie = new Croppie(croppieContainer, {
+            viewport: { width: 300, height: 100, type: 'square' }, // 1:3 ratio
+            boundary: { width: 600, height: 200 },
+            enableOrientation: true
+        });
+
+        croppie.bind({ url: img.src });
+
+        document.querySelector(`#crop-submit-btn-${index}`).addEventListener('click', () => {
+            croppie.result({
+                type: 'canvas',
+                size: { width: 300, height: 100 }
+            }).then(croppedImg => {
+                img.src = croppedImg;
+                $(`#cropModal${index}`).modal('hide');
+                croppie.destroy();
+                updateHiddenInputs();
+            });
+        });
+    }
+    function updateHiddenInputs() {
+    // Wait for the DOM to fully render dynamic elements
+    setTimeout(() => {
+    let images = document.querySelectorAll('.preview-main-background-container .preview img');
+    const hiddenInputContainer = document.querySelector('#cropped_main_background_images');
+    hiddenInputContainer.innerHTML = ''; // Clear existing inputs
+
+
+
+    images.forEach((img) => {
+        console.log(img.src);
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'main_background[]'; // Array input
+    input.value = img.src; // Base64 or URL
+
+    hiddenInputContainer.appendChild(input);
+    });
+
+    }, 300);
+    }
+</script>
+
 @endsection

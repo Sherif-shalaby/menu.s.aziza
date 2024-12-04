@@ -49,6 +49,9 @@ class SettingController extends Controller
     }
     public function saveSystemSettings(Request $request)
     {
+
+
+
         if (!auth()->user()->can('settings.system_setting.create') && !auth()->user()->can('settings.system_setting.edit')) {
             abort(403, __('lang.not_authorized'));
         }
@@ -147,9 +150,13 @@ class SettingController extends Controller
                 ['key' => 'homepage_category_carousel'],
                 ['value' => !empty($request->homepage_category_carousel) ? 1 : 0, 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
             );
+
+
             $data['logo'] = null;
+
+
             if ($request->has('logo') && !is_null('logo')) {
-                // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($request->logo, 'uploads', 250, 250);
+
                 if (preg_match('/^data:image/', $request->input('logo'))) {
                     $logo = System::where('key', 'logo')->first();
                     if (!empty($logo->value) && $logo->value != null && file_exists("uploads/" . System::getProperty('logo'))) {
@@ -173,6 +180,59 @@ class SettingController extends Controller
                     }
                 }
             }
+
+
+
+
+            $data['main_background'] = [];
+
+            if ($request->has('main_background') && is_array($request->main_background)) {
+                foreach ($request->input('main_background') as $background) {
+                    if (preg_match('/^data:image/', $background)) {
+                        // Delete old background images if necessary (optional)
+                        $existingBackgrounds = System::where('key', 'main_background')->pluck('value')->first();
+                        if (!empty($existingBackgrounds)) {
+                            $existingBackgrounds = json_decode($existingBackgrounds, true);
+                            foreach ($existingBackgrounds as $oldBackground) {
+                                if (file_exists("uploads/" . $oldBackground)) {
+                                    unlink("uploads/" . $oldBackground);
+                                }
+                            }
+                        }
+
+                        // Process and save new background images
+                        $imageData = $this->getCroppedImage($background);
+                        $extension = explode(";", explode("/", $imageData)[1])[0];
+                        $imageName = rand(1, 1500) . "_background." . $extension;
+                        $filePath = public_path('uploads/' . $imageName);
+                        file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+
+                        $data['main_background'][] = $imageName;
+                    }
+                }
+
+                // Save to database
+                $backgroundSetting = System::updateOrCreate(
+                    ['key' => 'main_background'],
+                    ['value' => json_encode($data['main_background']), 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                );
+
+                if (!env('ENABLE_POS_SYNC')) {
+                    $this->commonUtil->addSyncDataWithPos('System', $backgroundSetting, $data, 'POST', 'setting');
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
             $data['home_background_image'] = null;
             // $data['home_background_image'] = $this->commonUtil->ImageResizeAndUpload($request->home_background_image, 'uploads');
             if ($request->has('home') && !is_null('home')) {
@@ -267,6 +327,7 @@ class SettingController extends Controller
         $url = LaravelLocalization::getLocalizedURL($request->language);
         return redirect(!empty($url) ? $url : '')->with('status', $output);
     }
+
 
     public function removeImage($type)
     {
