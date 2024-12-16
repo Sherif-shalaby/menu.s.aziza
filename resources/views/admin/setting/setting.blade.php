@@ -205,12 +205,7 @@ $header4=App\Models\System::where('key','header4')->get();
 $header5=App\Models\System::where('key','header5')->get();
 $header6=App\Models\System::where('key','header6')->get();
 $header7=App\Models\System::where('key','header7')->get();
-$main_background=App\Models\System::where('key','main_background')->first();
-// Step 1: Remove the square brackets and quotes
-$cleanedValue = str_replace(['[', ']', '"'], '', $main_background['value']);
 
-// Step 2: Convert the cleaned string into an array using explode
-$backgrounds = explode(',', $cleanedValue);
 
 $home_background_image=App\Models\System::where('key','home_background_image')->get();
 $breadcrumb_background_image=App\Models\System::where('key','breadcrumb_background_image')->get();
