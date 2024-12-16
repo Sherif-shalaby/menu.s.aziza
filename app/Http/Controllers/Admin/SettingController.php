@@ -42,38 +42,6 @@ class SettingController extends Controller
         $currencies  = $this->commonUtil->allCurrencies();
         $locales = $this->commonUtil->getSupportedLocalesArray();
 
-        $main_background = System::where('key', 'main_background')->first();
-        // Step 1: Remove the square brackets and quotes
-        $cleanedValue = str_replace(['[', ']', '"'], '', $main_background['value']);
-
-        // Step 2: Convert the cleaned string into an array using explode
-        $backgrounds = explode(',', $cleanedValue);
-
-        // $base64Images = [];
-        // // return $backgrounds;
-        // if (!empty($backgrounds) && isset($backgrounds) && $backgrounds !== [""]) {
-
-
-
-        //     foreach ($backgrounds as $filename) {
-        //         $imagePath = public_path('uploads/' . $filename);
-
-        //         if (file_exists($imagePath)) {
-        //             // Get the file content
-        //             $fileContent = file_get_contents($imagePath);
-
-        //             // Get the MIME type of the file
-        //             $mimeType = mime_content_type($imagePath);
-
-        //             // Encode the file content as Base64
-        //             $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($fileContent);
-
-        //             $base64Images[] = $base64Image; // Store in array
-        //         } else {
-        //             $base64Images[] = null; // Add null if the file doesn't exist
-        //         }
-        //     }
-        // }
 
 
 
@@ -81,7 +49,7 @@ class SettingController extends Controller
             'settings',
             'locales',
             'currencies',
-            'backgrounds'
+
         ));
     }
     public function saveSystemSettings(Request $request)
