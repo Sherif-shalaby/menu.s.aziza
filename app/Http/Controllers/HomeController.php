@@ -97,6 +97,16 @@ class HomeController extends Controller
             }
         }
 
+
+        $backgrounds = System::where('key', 'header1')
+        ->orWhere('key', 'header2')
+        ->orWhere('key', 'header3')
+        ->orWhere('key', 'header4')
+        ->orWhere('key', 'header5')
+        ->orWhere('key', 'header6')
+        ->orWhere('key', 'header7')
+        ->get();
+
         return view('home.index')->with(compact(
             'categories',
             'offers_array',
@@ -108,7 +118,8 @@ class HomeController extends Controller
             'total',
             'cart_content',
             'dining_tables',
-            'month_array'
+            'month_array',
+            'backgrounds'
         ));
     }
 

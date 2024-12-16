@@ -1,11 +1,13 @@
 <div class="owl-carousel relative owl-theme owl-carousel1">
 
-    @foreach ($categories as $category)
+    @foreach ($backgrounds as $background)
 
     <div class="item" style="height: 70vh;">
-        <img class="main-cat-img" src="{{images_asset($category->getFirstMediaUrl('product_class')) }}"
-            alt="{{ $category->name }}">
+
+        <img src="{{ asset('uploads/'. $background->value) }}" id="img_logo_footer" alt="">
     </div>
     @endforeach
+
+
 
 </div>

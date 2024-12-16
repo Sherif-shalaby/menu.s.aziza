@@ -7,10 +7,84 @@
 @stop
 
 @section('main_content')
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<style>
+    .preview-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .preview-image {
+        position: relative;
+        width: 150px;
+        height: 150px;
+    }
+
+    .preview-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-image {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+    }
+
+    #cropModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+
+    #cropModal .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        max-height: 80%;
+    }
+</style>
+
+
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css" />
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
 <style>
     .preview-logo-container {
+        /* display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px; */
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 170px);
+    }
+    .preview-header1-container ,
+    .preview-header2-container ,
+    .preview-header3-container ,
+    .preview-header4-container ,
+    .preview-header5-container ,
+    .preview-header6-container ,
+    .preview-header7-container ,
+
+    {
         /* display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -124,6 +198,13 @@
 </style>
 @php
 $logo=App\Models\System::where('key','logo')->get();
+$header1=App\Models\System::where('key','header1')->get();
+$header2=App\Models\System::where('key','header2')->get();
+$header3=App\Models\System::where('key','header3')->get();
+$header4=App\Models\System::where('key','header4')->get();
+$header5=App\Models\System::where('key','header5')->get();
+$header6=App\Models\System::where('key','header6')->get();
+$header7=App\Models\System::where('key','header7')->get();
 $main_background=App\Models\System::where('key','main_background')->first();
 // Step 1: Remove the square brackets and quotes
 $cleanedValue = str_replace(['[', ']', '"'], '', $main_background['value']);
@@ -145,7 +226,7 @@ $defaultFont = $font->value ?? "Roboto";
 
 
 {!! Form::open(['url' => action('Admin\SettingController@saveSystemSettings'), 'method' => 'post', 'id' =>
-'setting_form', 'files' => true,'enctype'=>"multipart/form-data"]) !!}
+'setting_form', 'class' => 'dropzone','files' => true,'enctype'=>"multipart/form-data"]) !!}
 <x-adminlte-card title="{{ __('lang.system_settings') }}" theme="{{ config('adminlte.right_sidebar_theme') }}"
     theme-mode="outline" icon="fas fa-file">
     <div class="row">
@@ -206,15 +287,11 @@ $defaultFont = $font->value ?? "Roboto";
         {{-- end logo --}}
 
 
-
-
-        {{-- main background --}}
-        <div class="col-md-4 mb-2">
-            <div class="form-group mb-0">
-                {!! Form::label('main_background', __('lang.main_background'), []) !!}
-                <small class="text-red">@lang('lang.250_750')</small>
-                <x-adminlte-input-file name="main_background[]" placeholder="{{ __('lang.choose_files') }}"
-                    id="file-input-main-background" multiple>
+        {{-- header1 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header1', __('lang.header1'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header1">
                     <x-slot name="prependSlot">
                         <div class="input-group-text bg-lightblue">
                             <i class="fas fa-upload"></i>
@@ -222,33 +299,390 @@ $defaultFont = $font->value ?? "Roboto";
                     </x-slot>
                 </x-adminlte-input-file>
             </div>
-            <button type="button" class="btn btn-primary mb-2" id="add-more-images-btn">
-                <i class="fas fa-plus"></i>
-            </button>
         </div>
-        <div class="col-md-8 mb-2">
-            <div class="col-12">
-                <div class="preview-main-background-container" style="display: flex;
-                        flex-wrap: wrap;
-                        gap: 5px;">
-                    @if (!empty($main_background) && isset($settings['main_background']))
-
-                    @foreach ($backgrounds as $background)
-
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header1-container">
+                    @if (!empty($header1) && isset($settings['header1']))
                     <div class="preview">
-                        <img src="{{ asset('uploads/'. $background) }}" id="img_logo_footer" alt="">
+                        <img src="{{ asset('uploads/'. $settings['header1']) }}" id="img_header1_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header1"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header1-btn" data-toggle="modal"
+                            data-target="#header1Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
                     </div>
-                    @endforeach
-
                     @endif
+
                 </div>
             </div>
         </div>
-        <div id="cropped_main_background_images"></div>
+        <div id="cropped_header1_images"></div>
 
-        <!-- Dynamic Modals Container -->
-        <div id="dynamic-modals"></div>
-        {{-- end main background --}}
+        <div class="modal fade" id="header1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header1-modal" style="display:none">
+                            <div id="croppie-header1-container"></div>
+                            <button data-dismiss="modal" id="croppie-header1-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header1-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header1 --}}
+
+        {{-- header2 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header2', __('lang.header2'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header2">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header2-container">
+                    @if (!empty($header2) && isset($settings['header2']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header2']) }}" id="img_header2_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header2"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header2-btn" data-toggle="modal"
+                            data-target="#header2Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header2_images"></div>
+
+        <div class="modal fade" id="header2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header2-modal" style="display:none">
+                            <div id="croppie-header2-container"></div>
+                            <button data-dismiss="modal" id="croppie-header2-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header2-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header2 --}}
+
+        {{-- header3 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header3', __('lang.header3'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header3">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header3-container">
+                    @if (!empty($header3) && isset($settings['header3']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header3']) }}" id="img_header3_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header3"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header3-btn" data-toggle="modal"
+                            data-target="#header3Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header3_images"></div>
+
+        <div class="modal fade" id="header3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header3-modal" style="display:none">
+                            <div id="croppie-header3-container"></div>
+                            <button data-dismiss="modal" id="croppie-header3-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header3-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header3 --}}
+
+        {{-- header4 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header4', __('lang.header4'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header4">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header4-container">
+                    @if (!empty($header4) && isset($settings['header4']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header4']) }}" id="img_header4_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header4"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header4-btn" data-toggle="modal"
+                            data-target="#header4Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header4_images"></div>
+
+        <div class="modal fade" id="header4Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header4-modal" style="display:none">
+                            <div id="croppie-header4-container"></div>
+                            <button data-dismiss="modal" id="croppie-header4-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header4-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header4 --}}
+
+        {{-- header5 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header5', __('lang.header5'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header5">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header5-container">
+                    @if (!empty($header5) && isset($settings['header5']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header5']) }}" id="img_header5_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header5"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header5-btn" data-toggle="modal"
+                            data-target="#header5Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header5_images"></div>
+
+        <div class="modal fade" id="header5Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header5-modal" style="display:none">
+                            <div id="croppie-header5-container"></div>
+                            <button data-dismiss="modal" id="croppie-header5-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header5-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header5 --}}
+
+        {{-- header6 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header6', __('lang.header6'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header6">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header6-container">
+                    @if (!empty($header6) && isset($settings['header6']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header6']) }}" id="img_header6_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header6"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header6-btn" data-toggle="modal"
+                            data-target="#header6Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header6_images"></div>
+
+        <div class="modal fade" id="header6Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header6-modal" style="display:none">
+                            <div id="croppie-header6-container"></div>
+                            <button data-dismiss="modal" id="croppie-header6-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header6-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header6 --}}
+
+        {{-- header7 --}}
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('header7', __('lang.header7'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-header7">
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-header7-container">
+                    @if (!empty($header7) && isset($settings['header7']))
+                    <div class="preview">
+                        <img src="{{ asset('uploads/'. $settings['header7']) }}" id="img_header7_footer" alt="">
+                        <button class="btn btn-xs btn-danger delete-btn remove_image" data-type="header7"><i
+                                style="font-size: 25px;" class="fa fa-trash"></i></button>
+                        <span class="btn btn-xs btn-primary  crop-btn" id="crop-header7-btn" data-toggle="modal"
+                            data-target="#header7Modal"><i style="font-size: 25px;" class="fas fa-crop"></i></span>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+        <div id="cropped_header7_images"></div>
+
+        <div class="modal fade" id="header7Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-header7-modal" style="display:none">
+                            <div id="croppie-header7-container"></div>
+                            <button data-dismiss="modal" id="croppie-header7-cancel-btn" type="button"
+                                class="btn btn-secondary"><i class="fas fa-times"></i></button>
+                            <button id="croppie-header7-submit-btn" type="button" class="btn btn-primary"><i
+                                    class="fas fa-crop"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{-- end header7 --}}
+
+
+
+
+
 
 
 
@@ -600,6 +1034,16 @@ $defaultFont = $font->value ?? "Roboto";
 </x-adminlte-card>
 
 {!! Form::close() !!}
+<!-- Crop Modal -->
+<div id="cropModal">
+    <div class="modal-content">
+        <img id="imageToCrop">
+        <div>
+            <button id="applyCrop" type="button" class="btn btn-success">Apply Crop</button>
+            <button id="cancelCrop" type="button" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
 
 @stop
 @section('javascript')
@@ -1393,172 +1837,1129 @@ $defaultFont = $font->value ?? "Roboto";
         }
 
 </script>
+<script>
+    //header1
+        var fileHeader1Input = document.querySelector('#file-input-header1');
+        var previewHeader1Container = document.querySelector('.preview-header1-container');
+        var croppieHeader1Modal = document.querySelector('#croppie-header1-modal');
+        var croppieHeader1Container = document.querySelector('#croppie-header1-container');
+        var croppieHeader1CancelBtn = document.querySelector('#croppie-header1-cancel-btn');
+        var croppieHeader1SubmitBtn = document.querySelector('#croppie-header1-submit-btn');
+        // let currentFiles = [];
+        fileHeader1Input.addEventListener('change', () => {
+            previewHeader1Container.innerHTML = '';
+            let files = Array.from(fileHeader1Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader1Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header1Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader1CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader1Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
 
+            getHeader1Images()
+        });
+        function launchHeader1CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
 
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader1Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
+
+            // Show the Croppie modal
+            croppieHeader1Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader1CancelBtn.addEventListener('click', () => {
+                croppieHeader1Modal.style.display = 'none';
+                $('#header1Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader1SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader1Modal.style.display = 'none';
+                    $('#header1Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader1Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header1) && isset($settings['header1']))
+                    document.getElementById("crop-header1-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader1CropTool(document.getElementById("img_header1_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader1Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header1-container');
+                let images = [];
+                $("#cropped_header1_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header1").val(container[0].children[i].children[0].src);
+                    $("#cropped_header1_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
+</script>
+<script>
+    //header2
+        var fileHeader2Input = document.querySelector('#file-input-header2');
+        var previewHeader2Container = document.querySelector('.preview-header2-container');
+        var croppieHeader2Modal = document.querySelector('#croppie-header2-modal');
+        var croppieHeader2Container = document.querySelector('#croppie-header2-container');
+        var croppieHeader2CancelBtn = document.querySelector('#croppie-header2-cancel-btn');
+        var croppieHeader2SubmitBtn = document.querySelector('#croppie-header2-submit-btn');
+        // let currentFiles = [];
+        fileHeader2Input.addEventListener('change', () => {
+            previewHeader2Container.innerHTML = '';
+            let files = Array.from(fileHeader2Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader2Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header2Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader2CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader2Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
+
+            getHeader2Images()
+        });
+        function launchHeader2CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
+
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader2Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
+
+            // Show the Croppie modal
+            croppieHeader2Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader2CancelBtn.addEventListener('click', () => {
+                croppieHeader2Modal.style.display = 'none';
+                $('#header2Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader2SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader2Modal.style.display = 'none';
+                    $('#header2Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader2Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header2) && isset($settings['header2']))
+                    document.getElementById("crop-header2-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader2CropTool(document.getElementById("img_header2_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader2Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header2-container');
+                let images = [];
+                $("#cropped_header2_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header2").val(container[0].children[i].children[0].src);
+                    $("#cropped_header2_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
+</script>
 
 <script>
-    var fileInput = document.querySelector('#file-input-main-background');
-    var previewContainer = document.querySelector('.preview-main-background-container');
-    var modalContainer = document.querySelector('#dynamic-modals');
-    var addMoreImagesBtn = document.querySelector('#add-more-images-btn');
-
-    // To handle dynamically selected images
-    let allFiles = [];
-
-    fileInput.addEventListener('change', handleFiles);
-
-    addMoreImagesBtn.addEventListener('click', () => {
-        fileInput.value = ''; // Clear previous selection
-        fileInput.click();
-    });
-
-    function handleFiles() {
-        let files = Array.from(fileInput.files);
-        allFiles = allFiles.concat(files);
-
-        files.forEach((file, index) => {
-            let fileType = file.type.slice(file.type.indexOf('/') + 1).toLowerCase();
-            let validTypes = ["jpg", "jpeg", "png", "bmp"];
-
-            if (validTypes.includes(fileType)) {
-                const reader = new FileReader();
-                reader.addEventListener('load', () => {
-                    const preview = document.createElement('div');
-                    preview.classList.add('preview');
-
-                    const img = document.createElement('img');
-                    img.src = reader.result;
-                    preview.appendChild(img);
-
-                    // Action Buttons
-                    const actions = document.createElement('div');
-                    actions.classList.add('actions');
-
-                    const deleteBtn = document.createElement('span');
-                    deleteBtn.classList.add('btn', 'btn-xs', 'btn-danger', 'delete-btn');
-                    deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
-                    deleteBtn.addEventListener('click', () => {
-                        Swal.fire({
-                            title: '{{ __("site.Are you sure?") }}',
-                            text: "{{ __("site.You won't be able to delete!") }}",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                preview.remove();
-                                updateHiddenInputs();
-                                Swal.fire('{{ __("site.Deleted!") }}', '{{ __("site.Your Image has been deleted.") }}', 'success');
-                            }
+    //header3
+        var fileHeader3Input = document.querySelector('#file-input-header3');
+        var previewHeader3Container = document.querySelector('.preview-header3-container');
+        var croppieHeader3Modal = document.querySelector('#croppie-header3-modal');
+        var croppieHeader3Container = document.querySelector('#croppie-header3-container');
+        var croppieHeader3CancelBtn = document.querySelector('#croppie-header3-cancel-btn');
+        var croppieHeader3SubmitBtn = document.querySelector('#croppie-header3-submit-btn');
+        // let currentFiles = [];
+        fileHeader3Input.addEventListener('change', () => {
+            previewHeader3Container.innerHTML = '';
+            let files = Array.from(fileHeader3Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader3Images()
+                                }
+                            });
                         });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header3Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader3CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader3Container.appendChild(preview);
                     });
-
-                    const cropBtn = document.createElement('span');
-                    cropBtn.classList.add('btn', 'btn-xs', 'btn-primary', 'crop-btn');
-                    cropBtn.innerHTML = '<i class="fas fa-crop"></i>';
-                    cropBtn.setAttribute('data-toggle', 'modal');
-                    cropBtn.setAttribute('data-target', `#cropModal${allFiles.length - 1}`);
-                    cropBtn.addEventListener('click', () => {
-                        setTimeout(() => launchCropTool(img, allFiles.length - 1), 500);
-                    });
-
-                    actions.appendChild(deleteBtn);
-                    actions.appendChild(cropBtn);
-                    preview.appendChild(actions);
-
-                    previewContainer.appendChild(preview);
-
-                    // Dynamically add cropping modal
-                    addDynamicModal(allFiles.length - 1);
-                });
-
-                reader.readAsDataURL(file);
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: '{{ __("site.Oops...") }}',
-                    text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
-                });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
             }
+
+            getHeader3Images()
         });
+        function launchHeader3CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
 
-        updateHiddenInputs();
-    }
-
-    function addDynamicModal(index) {
-        const modalHTML = `
-            <div class="modal fade" id="cropModal${index}" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel${index}" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cropModalLabel${index}">{{ __('Crop Image') }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="croppie-container-${index}"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
-                            <button type="button" class="btn btn-primary" id="crop-submit-btn-${index}">{{ __('Crop') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        modalContainer.insertAdjacentHTML('beforeend', modalHTML);
-    }
-
-    function launchCropTool(img, index) {
-        var croppieContainer = document.querySelector(`#croppie-container-${index}`);
-        croppieContainer.innerHTML = ''; // Clear previous instance
-
-        var croppie = new Croppie(croppieContainer, {
-            viewport: { width: 300, height: 100, type: 'square' }, // 1:3 ratio
-            boundary: { width: 600, height: 200 },
-            enableOrientation: true
-        });
-
-        croppie.bind({ url: img.src });
-
-        document.querySelector(`#crop-submit-btn-${index}`).addEventListener('click', () => {
-            croppie.result({
-                type: 'canvas',
-                size: { width: 300, height: 100 }
-            }).then(croppedImg => {
-                img.src = croppedImg;
-                $(`#cropModal${index}`).modal('hide');
-                croppie.destroy();
-                updateHiddenInputs();
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader3Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
             });
+
+            // Show the Croppie modal
+            croppieHeader3Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader3CancelBtn.addEventListener('click', () => {
+                croppieHeader3Modal.style.display = 'none';
+                $('#header3Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader3SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader3Modal.style.display = 'none';
+                    $('#header3Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader3Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header3) && isset($settings['header3']))
+                    document.getElementById("crop-header3-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader3CropTool(document.getElementById("img_header3_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader3Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header3-container');
+                let images = [];
+                $("#cropped_header3_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header3").val(container[0].children[i].children[0].src);
+                    $("#cropped_header3_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
+</script>
+
+<script>
+    //header4
+        var fileHeader4Input = document.querySelector('#file-input-header4');
+        var previewHeader4Container = document.querySelector('.preview-header4-container');
+        var croppieHeader4Modal = document.querySelector('#croppie-header4-modal');
+        var croppieHeader4Container = document.querySelector('#croppie-header4-container');
+        var croppieHeader4CancelBtn = document.querySelector('#croppie-header4-cancel-btn');
+        var croppieHeader4SubmitBtn = document.querySelector('#croppie-header4-submit-btn');
+        // let currentFiles = [];
+        fileHeader4Input.addEventListener('change', () => {
+            previewHeader4Container.innerHTML = '';
+            let files = Array.from(fileHeader4Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader4Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header4Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader4CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader4Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
+
+            getHeader4Images()
         });
-    }
-    function updateHiddenInputs() {
-    // Wait for the DOM to fully render dynamic elements
-    setTimeout(() => {
-    let images = document.querySelectorAll('.preview-main-background-container .preview img');
-    const hiddenInputContainer = document.querySelector('#cropped_main_background_images');
-    hiddenInputContainer.innerHTML = ''; // Clear existing inputs
+        function launchHeader4CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
 
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader4Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
 
+            // Show the Croppie modal
+            croppieHeader4Modal.style.display = 'block';
 
-    images.forEach((img) => {
-        console.log(img.src);
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader4CancelBtn.addEventListener('click', () => {
+                croppieHeader4Modal.style.display = 'none';
+                $('#header4Modal').modal('hide');
+                croppie.destroy();
+            });
 
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'main_background[]'; // Array input
-    input.value = img.src; // Base64 or URL
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader4SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader4Modal.style.display = 'none';
+                    $('#header4Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader4Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header4) && isset($settings['header4']))
+                    document.getElementById("crop-header4-btn").addEventListener('click', () => {
 
-    hiddenInputContainer.appendChild(input);
-    });
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader4CropTool(document.getElementById("img_header4_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader4Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header4-container');
+                let images = [];
+                $("#cropped_header4_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header4").val(container[0].children[i].children[0].src);
+                    $("#cropped_header4_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
 
-    }, 300);
-    }
+</script>
+<script>
+    //header5
+        var fileHeader5Input = document.querySelector('#file-input-header5');
+        var previewHeader5Container = document.querySelector('.preview-header5-container');
+        var croppieHeader5Modal = document.querySelector('#croppie-header5-modal');
+        var croppieHeader5Container = document.querySelector('#croppie-header5-container');
+        var croppieHeader5CancelBtn = document.querySelector('#croppie-header5-cancel-btn');
+        var croppieHeader5SubmitBtn = document.querySelector('#croppie-header5-submit-btn');
+        // let currentFiles = [];
+        fileHeader5Input.addEventListener('change', () => {
+            previewHeader5Container.innerHTML = '';
+            let files = Array.from(fileHeader5Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader5Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header5Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader5CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader5Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
+
+            getHeader5Images()
+        });
+        function launchHeader5CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
+
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader5Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
+
+            // Show the Croppie modal
+            croppieHeader5Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader5CancelBtn.addEventListener('click', () => {
+                croppieHeader5Modal.style.display = 'none';
+                $('#header5Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader5SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader5Modal.style.display = 'none';
+                    $('#header5Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader5Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header5) && isset($settings['header5']))
+                    document.getElementById("crop-header5-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader5CropTool(document.getElementById("img_header5_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader5Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header5-container');
+                let images = [];
+                $("#cropped_header5_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header5").val(container[0].children[i].children[0].src);
+                    $("#cropped_header5_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
+</script>
+
+<script>
+    //header6
+        var fileHeader6Input = document.querySelector('#file-input-header6');
+        var previewHeader6Container = document.querySelector('.preview-header6-container');
+        var croppieHeader6Modal = document.querySelector('#croppie-header6-modal');
+        var croppieHeader6Container = document.querySelector('#croppie-header6-container');
+        var croppieHeader6CancelBtn = document.querySelector('#croppie-header6-cancel-btn');
+        var croppieHeader6SubmitBtn = document.querySelector('#croppie-header6-submit-btn');
+        // let currentFiles = [];
+        fileHeader6Input.addEventListener('change', () => {
+            previewHeader6Container.innerHTML = '';
+            let files = Array.from(fileHeader6Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader6Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header6Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader6CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader6Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
+
+            getHeader6Images()
+        });
+        function launchHeader6CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
+
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader6Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
+
+            // Show the Croppie modal
+            croppieHeader6Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader6CancelBtn.addEventListener('click', () => {
+                croppieHeader6Modal.style.display = 'none';
+                $('#header6Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader6SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader6Modal.style.display = 'none';
+                    $('#header6Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader6Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header6) && isset($settings['header6']))
+                    document.getElementById("crop-header6-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader6CropTool(document.getElementById("img_header6_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader6Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header6-container');
+                let images = [];
+                $("#cropped_header6_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header6").val(container[0].children[i].children[0].src);
+                    $("#cropped_header6_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
+</script>
+
+<script>
+    //header7
+        var fileHeader7Input = document.querySelector('#file-input-header7');
+        var previewHeader7Container = document.querySelector('.preview-header7-container');
+        var croppieHeader7Modal = document.querySelector('#croppie-header7-modal');
+        var croppieHeader7Container = document.querySelector('#croppie-header7-container');
+        var croppieHeader7CancelBtn = document.querySelector('#croppie-header7-cancel-btn');
+        var croppieHeader7SubmitBtn = document.querySelector('#croppie-header7-submit-btn');
+        // let currentFiles = [];
+        fileHeader7Input.addEventListener('change', () => {
+            previewHeader7Container.innerHTML = '';
+            let files = Array.from(fileHeader7Input.files)
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let fileType = file.type.slice(file.type.indexOf('/') + 1);
+                let FileAccept = ["jpg","JPG","jpeg","JPEG","png","PNG","BMP","bmp"];
+                // if (file.type.match('image.*')) {
+                if (FileAccept.includes(fileType)) {
+                    const reader = new FileReader();
+                    reader.addEventListener('load', () => {
+                        const preview = document.createElement('div');
+                        preview.classList.add('preview');
+                        const img = document.createElement('img');
+                        const actions = document.createElement('div');
+                        actions.classList.add('action_div');
+                        img.src = reader.result;
+                        preview.appendChild(img);
+                        preview.appendChild(actions);
+                        const container = document.createElement('div');
+                        const deleteBtn = document.createElement('span');
+                        deleteBtn.classList.add('delete-btn');
+                        deleteBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-trash"></i>';
+                        deleteBtn.addEventListener('click', () => {
+                            Swal.fire({
+                                title: '{{ __("site.Are you sure?") }}',
+                                text: "{{ __("site.You won't be able to delete!") }}",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        '{{ __("site.Your Image has been deleted.") }}',
+                                        'success'
+                                    )
+                                    files.splice(file, 1)
+                                    preview.remove();
+                                    getHeader7Images()
+                                }
+                            });
+                        });
+                        preview.appendChild(deleteBtn);
+                        const cropBtn = document.createElement('span');
+                        cropBtn.setAttribute("data-toggle", "modal")
+                        cropBtn.setAttribute("data-target", "#header7Modal")
+                        cropBtn.classList.add('crop-btn');
+                        cropBtn.innerHTML = '<i style="font-size: 20px;" class="fas fa-crop"></i>';
+                        cropBtn.addEventListener('click', () => {
+                            setTimeout(() => {
+                                launchHeader7CropTool(img);
+                            }, 500);
+                        });
+                        preview.appendChild(cropBtn);
+                        previewHeader7Container.appendChild(preview);
+                    });
+                    reader.readAsDataURL(file);
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __("site.Oops...") }}',
+                        text: '{{ __("site.Sorry , You Should Upload Valid Image") }}',
+                    })
+                }
+            }
+
+            getHeader7Images()
+        });
+        function launchHeader7CropTool(img) {
+            // Set up Croppie options
+            var croppieOptions = {
+             viewport: {
+                width: 600, // Width for a 3:1 ratio
+                height: 200, // Height for a 3:1 ratio
+                type: 'square' // Can also be 'rectangle'
+                },
+                boundary: {
+                width: 650,
+                height: 250,
+                },
+                enableOrientation: true
+            };
+
+            // Create a new Croppie instance with the selected image and options
+            var croppie = new Croppie(croppieHeader7Container, croppieOptions);
+            croppie.bind({
+                url: img.src,
+                orientation: 1,
+            });
+
+            // Show the Croppie modal
+            croppieHeader7Modal.style.display = 'block';
+
+            // When the user clicks the "Cancel" button, hide the modal
+            croppieHeader7CancelBtn.addEventListener('click', () => {
+                croppieHeader7Modal.style.display = 'none';
+                $('#header7Modal').modal('hide');
+                croppie.destroy();
+            });
+
+            // When the user clicks the "Crop" button, get the cropped image and replace the original image in the preview
+            croppieHeader7SubmitBtn.addEventListener('click', () => {
+                croppie.result({
+                    type: 'canvas',
+                    size: {
+                     width:1350,
+                        height: 450
+                    },
+                    quality: 1 // Set quality to 1 for maximum quality
+                }).then((croppedImg) => {
+                    img.src = croppedImg;
+                    croppieHeader7Modal.style.display = 'none';
+                    $('#header7Modal').modal('hide');
+                    croppie.destroy();
+                    getHeader7Images()
+                });
+            });
+        }
+                // edit Case
+                @if (!empty($header7) && isset($settings['header7']))
+                    document.getElementById("crop-header7-btn").addEventListener('click', () => {
+
+                        console.log(("#exampleModal"))
+                        setTimeout(() => {
+                            launchHeader7CropTool(document.getElementById("img_header7_footer"));
+                        }, 500);
+                    });
+                    document.getElementById("deleteBtn").addEventListener('click', () => {
+                        if (window.confirm('Are you sure you want to delete this image?')) {
+                            $("#preview").remove();
+                        }
+                    });
+            @endif
+        function getHeader7Images() {
+            setTimeout(() => {
+                const container = document.querySelectorAll('.preview-header7-container');
+                let images = [];
+                $("#cropped_header7_images").empty();
+                for (let i = 0; i < container[0].children.length; i++) {
+                    images.push(container[0].children[i].children[0].src)
+                    var newInput = $("<input>").attr("type", "hidden").attr("name", "header7").val(container[0].children[i].children[0].src);
+                    $("#cropped_header7_images").append(newInput);
+                }
+                return images
+            }, 300);
+        }
+
 </script>
 
 @endsection

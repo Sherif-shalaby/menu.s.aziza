@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class SettingController extends Controller
@@ -41,10 +42,46 @@ class SettingController extends Controller
         $currencies  = $this->commonUtil->allCurrencies();
         $locales = $this->commonUtil->getSupportedLocalesArray();
 
+        $main_background = System::where('key', 'main_background')->first();
+        // Step 1: Remove the square brackets and quotes
+        $cleanedValue = str_replace(['[', ']', '"'], '', $main_background['value']);
+
+        // Step 2: Convert the cleaned string into an array using explode
+        $backgrounds = explode(',', $cleanedValue);
+
+        // $base64Images = [];
+        // // return $backgrounds;
+        // if (!empty($backgrounds) && isset($backgrounds) && $backgrounds !== [""]) {
+
+
+
+        //     foreach ($backgrounds as $filename) {
+        //         $imagePath = public_path('uploads/' . $filename);
+
+        //         if (file_exists($imagePath)) {
+        //             // Get the file content
+        //             $fileContent = file_get_contents($imagePath);
+
+        //             // Get the MIME type of the file
+        //             $mimeType = mime_content_type($imagePath);
+
+        //             // Encode the file content as Base64
+        //             $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($fileContent);
+
+        //             $base64Images[] = $base64Image; // Store in array
+        //         } else {
+        //             $base64Images[] = null; // Add null if the file doesn't exist
+        //         }
+        //     }
+        // }
+
+
+
         return view('admin.setting.setting')->with(compact(
             'settings',
             'locales',
-            'currencies'
+            'currencies',
+            'backgrounds'
         ));
     }
     public function saveSystemSettings(Request $request)
@@ -153,8 +190,6 @@ class SettingController extends Controller
 
 
             $data['logo'] = null;
-
-
             if ($request->has('logo') && !is_null('logo')) {
 
                 if (preg_match('/^data:image/', $request->input('logo'))) {
@@ -182,45 +217,191 @@ class SettingController extends Controller
             }
 
 
+            $data['header1'] = null;
+            if ($request->has('header1') && !is_null('header1')) {
 
-
-            $data['main_background'] = [];
-
-            if ($request->has('main_background') && is_array($request->main_background)) {
-                foreach ($request->input('main_background') as $background) {
-                    if (preg_match('/^data:image/', $background)) {
-                        // Delete old background images if necessary (optional)
-                        $existingBackgrounds = System::where('key', 'main_background')->pluck('value')->first();
-                        if (!empty($existingBackgrounds)) {
-                            $existingBackgrounds = json_decode($existingBackgrounds, true);
-                            foreach ($existingBackgrounds as $oldBackground) {
-                                if (file_exists("uploads/" . $oldBackground)) {
-                                    unlink("uploads/" . $oldBackground);
-                                }
-                            }
-                        }
-
-                        // Process and save new background images
-                        $imageData = $this->getCroppedImage($background);
-                        $extension = explode(";", explode("/", $imageData)[1])[0];
-                        $imageName = rand(1, 1500) . "_background." . $extension;
-                        $filePath = public_path('uploads/' . $imageName);
-                        file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
-
-                        $data['main_background'][] = $imageName;
+                if (preg_match('/^data:image/', $request->input('header1'))) {
+                    $header1 = System::where('key', 'header1')->first();
+                    if (!empty($header1->value) && $header1->value != null && file_exists("uploads/" . System::getProperty('header1'))) {
+                        unlink("uploads/" . System::getProperty('header1'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header1);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header1'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header1_setting = System::updateOrCreate(
+                        ['key' => 'header1'],
+                        ['value' => $data['header1'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header1_url'] = asset('uploads/' . $data['header1']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header1_setting, $data, 'POST', 'setting');
+                        unset($data['header1_url']);
                     }
                 }
+            }
+            $data['header2'] = null;
+            if ($request->has('header2') && !is_null('header2')) {
 
-                // Save to database
-                $backgroundSetting = System::updateOrCreate(
-                    ['key' => 'main_background'],
-                    ['value' => json_encode($data['main_background']), 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
-                );
-
-                if (!env('ENABLE_POS_SYNC')) {
-                    $this->commonUtil->addSyncDataWithPos('System', $backgroundSetting, $data, 'POST', 'setting');
+                if (preg_match('/^data:image/', $request->input('header2'))) {
+                    $header2 = System::where('key', 'header2')->first();
+                    if (!empty($header2->value) && $header2->value != null && file_exists("uploads/" . System::getProperty('header2'))) {
+                        unlink("uploads/" . System::getProperty('header2'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header2);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header2'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header2_setting = System::updateOrCreate(
+                        ['key' => 'header2'],
+                        ['value' => $data['header2'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header2_url'] = asset('uploads/' . $data['header2']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header2_setting, $data, 'POST', 'setting');
+                        unset($data['header2_url']);
+                    }
                 }
             }
+            $data['header3'] = null;
+            if ($request->has('header3') && !is_null('header3')) {
+
+                if (preg_match('/^data:image/', $request->input('header3'))) {
+                    $header3 = System::where('key', 'header3')->first();
+                    if (!empty($header3->value) && $header3->value != null && file_exists("uploads/" . System::getProperty('header3'))) {
+                        unlink("uploads/" . System::getProperty('header3'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header3);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header3'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header3_setting = System::updateOrCreate(
+                        ['key' => 'header3'],
+                        ['value' => $data['header3'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header3_url'] = asset('uploads/' . $data['header3']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header3_setting, $data, 'POST', 'setting');
+                        unset($data['header3_url']);
+                    }
+                }
+            }
+            $data['header4'] = null;
+            if ($request->has('header4') && !is_null('header4')) {
+
+                if (preg_match('/^data:image/', $request->input('header4'))) {
+                    $header4 = System::where('key', 'header4')->first();
+                    if (!empty($header4->value) && $header4->value != null && file_exists("uploads/" . System::getProperty('header4'))) {
+                        unlink("uploads/" . System::getProperty('header4'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header4);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header4'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header4_setting = System::updateOrCreate(
+                        ['key' => 'header4'],
+                        ['value' => $data['header4'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header4_url'] = asset('uploads/' . $data['header4']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header4_setting, $data, 'POST', 'setting');
+                        unset($data['header4_url']);
+                    }
+                }
+            }
+            $data['header5'] = null;
+            if ($request->has('header5') && !is_null('header5')) {
+
+                if (preg_match('/^data:image/', $request->input('header5'))) {
+                    $header5 = System::where('key', 'header5')->first();
+                    if (!empty($header5->value) && $header5->value != null && file_exists("uploads/" . System::getProperty('header5'))) {
+                        unlink("uploads/" . System::getProperty('header5'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header5);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header5'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header5_setting = System::updateOrCreate(
+                        ['key' => 'header5'],
+                        ['value' => $data['header5'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header5_url'] = asset('uploads/' . $data['header5']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header5_setting, $data, 'POST', 'setting');
+                        unset($data['header5_url']);
+                    }
+                }
+            }
+            $data['header6'] = null;
+            if ($request->has('header6') && !is_null('header6')) {
+
+                if (preg_match('/^data:image/', $request->input('header6'))) {
+                    $header6 = System::where('key', 'header6')->first();
+                    if (!empty($header6->value) && $header6->value != null && file_exists("uploads/" . System::getProperty('header6'))) {
+                        unlink("uploads/" . System::getProperty('header6'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header6);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header6'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header6_setting = System::updateOrCreate(
+                        ['key' => 'header6'],
+                        ['value' => $data['header6'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header6_url'] = asset('uploads/' . $data['header6']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header6_setting, $data, 'POST', 'setting');
+                        unset($data['header6_url']);
+                    }
+                }
+            }
+            $data['header7'] = null;
+            if ($request->has('header7') && !is_null('header7')) {
+
+                if (preg_match('/^data:image/', $request->input('header7'))) {
+                    $header7 = System::where('key', 'header7')->first();
+                    if (!empty($header7->value) && $header7->value != null && file_exists("uploads/" . System::getProperty('header7'))) {
+                        unlink("uploads/" . System::getProperty('header7'));
+                    }
+                    $imageData = $this->getCroppedImage($request->header7);
+                    $extention = explode(";", explode("/", $imageData)[1])[0];
+                    $image = rand(1, 1500) . "_image." . $extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $data['header7'] = $image;
+                    // $data['logo'] = $this->commonUtil->ImageResizeAndUpload($b, 'uploads', 250, 250);
+                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
+                    $header7_setting = System::updateOrCreate(
+                        ['key' => 'header7'],
+                        ['value' => $data['header7'], 'date_and_time' => Carbon::now(), 'created_by' => Auth::user()->id]
+                    );
+                    $data['header7_url'] = asset('uploads/' . $data['header7']);
+                    if (!env('ENABLE_POS_SYNC')) {
+                        $this->commonUtil->addSyncDataWithPos('System', $header7_setting, $data, 'POST', 'setting');
+                        unset($data['header7_url']);
+                    }
+                }
+            }
+
+
+
 
 
 
