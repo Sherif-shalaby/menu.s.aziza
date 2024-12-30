@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Pusher\Pusher;
+
 class OrderController extends Controller
 {
     /**
@@ -60,9 +61,9 @@ class OrderController extends Controller
 
             $string = trim(preg_replace('/\s+/', ' ', $request->sales_note));
             $data['sales_note'] = $string;
-            $data['store_id'] =env('ENABLE_POS_SYNC')?$request->store_id:0;
+            $data['store_id'] = env('ENABLE_POS_SYNC') ? $request->store_id : 0;
             $data['customer_name'] = $request->customer_name;
-            $data['phone_number'] = $request->phone_number;
+            $data['phone_number'] = 0;
             $data['address'] = !empty($request->address) ? $request->address : null;
             $data['order_type'] = !empty($request->order_type) ? 'order_later' : 'order_now';
             $data['month'] = $request->month;
@@ -83,6 +84,7 @@ class OrderController extends Controller
 
 
             $cart_content = \Cart::session($user_id)->getContent();
+            $final_total = 0;
             $text = '%20';
             foreach ($cart_content as $content) {
                 $discount_attr = $content->attributes->discount;
@@ -92,18 +94,19 @@ class OrderController extends Controller
                     'product_id' => $content->associatedModel->id,
                     'variation_id' => $content->attributes->variation_id,
                     'discount' => $discount,
-                    'quantity' =>$content->attributes->quantity,
+                    'quantity' => $content->attributes->quantity,
                     'price' => $content->price,
                     'sub_total' => $content->price * $content->attributes->quantity,
                 ];
                 // . " " .__('lang.size')." ".$content->attributes->size??'#'.
                 $product = Product::find($content->associatedModel->id);
-                $text.=urlencode($product->name).'+'.$content->attributes->size.'+%3A'.$order_details['quantity'] ."+%2A+".$order_details['price'].'='.$order_details['sub_total']."+".session('currency')['code']. "%0A";
-                
+                $text .= urlencode($product->name) . '+' . $content->attributes->size . '+%3A' . $order_details['quantity'] . "+%2A+" . $order_details['price'] . '=' . $order_details['sub_total'] . "+" . session('currency')['code'] . "%0A";
+                $final_total += $content->price * $content->attributes->quantity;
                 // $text .= urlencode($product->name) .'+  +'.$content->attributes->size.'+%3A+' . $order_details['quantity'] . "+%2A+" . $order_details['price'] . '+=+' . $order_details['sub_total'] . " " . session('currency')['code'] . " +%0D%0A+";
                 OrderDetails::create($order_details);
             }
             $order->discount_amount = $order->order_details->sum('discount') ?? 0;
+            $order->final_total = $final_total - $order->discount_amount;
             $order->save();
 
             \Cart::session($user_id)->clear();
@@ -112,26 +115,26 @@ class OrderController extends Controller
             DB::commit();
             // $orders_count=
             // event(new NewOrderEvent($order));
-            if(env('ENABLE_POS_SYNC') && !empty($request->table_no)){
+            if (env('ENABLE_POS_SYNC') && !empty($request->table_no)) {
                 $options = array(
                     'cluster' =>  env('PUSHER_APP_CLUSTER'),
                     'useTLS' => true
                 );
-        
-        
+
+
                 $pusher = new Pusher(
                     env('PUSHER_APP_KEY'),
                     env('PUSHER_APP_SECRET'),
                     env('PUSHER_APP_ID'),
                     $options
                 );
-        
-                $table=DiningTable::find($order->table_no);
+
+                $table = DiningTable::find($order->table_no);
                 $data = [
-                    'order_id'=>$order->id,
-                    'table_no'=>$order->table_no,
-                    'room_no'=>$table->dining_room_id,
-                    'orders_count'=>$order->order_details()->count()
+                    'order_id' => $order->id,
+                    'table_no' => $order->table_no,
+                    'room_no' => $table->dining_room_id,
+                    'orders_count' => $order->order_details()->count()
                 ];
                 $pusher->trigger('order-channel', 'new-order', $data);
             }
@@ -167,12 +170,11 @@ class OrderController extends Controller
 
             if ($order->delivery_type == 'home_delivery') {
                 $text .= "%0D%0A+" . __('lang.home_delivery');
-                $text .= "%0D%0A+" . __('lang.address')."+".$order->address;
-            }else if($order->delivery_type == 'dining_in'){
+                $text .= "%0D%0A+" . __('lang.address') . "+" . $order->address;
+            } else if ($order->delivery_type == 'dining_in') {
                 $text .= "%0D%0A+" . __('lang.dinnig_in_restaurant');
-                $text .= "%0D%0A+" . __('lang.table_no')."+".$order->table_no;
-            }
-            else {
+                $text .= "%0D%0A+" . __('lang.table_no') . "+" . $order->table_no;
+            } else {
                 $text .= "%0D%0A+" . __('lang.i_will_pick_it_up_my_self');
             }
             if ($order->payment_type == 'cash_on_delivery') {
@@ -181,8 +183,8 @@ class OrderController extends Controller
                 $text .= "%0D%0A+" . __('lang.pay_online');
             }
             $text .= "%0D%0A+" . __('lang.customer') . "%3A" . $order->customer_name;
-            $text .= "%0D%0A+" . __('lang.phone_number') . "%3A" . $order->phone_number;
-            $text .= "%0D%0A+" . __('lang.note') . "%3A". $order->sales_note;
+            // $text .= "%0D%0A+" . __('lang.phone_number') . "%3A" . $order->phone_number;
+            $text .= "%0D%0A+" . __('lang.note') . "%3A" . $order->sales_note;
 
             $whatsapp = System::getProperty('whatsapp');
             $url = "https://api.whatsapp.com/send/?phone=" . $whatsapp . "&text=" . $text . "&app_absent=0";
@@ -203,8 +205,6 @@ class OrderController extends Controller
             ];
             return redirect()->back()->with('status', $output);
         }
-
-        
     }
 
     /**
