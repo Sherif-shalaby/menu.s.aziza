@@ -12,15 +12,24 @@
     </div>
 </div> --}}
 <script>
-    function filterSelection(class_id) {
+    // function filterSelection(class_id) {
 
-            if(class_id != 'all'){
-                $(".filterDiv").addClass('hide');
-                $(".filterDiv-"+class_id).removeClass('hide');
-            }else{
-                $(".filterDiv").removeClass('hide');
-            }
-        }
+    //         if(class_id != 'all'){
+    //             $(".filterDiv").addClass('hide');
+    //             $(".filterDiv-"+class_id).removeClass('hide');
+    //         }else{
+    //             $(".filterDiv").removeClass('hide');
+    //         }
+    //     }
+
+   function filterSelection(class_id) {
+const allItems = document.querySelectorAll(".filterDiv");
+allItems.forEach(item => {
+const shouldShow = class_id === 'all' || item.classList.contains(`filterDiv-${class_id}`);
+item.classList.toggle('hide', !shouldShow);
+});
+}
+
 
         function w3AddClass(element, name) {
           var i, arr1, arr2;
@@ -57,7 +66,6 @@
 <style>
     .filterDiv {
         margin: 2px;
-
     }
 
     .hide {

@@ -124,7 +124,7 @@ $defaultFont = $font->value ?? "Roboto";
 
     <div class="row">
         {{-- logo --}}
-        <div class="col-md-4">
+        {{-- <div class="col-md-4">
             <div class="form-group">
                 {!! Form::label('logo', __('lang.logo'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
                 <x-adminlte-input-file name="file" placeholder="{{ __('lang.choose_a_file') }}" id="file-input-logo">
@@ -176,8 +176,86 @@ $defaultFont = $font->value ?? "Roboto";
 
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- end logo --}}
+
+
+
+
+
+
+        <div class="col-md-4">
+            <div class="form-group">
+                {!! Form::label('logo', __('lang.logo'), []) !!} <small class="text-red">@lang('lang.250_250')</small>
+                <x-adminlte-input-file name="files[]" placeholder="{{ __('lang.choose_files') }}" id="file-input-logo"
+                    multiple>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text bg-lightblue">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+            </div>
+        </div>
+        <div class="col-md-8 mb-5">
+            <div class="col-10 offset-1">
+                <div class="preview-logo-container"></div>
+            </div>
+        </div>
+        <div id="cropped_logo_images"></div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="logoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Crop Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="croppie-logo-modal" style="display:none">
+                            <div id="croppie-logo-container"></div>
+                            <button data-dismiss="modal" id="croppie-logo-cancel-btn" type="button"
+                                class="btn btn-secondary">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button id="croppie-logo-submit-btn" type="button" class="btn btn-primary">
+                                <i class="fas fa-crop"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="col-md-4">
             <div class="form-group">
                 @if (!empty($home_background_image) && isset($settings['home_background_image']))
@@ -1163,7 +1241,7 @@ $defaultFont = $font->value ?? "Roboto";
         }
 
 </script>
-<script>
+{{-- <script>
     //logo
         var fileLogoInput = document.querySelector('#file-input-logo');
         var previewLogoContainer = document.querySelector('.preview-logo-container');
@@ -1322,5 +1400,113 @@ $defaultFont = $font->value ?? "Roboto";
             }, 300);
         }
 
+</script> --}}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const fileLogoInput = document.querySelector('#file-input-logo');
+    const previewLogoContainer = document.querySelector('.preview-logo-container');
+    const croppieLogoModal = document.querySelector('#croppie-logo-modal');
+    const croppieLogoContainer = document.querySelector('#croppie-logo-container');
+    const croppieLogoCancelBtn = document.querySelector('#croppie-logo-cancel-btn');
+    const croppieLogoSubmitBtn = document.querySelector('#croppie-logo-submit-btn');
+    let croppieInstance = null;
+    let currentImg = null;
+
+    fileLogoInput.addEventListener('change', () => {
+    previewLogoContainer.innerHTML = '';
+    Array.from(fileLogoInput.files).forEach((file) => {
+    if (validateImage(file)) {
+    const reader = new FileReader();
+    reader.onload = () => createPreview(reader.result, file);
+    reader.readAsDataURL(file);
+    } else {
+    showAlert('{{ __("site.Sorry , You Should Upload Valid Image") }}');
+    }
+    });
+    });
+
+    function validateImage(file) {
+    const acceptedTypes = ["jpg", "jpeg", "png", "bmp"];
+    const fileType = file.type.split('/').pop().toLowerCase();
+    return acceptedTypes.includes(fileType);
+    }
+
+    function createPreview(imageSrc) {
+    const preview = document.createElement('div');
+    preview.classList.add('preview');
+
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    preview.appendChild(img);
+
+    const deleteBtn = createButton('delete-btn', 'fa-trash', () => preview.remove());
+    const cropBtn = createButton('crop-btn', 'fa-crop', () => openCropModal(img));
+
+    preview.appendChild(deleteBtn);
+    preview.appendChild(cropBtn);
+    previewLogoContainer.appendChild(preview);
+    }
+
+    function createButton(className, iconClass, onClick) {
+    const btn = document.createElement('span');
+    btn.classList.add(className);
+    btn.innerHTML = `<i style="font-size: 20px;" class="fas ${iconClass}"></i>`;
+    btn.addEventListener('click', onClick);
+    return btn;
+    }
+
+    function openCropModal(img) {
+    currentImg = img; // Store reference to the current image
+    $('#logoModal').modal('show');
+
+    $('#logoModal').on('shown.bs.modal', () => {
+    if (croppieInstance) croppieInstance.destroy();
+
+    croppieInstance = new Croppie(croppieLogoContainer, {
+    viewport: { width: 200, height: 200, type: 'square' },
+    boundary: { width: 300, height: 300 },
+    enableOrientation: true,
+    });
+
+    croppieInstance.bind({ url: img.src });
+    });
+
+    croppieLogoCancelBtn.addEventListener('click', hideCropModal);
+    croppieLogoSubmitBtn.addEventListener('click', cropImage);
+    }
+
+    function hideCropModal() {
+    $('#logoModal').modal('hide');
+    if (croppieInstance) croppieInstance.destroy();
+    }
+
+    function cropImage() {
+    if (!croppieInstance) return;
+
+    croppieInstance.result({
+    type: 'canvas',
+    size: { width: 250, height: 250 },
+    quality: 1,
+    }).then((croppedImg) => {
+    currentImg.src = croppedImg; // Update image source
+    appendCroppedImage(croppedImg);
+    hideCropModal();
+    });
+    }
+
+    function appendCroppedImage(src) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'logo[]';
+    input.value = src;
+    document.querySelector('#cropped_logo_images').appendChild(input);
+    }
+
+    function showAlert(message) {
+    Swal.fire({ icon: 'error', title: '{{ __("site.Oops...") }}', text: message });
+    }
+    });
 </script>
 @endsection
